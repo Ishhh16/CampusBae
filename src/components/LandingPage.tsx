@@ -49,6 +49,7 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
               setShowLogin(true);
               setShowForm(true);
               setSignupSuccess(false);
+              onAuthError(null); // Clear any errors
             }}
             className={`
               text-lg px-12 py-4 rounded-full
@@ -74,6 +75,7 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
               setShowLogin(false);
               setShowForm(true);
               setSignupSuccess(false);
+              onAuthError(null); // Clear any errors
             }}
             className={`
               text-lg px-12 py-4 rounded-full
@@ -97,21 +99,33 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
         {showForm && (
           <div className="max-w-md mx-auto mb-12">
             {showLogin ? (
-              <LoginForm onSuccess={onLoginSuccess} onError={onAuthError} />
+              <LoginForm onSuccess={onLoginSuccess} onError={onAuthError} hasError={!!authError} />
             ) : (
               <SignupForm 
                 onSuccess={() => {
                   setSignupSuccess(true);
                   setShowLogin(true);
+                  onAuthError(null); // Clear any previous errors
                 }} 
                 onError={onAuthError} 
+                hasError={!!authError}
               />
             )}
             {authError && (
-              <p className="text-red-500 mt-4 text-sm">{authError}</p>
+              <div className="mt-4 p-3 rounded-lg border border-red-500/50 bg-red-500/10 backdrop-blur-sm">
+                <p className="text-red-400 font-medium text-sm flex items-center gap-2">
+                  <span className="text-red-500">⚠️</span>
+                  {authError}
+                </p>
+              </div>
             )}
             {signupSuccess && showLogin && (
-              <p className="text-white mt-4 text-sm">Signup successful! You can now proceed to login.</p>
+              <div className="mt-4 p-3 rounded-lg border border-green-500/50 bg-green-500/10 backdrop-blur-sm">
+                <p className="text-green-400 font-medium text-sm flex items-center gap-2">
+                  <span className="text-green-500">✅</span>
+                  Signup successful! Please check your IGDTUW email for confirmation, then login.
+                </p>
+              </div>
             )}
           </div>
         )}

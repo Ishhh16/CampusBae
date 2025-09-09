@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GalaxyBackground } from './components/GalaxyBackground';
 import { LandingPage } from './components/LandingPage';
 import { Navbar } from './components/Navbar';
@@ -14,6 +14,17 @@ function AppContent() {
   const { user, loading } = useAuth();
   const [currentPage, setCurrentPage] = useState<'landing' | 'home' | 'profile' | 'resources' | 'marketplace' | 'societies' | 'networking'>('landing');
   const [authError, setAuthError] = useState<string | null>(null);
+
+  // Simple navigation logic without complex state management
+  useEffect(() => {
+    if (!loading) {
+      if (user && currentPage === 'landing') {
+        setCurrentPage('home');
+      } else if (!user && currentPage !== 'landing') {
+        setCurrentPage('landing');
+      }
+    }
+  }, [user, loading]); // Remove currentPage from deps to prevent infinite loop
 
   const handleNavigate = (page: string) => {
     setAuthError(null);
@@ -31,10 +42,6 @@ function AppContent() {
 
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
-  }
-
-  if (!user && currentPage !== 'landing') {
-    setCurrentPage('landing');
   }
 
   const renderCurrentPage = () => {

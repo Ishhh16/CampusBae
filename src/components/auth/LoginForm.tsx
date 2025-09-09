@@ -5,9 +5,10 @@ import { useAuth } from '../../context/AuthContext'
 interface LoginFormProps {
   onSuccess: () => void;
   onError: (error: string) => void;
+  hasError?: boolean;
 }
 
-export function LoginForm({ onSuccess, onError }: LoginFormProps) {
+export function LoginForm({ onSuccess, onError, hasError }: LoginFormProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -34,7 +35,11 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
         value={email} 
         onChange={(e) => setEmail(e.target.value)} 
         required 
-        className="w-full p-2 rounded bg-white/10 border border-white/20 text-white"
+        className={`w-full p-2 rounded text-white transition-colors ${
+          hasError 
+            ? 'bg-red-500/10 border-red-500/50 focus:border-red-400' 
+            : 'bg-white/10 border-white/20 focus:border-blue-400'
+        }`}
         disabled={isLoading}
       />
       <input 
@@ -43,7 +48,11 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
         value={password} 
         onChange={(e) => setPassword(e.target.value)} 
         required 
-        className="w-full p-2 rounded bg-white/10 border border-white/20 text-white"
+        className={`w-full p-2 rounded text-white transition-colors ${
+          hasError 
+            ? 'bg-red-500/10 border-red-500/50 focus:border-red-400' 
+            : 'bg-white/10 border-white/20 focus:border-blue-400'
+        }`}
         disabled={isLoading}
       />
       <Button 

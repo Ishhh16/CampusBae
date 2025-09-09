@@ -52,7 +52,7 @@ export function Navbar({ currentPage, onNavigate }: NavbarProps) {
                   <button
                     key={item.id}
                     onClick={() => handleNavigate(item.id)}
-                    className={`transition-colors duration-200 ${
+                    className={`transition-colors duration-200 cursor-pointer ${
                       currentPage === item.id
                         ? 'text-[#00E5FF]'
                         : 'text-[#EAEAEA] hover:text-[#00E5FF]'
@@ -89,7 +89,7 @@ export function Navbar({ currentPage, onNavigate }: NavbarProps) {
                 <button
                   key={item.id}
                   onClick={() => handleNavigate(item.id)}
-                  className={`block px-3 py-2 w-full text-left transition-colors duration-200 ${
+                  className={`block px-3 py-2 w-full text-left transition-colors duration-200 cursor-pointer ${
                     currentPage === item.id
                       ? 'text-[#00E5FF]'
                       : 'text-[#EAEAEA] hover:text-[#00E5FF]'

@@ -1,11 +1,13 @@
 import { GlassCard } from './GlassCard';
 import { Book, FileText, Users, ShoppingBag, Calendar, User } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 interface DashboardProps {
   onNavigate: (page: string) => void;
 }
 
 export function Dashboard({ onNavigate }: DashboardProps) {
+  const { userProfile } = useAuth();
   const branchResources = [
     { name: 'Data Structures', semester: 'Sem 3', type: 'Notes', icon: <Book size={24} /> },
     { name: 'Computer Networks', semester: 'Sem 5', type: 'PYQs', icon: <FileText size={24} /> },
@@ -32,7 +34,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         {/* Welcome Section */}
         <div className="mb-12">
           <h1 className="text-4xl font-bold mb-4" style={{ color: '#EAEAEA' }}>
-            Hey [Name], welcome back 👋
+            Hey {userProfile?.name || 'Student'}, welcome back 👋
           </h1>
           <p style={{ color: '#A0AEC0' }}>
             Your campus companion is ready to help you succeed.
@@ -47,7 +49,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             </h2>
             <button
               onClick={() => onNavigate('resources')}
-              className="text-[#00E5FF] hover:underline"
+              className="text-[#00E5FF] hover:underline cursor-pointer"
             >
               View All →
             </button>
@@ -55,7 +57,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {branchResources.map((resource, index) => (
-              <GlassCard key={index} className="cursor-pointer group">
+              <GlassCard key={index} className="cursor-pointer group hover:scale-[1.02] transition-transform">
                 <div className="flex items-center mb-3 text-[#00E5FF]">
                   {resource.icon}
                 </div>
@@ -81,7 +83,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             </h2>
             <button
               onClick={() => onNavigate('societies')}
-              className="text-[#00E5FF] hover:underline"
+              className="text-[#00E5FF] hover:underline cursor-pointer"
             >
               View All →
             </button>
@@ -115,7 +117,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             </h2>
             <button
               onClick={() => onNavigate('marketplace')}
-              className="text-[#00E5FF] hover:underline"
+              className="text-[#00E5FF] hover:underline cursor-pointer"
             >
               View All →
             </button>

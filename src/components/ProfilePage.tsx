@@ -1,53 +1,175 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GlassCard } from './GlassCard';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Plus, CheckCircle, XCircle, X, Trash2, Calendar, LogOut } from 'lucide-react';
+import { Plus, CheckCircle, XCircle, X, Trash2, Calendar, LogOut, Undo, Loader2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { attendanceService, type AttendanceStats } from '../services/attendanceService';
 
 export function ProfilePage() {
-  const { signOut } = useAuth();
+  const { signOut, userProfile } = useAuth();
   const [newSubject, setNewSubject] = useState('');
-  const [subjects, setSubjects] = useState([
-    'Data Structures',
-    'Computer Networks',
-    'Database Systems',
-    'Operating Systems'
-  ]);
+  const [subjects, setSubjects] = useState<string[]>([]);
+  const [attendance, setAttendance] = useState<Record<string, AttendanceStats>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  
+  // Track last action for undo functionality (now tracks database operations)
+  const [lastActions, setLastActions] = useState<Record<string, { type: 'present' | 'absent' | 'cancelled' | 'no-class', timestamp: number } | null>>({});
 
-  const [attendance, setAttendance] = useState({
-    'Data Structures': { present: 18, absent: 2, cancelled: 1, 'no-class': 0 },
-    'Computer Networks': { present: 15, absent: 3, cancelled: 0, 'no-class': 0 },
-    'Database Systems': { present: 22, absent: 2, cancelled: 1, 'no-class': 0 },
-    'Operating Systems': { present: 16, absent: 3, cancelled: 2, 'no-class': 0 }
-  });
+  // Load subjects and attendance data on component mount
+  useEffect(() => {
+    loadAttendanceData();
+  }, []);
 
-  const addSubject = () => {
-    if (newSubject.trim() && !subjects.includes(newSubject.trim())) {
-      setSubjects([...subjects, newSubject.trim()]);
-      setAttendance({
-        ...attendance,
-        [newSubject.trim()]: { present: 0, absent: 0, cancelled: 0, 'no-class': 0 }
+  const loadAttendanceData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Initialize default subjects for new users
+      await attendanceService.initializeDefaultSubjects();
+      
+      // Load subjects
+      const subjectsData = await attendanceService.getSubjects();
+      const subjectNames = subjectsData.map(s => s.subject_name);
+      setSubjects(subjectNames);
+      
+      // Load attendance stats
+      const stats = await attendanceService.getAttendanceStats();
+      
+      // Initialize empty stats for subjects that have no attendance records
+      const attendanceData: Record<string, AttendanceStats> = {};
+      subjectNames.forEach(subject => {
+        attendanceData[subject] = stats[subject] || {
+          present: 0,
+          absent: 0,
+          cancelled: 0,
+          'no-class': 0
+        };
       });
-      setNewSubject('');
+      
+      setAttendance(attendanceData);
+    } catch (err) {
+      console.error('Error loading attendance data:', err);
+      setError('Failed to load attendance data. Please refresh the page.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const deleteSubject = (subjectToDelete: string) => {
-    setSubjects(subjects.filter(subject => subject !== subjectToDelete));
-    const newAttendance = { ...attendance };
-    delete newAttendance[subjectToDelete];
-    setAttendance(newAttendance);
+  const addSubject = async () => {
+    const subjectName = newSubject.trim();
+    if (!subjectName || subjects.includes(subjectName)) return;
+    
+    try {
+      setActionLoading('add-subject');
+      setError(null);
+      
+      await attendanceService.addSubject(subjectName);
+      
+      // Update local state
+      setSubjects([...subjects, subjectName]);
+      setAttendance({
+        ...attendance,
+        [subjectName]: { present: 0, absent: 0, cancelled: 0, 'no-class': 0 }
+      });
+      setNewSubject('');
+    } catch (err) {
+      console.error('Error adding subject:', err);
+      setError('Failed to add subject. Please try again.');
+    } finally {
+      setActionLoading(null);
+    }
   };
 
-  const updateAttendance = (subject: string, type: 'present' | 'absent' | 'cancelled' | 'no-class') => {
-    setAttendance(prev => ({
-      ...prev,
-      [subject]: {
-        ...prev[subject],
-        [type]: prev[subject][type] + 1
+  const deleteSubject = async (subjectToDelete: string) => {
+    try {
+      setActionLoading(`delete-${subjectToDelete}`);
+      setError(null);
+      
+      await attendanceService.deleteSubject(subjectToDelete);
+      
+      // Update local state
+      setSubjects(subjects.filter(subject => subject !== subjectToDelete));
+      const newAttendance = { ...attendance };
+      delete newAttendance[subjectToDelete];
+      setAttendance(newAttendance);
+      
+      // Clear last action for this subject
+      const newLastActions = { ...lastActions };
+      delete newLastActions[subjectToDelete];
+      setLastActions(newLastActions);
+    } catch (err) {
+      console.error('Error deleting subject:', err);
+      setError('Failed to delete subject. Please try again.');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const markAttendance = async (subject: string, type: 'present' | 'absent' | 'cancelled' | 'no-class') => {
+    try {
+      setActionLoading(`mark-${subject}`);
+      setError(null);
+      
+      await attendanceService.markAttendance(subject, type);
+      
+      // Update local state
+      setAttendance(prev => ({
+        ...prev,
+        [subject]: {
+          ...prev[subject],
+          [type]: prev[subject][type] + 1
+        }
+      }));
+      
+      // Store the last action for undo functionality
+      setLastActions(prev => ({
+        ...prev,
+        [subject]: { type, timestamp: Date.now() }
+      }));
+    } catch (err) {
+      console.error('Error marking attendance:', err);
+      setError('Failed to mark attendance. Please try again.');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+  
+  const undoLastAction = async (subject: string) => {
+    const lastAction = lastActions[subject];
+    if (!lastAction) return;
+    
+    try {
+      setActionLoading(`undo-${subject}`);
+      setError(null);
+      
+      const deletedRecord = await attendanceService.undoLastAttendance(subject);
+      
+      if (deletedRecord) {
+        // Update local state by decrementing the counter
+        setAttendance(prev => ({
+          ...prev,
+          [subject]: {
+            ...prev[subject],
+            [lastAction.type]: Math.max(0, prev[subject][lastAction.type] - 1)
+          }
+        }));
       }
-    }));
+      
+      // Clear the last action for this subject
+      setLastActions(prev => ({
+        ...prev,
+        [subject]: null
+      }));
+    } catch (err) {
+      console.error('Error undoing attendance:', err);
+      setError('Failed to undo attendance. Please try again.');
+    } finally {
+      setActionLoading(null);
+    }
   };
 
   const getAttendancePercentage = (subject: string) => {
@@ -80,15 +202,25 @@ export function ProfilePage() {
         <GlassCard className="mb-8">
           <div className="flex items-center space-x-6">
             <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center">
-              <span className="text-2xl font-bold text-white">[N]</span>
+              <span className="text-2xl font-bold text-white">
+                {userProfile?.name?.charAt(0)?.toUpperCase() || 'U'}
+              </span>
             </div>
             <div>
               <h1 className="text-3xl font-bold mb-2" style={{ color: '#EAEAEA' }}>
-                [Student Name]
+                {userProfile?.name || 'Loading...'}
               </h1>
               <p style={{ color: '#A0AEC0' }}>
-                Enrollment No: [12345678] • Branch: [Computer Science]
+                Enrollment No: {userProfile?.enrollment_number === 'Not available' ? 'Not set' : (userProfile?.enrollment_number || 'Loading...')} • Branch: {userProfile?.branch === 'Not available' ? 'Not set' : (userProfile?.branch || 'Loading...')}
               </p>
+              <p style={{ color: '#A0AEC0' }}>
+                Batch: {userProfile?.batch === 'Not available' ? 'Not set' : (userProfile?.batch || 'Loading...')} • Email: {userProfile?.email || 'Loading...'}
+              </p>
+              {(userProfile?.enrollment_number === 'Not available' || userProfile?.branch === 'Not available' || userProfile?.batch === 'Not available') && (
+                <p className="text-xs mt-2" style={{ color: '#A0AEC0', opacity: 0.7 }}>
+                  ℹ️ Some profile fields are not set. This information was collected during signup but may not be stored in the current database schema.
+                </p>
+              )}
             </div>
           </div>
         </GlassCard>
@@ -104,9 +236,34 @@ export function ProfilePage() {
               <p className="text-sm" style={{ color: '#A0AEC0' }}>
                 Today: {getTodaysDate()}
               </p>
+              <p className="text-xs mt-1" style={{ color: '#FFB800' }}>
+                💾 Data stored locally (set up database for cloud sync)
+              </p>
             </div>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30">
+              <p className="text-red-400 text-sm">{error}</p>
+              <Button 
+                onClick={() => loadAttendanceData()} 
+                className="mt-2 bg-red-500 hover:bg-red-600 text-white text-xs"
+                size="sm"
+              >
+                Retry
+              </Button>
+            </div>
+          )}
+
+          {/* Loading State */}
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="animate-spin" size={32} style={{ color: '#00E5FF' }} />
+              <span className="ml-3" style={{ color: '#EAEAEA' }}>Loading attendance data...</span>
+            </div>
+          ) : (
+            <>
           {/* Subjects Section (Setup) */}
           <div className="mb-8">
             <h3 className="text-lg font-semibold mb-4" style={{ color: '#EAEAEA' }}>
@@ -127,13 +284,18 @@ export function ProfilePage() {
               />
               <Button
                 onClick={addSubject}
+                disabled={actionLoading === 'add-subject'}
                 className="px-6"
                 style={{
                   background: 'linear-gradient(135deg, #0D47A1, #00BFFF)',
                   border: 'none'
                 }}
               >
-                <Plus size={16} />
+                {actionLoading === 'add-subject' ? (
+                  <Loader2 className="animate-spin" size={16} />
+                ) : (
+                  <Plus size={16} />
+                )}
                 Add Subject
               </Button>
             </div>
@@ -151,9 +313,14 @@ export function ProfilePage() {
                     size="sm"
                     variant="ghost"
                     onClick={() => deleteSubject(subject)}
+                    disabled={actionLoading === `delete-${subject}`}
                     className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
                   >
-                    <Trash2 size={16} />
+                    {actionLoading === `delete-${subject}` ? (
+                      <Loader2 className="animate-spin" size={16} />
+                    ) : (
+                      <Trash2 size={16} />
+                    )}
                   </Button>
                 </div>
               ))}
@@ -173,35 +340,55 @@ export function ProfilePage() {
                   style={{ backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
                 >
                   <span className="font-medium text-lg sm:text-base" style={{ color: '#EAEAEA' }}>{subject}</span>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 items-center">
                     <Button
                       size="sm"
-                      onClick={() => updateAttendance(subject, 'present')}
-                      className="flex-1 sm:flex-none items-center justify-center gap-1 bg-green-600 hover:bg-green-700 text-white text-sm"
+                      onClick={() => markAttendance(subject, 'present')}
+                      disabled={actionLoading === `mark-${subject}`}
+                      className="flex-1 sm:flex-none items-center justify-center gap-1 bg-green-600 hover:bg-green-700 text-white text-sm cursor-pointer"
                     >
-                      <span className="hidden sm:inline">✅</span> Present
+                      {actionLoading === `mark-${subject}` ? <Loader2 className="animate-spin" size={14} /> : <span className="hidden sm:inline">✅</span>} Present
                     </Button>
                     <Button
                       size="sm"
-                      onClick={() => updateAttendance(subject, 'absent')}
-                      className="flex-1 sm:flex-none items-center justify-center gap-1 bg-red-600 hover:bg-red-700 text-white text-sm"
+                      onClick={() => markAttendance(subject, 'absent')}
+                      disabled={actionLoading === `mark-${subject}`}
+                      className="flex-1 sm:flex-none items-center justify-center gap-1 bg-red-600 hover:bg-red-700 text-white text-sm cursor-pointer"
                     >
-                      <span className="hidden sm:inline">❌</span> Absent
+                      {actionLoading === `mark-${subject}` ? <Loader2 className="animate-spin" size={14} /> : <span className="hidden sm:inline">❌</span>} Absent
                     </Button>
                     <Button
                       size="sm"
-                      onClick={() => updateAttendance(subject, 'cancelled')}
-                      className="flex-1 sm:flex-none items-center justify-center gap-1 bg-gray-600 hover:bg-gray-700 text-white text-sm"
+                      onClick={() => markAttendance(subject, 'cancelled')}
+                      disabled={actionLoading === `mark-${subject}`}
+                      className="flex-1 sm:flex-none items-center justify-center gap-1 bg-gray-600 hover:bg-gray-700 text-white text-sm cursor-pointer"
                     >
-                      <span className="hidden sm:inline">🚫</span> Cancelled
+                      {actionLoading === `mark-${subject}` ? <Loader2 className="animate-spin" size={14} /> : <span className="hidden sm:inline">🚫</span>} Cancelled
                     </Button>
                     <Button
                       size="sm"
-                      onClick={() => updateAttendance(subject, 'no-class')}
-                      className="flex-1 sm:flex-none items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-sm"
+                      onClick={() => markAttendance(subject, 'no-class')}
+                      disabled={actionLoading === `mark-${subject}`}
+                      className="flex-1 sm:flex-none items-center justify-center gap-1 bg-blue-600 hover:bg-blue-700 text-white text-sm cursor-pointer"
                     >
-                      <span className="hidden sm:inline">📅</span> No Class
+                      {actionLoading === `mark-${subject}` ? <Loader2 className="animate-spin" size={14} /> : <span className="hidden sm:inline">📅</span>} No Class
                     </Button>
+                    {lastActions[subject] && (
+                      <Button
+                        size="sm"
+                        onClick={() => undoLastAction(subject)}
+                        disabled={actionLoading === `undo-${subject}`}
+                        className="items-center justify-center gap-1 bg-orange-500 hover:bg-orange-600 text-white text-sm cursor-pointer ml-2"
+                        title={`Undo last ${lastActions[subject]?.type} marking`}
+                      >
+                        {actionLoading === `undo-${subject}` ? (
+                          <Loader2 className="animate-spin" size={14} />
+                        ) : (
+                          <Undo size={14} />
+                        )}
+                        <span className="hidden sm:inline">Undo</span>
+                      </Button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -263,12 +450,14 @@ export function ProfilePage() {
           <div className="mt-8 flex justify-center">
             <Button
               onClick={signOut}
-              className="bg-red-500 hover:bg-red-600 text-white px-8 py-2 rounded-full flex items-center gap-2"
+              className="bg-red-500 hover:bg-red-600 text-white px-8 py-2 rounded-full flex items-center gap-2 cursor-pointer"
             >
               <LogOut size={18} />
               Logout
             </Button>
           </div>
+            </>
+          )}
         </GlassCard>
       </div>
     </div>
