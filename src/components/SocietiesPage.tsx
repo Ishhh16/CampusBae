@@ -168,7 +168,7 @@ export function SocietiesPage() {
             Showing {filteredSocieties.length} societies
           </p>
         </div>
-
+ 
         {/* Societies Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {filteredSocieties.map((society) => (
