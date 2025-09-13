@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { GlassCard } from './GlassCard';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Plus, CheckCircle, XCircle, X, Trash2, Calendar, LogOut, Undo, Loader2 } from 'lucide-react';
+import { Plus, CheckCircle, XCircle, X, Trash2, Calendar, LogOut, Undo, Loader2, RotateCcw } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { attendanceService, type AttendanceStats } from '../services/attendanceService';
 
@@ -14,6 +14,8 @@ export function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [resetLoading, setResetLoading] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
   
   // Track last action for undo functionality (now tracks database operations)
   const [lastActions, setLastActions] = useState<Record<string, { type: 'present' | 'absent' | 'cancelled' | 'no-class', timestamp: number } | null>>({});
@@ -169,6 +171,36 @@ export function ProfilePage() {
       setError('Failed to undo attendance. Please try again.');
     } finally {
       setActionLoading(null);
+    }
+  };
+
+  const handleResetAllAttendance = async () => {
+    try {
+      setResetLoading(true);
+      setError(null);
+      
+      await attendanceService.resetAllAttendance();
+      
+      // Reset local state - set all attendance counts to 0
+      const resetAttendance: Record<string, AttendanceStats> = {};
+      subjects.forEach(subject => {
+        resetAttendance[subject] = {
+          present: 0,
+          absent: 0,
+          cancelled: 0,
+          'no-class': 0
+        };
+      });
+      
+      setAttendance(resetAttendance);
+      setLastActions({}); // Clear all undo actions
+      setShowResetConfirm(false);
+      
+    } catch (err) {
+      console.error('Error resetting attendance:', err);
+      setError('Failed to reset attendance. Please try again.');
+    } finally {
+      setResetLoading(false);
     }
   };
 
@@ -394,9 +426,28 @@ export function ProfilePage() {
 
           {/* Summary Section */}
           <div>
-            <h3 className="text-lg font-semibold mb-4" style={{ color: '#EAEAEA' }}>
-              Attendance Summary
-            </h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold" style={{ color: '#EAEAEA' }}>
+                Attendance Summary
+              </h3>
+              <Button
+                onClick={() => setShowResetConfirm(true)}
+                disabled={resetLoading || subjects.length === 0}
+                className="h-8 px-3 text-xs bg-red-600/20 hover:bg-red-600/30 border-red-500/50 text-red-200 hover:text-red-100 transition-all"
+                style={{ 
+                  backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                  borderColor: 'rgba(239, 68, 68, 0.3)',
+                  color: '#FCA5A5'
+                }}
+              >
+                {resetLoading ? (
+                  <Loader2 className="w-3 h-3 animate-spin mr-1" />
+                ) : (
+                  <RotateCcw className="w-3 h-3 mr-1" />
+                )}
+                Reset All
+              </Button>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {subjects.map((subject) => {
                 const percentage = getAttendancePercentage(subject);
@@ -453,6 +504,47 @@ export function ProfilePage() {
               Logout
             </Button>
           </div>
+
+          {/* Reset Confirmation Dialog */}
+          {showResetConfirm && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <div 
+                className="bg-gray-900/95 backdrop-blur-md border border-white/20 rounded-lg p-6 max-w-md mx-4"
+                style={{ backgroundColor: 'rgba(17, 24, 39, 0.95)' }}
+              >
+                <h4 className="text-lg font-semibold mb-3" style={{ color: '#EAEAEA' }}>
+                  Reset All Attendance?
+                </h4>
+                <p className="text-sm mb-6" style={{ color: '#A0AEC0' }}>
+                  This will permanently delete all attendance records for all subjects. 
+                  All counts will be reset to 0. This action cannot be undone.
+                </p>
+                <div className="flex gap-3 justify-end">
+                  <Button
+                    onClick={() => setShowResetConfirm(false)}
+                    disabled={resetLoading}
+                    className="px-4 py-2 bg-gray-600/20 hover:bg-gray-600/30 border-gray-500/50 text-gray-200"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleResetAllAttendance}
+                    disabled={resetLoading}
+                    className="px-4 py-2 bg-red-600/20 hover:bg-red-600/30 border-red-500/50 text-red-200"
+                  >
+                    {resetLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                        Resetting...
+                      </>
+                    ) : (
+                      'Reset All'
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
             </>
           )}
         </GlassCard>

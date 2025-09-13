@@ -173,6 +173,18 @@ class LocalStorageAttendanceService {
       this.saveSubjects(defaultSubjects);
     }
   }
+
+  async resetAllAttendance(): Promise<void> {
+    // Clear all attendance data from localStorage
+    const userId = this.getUserId();
+    const stored = localStorage.getItem(STORAGE_KEYS.ATTENDANCE) || '{}';
+    const allData = JSON.parse(stored);
+    
+    // Keep the structure but reset all attendance to empty
+    allData[userId] = {};
+    
+    localStorage.setItem(STORAGE_KEYS.ATTENDANCE, JSON.stringify(allData));
+  }
 }
 
 class AttendanceService {
@@ -405,6 +417,24 @@ class AttendanceService {
         }
       },
       () => this.fallbackService.initializeDefaultSubjects()
+    );
+  }
+
+  async resetAllAttendance(): Promise<void> {
+    return this.tryDatabaseFirst(
+      async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw new Error('User not authenticated');
+
+        // Delete all attendance records for the user
+        const { error } = await supabase
+          .from('attendance_records')
+          .delete()
+          .eq('student_id', user.id);
+
+        if (error) throw error;
+      },
+      () => this.fallbackService.resetAllAttendance()
     );
   }
 }
