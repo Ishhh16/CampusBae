@@ -80,6 +80,7 @@ class LocalStorageAttendanceService {
   }
 
   async addSubject(subjectName: string): Promise<Subject> {
+    console.log('📦 Adding subject to LOCAL STORAGE:', subjectName);
     const subjects = this.getStoredSubjects();
     if (!subjects.includes(subjectName)) {
       subjects.push(subjectName);
@@ -94,6 +95,7 @@ class LocalStorageAttendanceService {
   }
 
   async deleteSubject(subjectName: string): Promise<void> {
+    console.log('📦 Deleting subject from LOCAL STORAGE:', subjectName);
     const subjects = this.getStoredSubjects().filter(s => s !== subjectName);
     this.saveSubjects(subjects);
     
@@ -181,13 +183,11 @@ class AttendanceService {
       // Check if user is authenticated first
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        console.log('User not authenticated, using localStorage fallback');
         return await fallbackOperation();
       }
       
       return await databaseOperation();
     } catch (error) {
-      console.warn('Database operation failed, falling back to localStorage:', error);
       return await fallbackOperation();
     }
   }
@@ -304,7 +304,8 @@ class AttendanceService {
               'no-class': 0
             };
           }
-          stats[record.subject_name][record.attendance_type]++;
+          const attendanceType = record.attendance_type as AttendanceType;
+          stats[record.subject_name][attendanceType]++;
         });
 
         return stats;

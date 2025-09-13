@@ -236,9 +236,6 @@ export function ProfilePage() {
               <p className="text-sm" style={{ color: '#A0AEC0' }}>
                 Today: {getTodaysDate()}
               </p>
-              <p className="text-xs mt-1" style={{ color: '#FFB800' }}>
-                💾 Data stored locally (set up database for cloud sync)
-              </p>
             </div>
           </div>
 
