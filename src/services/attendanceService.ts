@@ -80,6 +80,7 @@ class LocalStorageAttendanceService {
   }
 
   async addSubject(subjectName: string): Promise<Subject> {
+    console.log('📦 Adding subject to LOCAL STORAGE:', subjectName);
     const subjects = this.getStoredSubjects();
     if (!subjects.includes(subjectName)) {
       subjects.push(subjectName);
@@ -94,6 +95,7 @@ class LocalStorageAttendanceService {
   }
 
   async deleteSubject(subjectName: string): Promise<void> {
+    console.log('📦 Deleting subject from LOCAL STORAGE:', subjectName);
     const subjects = this.getStoredSubjects().filter(s => s !== subjectName);
     this.saveSubjects(subjects);
     
@@ -171,6 +173,18 @@ class LocalStorageAttendanceService {
       this.saveSubjects(defaultSubjects);
     }
   }
+
+  async resetAllAttendance(): Promise<void> {
+    // Clear all attendance data from localStorage
+    const userId = this.getUserId();
+    const stored = localStorage.getItem(STORAGE_KEYS.ATTENDANCE) || '{}';
+    const allData = JSON.parse(stored);
+    
+    // Keep the structure but reset all attendance to empty
+    allData[userId] = {};
+    
+    localStorage.setItem(STORAGE_KEYS.ATTENDANCE, JSON.stringify(allData));
+  }
 }
 
 class AttendanceService {
@@ -181,13 +195,11 @@ class AttendanceService {
       // Check if user is authenticated first
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        console.log('User not authenticated, using localStorage fallback');
         return await fallbackOperation();
       }
       
       return await databaseOperation();
     } catch (error) {
-      console.warn('Database operation failed, falling back to localStorage:', error);
       return await fallbackOperation();
     }
   }
@@ -304,7 +316,8 @@ class AttendanceService {
               'no-class': 0
             };
           }
-          stats[record.subject_name][record.attendance_type]++;
+          const attendanceType = record.attendance_type as AttendanceType;
+          stats[record.subject_name][attendanceType]++;
         });
 
         return stats;
@@ -404,6 +417,24 @@ class AttendanceService {
         }
       },
       () => this.fallbackService.initializeDefaultSubjects()
+    );
+  }
+
+  async resetAllAttendance(): Promise<void> {
+    return this.tryDatabaseFirst(
+      async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) throw new Error('User not authenticated');
+
+        // Delete all attendance records for the user
+        const { error } = await supabase
+          .from('attendance_records')
+          .delete()
+          .eq('student_id', user.id);
+
+        if (error) throw error;
+      },
+      () => this.fallbackService.resetAllAttendance()
     );
   }
 }
