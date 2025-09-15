@@ -123,8 +123,8 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
             )}
             {signupSuccess && showLogin && (
               <div className="mt-4 p-3 rounded-lg border border-green-500/50 bg-green-500/10 backdrop-blur-sm">
-                <p className="text-green-400 font-medium text-sm flex items-center gap-2">
-                  <span className="text-green-500">✅</span>
+                <p className="font-medium text-sm flex items-center gap-2" style={{color: '#22c55e !important'}}>
+                  <span style={{color: '#22c55e'}}>✅</span>
                   Signup successful! Please check your IGDTUW email for confirmation, then login.
                 </p>
               </div>

@@ -139,24 +139,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error('❌ Signup failed. Please try again.');
     }
 
-    // Always save to user metadata first (this is reliable and works immediately)
+    console.log('✅ User created successfully:', user.id);
+    console.log('📧 Email confirmation required');
+
+    // Save profile info to user metadata (more reliable approach)
     console.log('📝 Saving profile info to user metadata...');
-    const { error: metadataError } = await supabase.auth.updateUser({
-      data: {
-        name,
-        enrollment_number: enrollmentNumber,
-        enrollmentNumber: enrollmentNumber,  // Try both field names
-        branch,
-        batch: parseInt(batch)
+    
+    try {
+      // First, get a fresh user session to ensure we have the latest user object
+      await new Promise(resolve => setTimeout(resolve, 100)); // Small delay for user creation to complete
+      
+      const { error: metadataError } = await supabase.auth.updateUser({
+        data: {
+          name: name?.trim(),
+          enrollment_number: enrollmentNumber?.trim(),
+          branch: branch?.trim(),
+          batch: parseInt(batch)
+        }
+      });
+      
+      if (metadataError) {
+        console.error('❌ Metadata update failed:', metadataError);
+        console.warn('⚠️ Profile info not saved but signup succeeded. User can complete profile later.');
+        // Don't throw error here - signup was successful, profile can be completed later
+      } else {
+        console.log('✅ Profile info saved to user metadata successfully');
       }
-    });
-    
-    if (metadataError) {
-      console.error('❌ Metadata update failed:', metadataError);
-      throw new Error('Failed to save profile information. Please try again.');
+    } catch (err) {
+      console.error('❌ Error during metadata update:', err);
+      console.warn('⚠️ Profile info not saved but signup succeeded. User can complete profile later.');
+      // Don't throw error here - signup was successful
     }
-    
-    console.log('✅ Profile info saved to user metadata successfully');
     
     // Don't try database insertion during signup - it can cause foreign key issues
     // The profile will be created later when user confirms email and logs in
@@ -303,32 +316,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.log('📊 User metadata found:', userMeta);
         console.log('📧 User email:', currentUser?.email);
         
-        // Try to fetch from database
-        let rawData = null;
-        try {
-          const { data: dbData, error: dbError } = await supabase
-            .from('students')
-            .select('name, email, enrollment_number, branch, year')
-            .eq('id', userId)
-            .single();
-          
-          if (!dbError && dbData) {
-            console.log('🗄️ Database profile found:', dbData);
-            rawData = dbData;
-          } else {
-            console.log('⚠️ No database profile found:', dbError?.message);
-          }
-        } catch (dbError) {
-          console.log('⚠️ Database query failed:', dbError);
-        }
+        // We don't use a separate students table anymore - all profile data is in user_metadata
+        // This makes the system more reliable and doesn't require database schema
+        console.log('📊 Using user_metadata for profile data');
         
-        // Build profile data with metadata fallback
+        // Build profile data from metadata only
         const data = {
-          name: rawData?.name || userMeta.name || 'Not available',
-          email: rawData?.email || currentUser?.email || 'Not available',
-          enrollment_number: rawData?.enrollment_number || userMeta.enrollment_number || userMeta.enrollmentNumber || 'Not available',
-          branch: rawData?.branch || userMeta.branch || 'Not available', 
-          batch: rawData?.year || userMeta.batch || 'Not available'
+          name: userMeta.name || 'Not available',
+          email: currentUser?.email || 'Not available',
+          enrollment_number: userMeta.enrollment_number || userMeta.enrollmentNumber || 'Not available',
+          branch: userMeta.branch || 'Not available', 
+          batch: userMeta.batch || 'Not available'
         };
         
         console.log('📋 Final profile data:', data);
@@ -337,25 +335,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUserProfile(data as StudentProfile);
         }
         
-        // If we have user metadata but no database record, try to create one
-        if (!rawData && userMeta.name && mounted) {
-          console.log('📝 Attempting to create database profile from metadata...');
-          try {
-            await supabase
-              .from('students')
-              .insert([{
-                id: userId,
-                name: userMeta.name,
-                email: currentUser?.email,
-                enrollment_number: userMeta.enrollment_number || userMeta.enrollmentNumber,
-                branch: userMeta.branch,
-                year: userMeta.batch
-              }]);
-            console.log('✅ Database profile created from metadata');
-          } catch (insertError) {
-            console.log('⚠️ Could not create database profile:', insertError);
-          }
-        }
+        // No need to create database records since we use user_metadata only
+        
       } catch (error) {
         console.error('Error fetching profile:', error);
         if (mounted) {
