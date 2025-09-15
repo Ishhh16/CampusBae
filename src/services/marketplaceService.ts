@@ -158,17 +158,48 @@ class MarketplaceService {
   // Get all marketplace items
   async getItems(): Promise<MarketplaceItem[]> {
     try {
+      console.log('🔄 Attempting to fetch items from database...');
+      
       // Try database first
       const { data, error } = await supabase
         .from('marketplace_items')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database error:', error);
+        throw error;
+      }
       
-      return data || [];
+      console.log('✅ Successfully fetched from database:', data?.length, 'items');
+      
+      // Transform database items to match our interface
+      const transformedItems: MarketplaceItem[] = (data || []).map(item => ({
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        originalPrice: item.original_price || undefined,
+        category: item.category,
+        branch: item.branch,
+        semester: item.semester || undefined,
+        condition: item.condition,
+        seller: item.seller,
+        sellerYear: item.seller_year || undefined,
+        sellerPhone: item.seller_phone,
+        image: item.image || '',
+        description: item.description,
+        liked: false, // We don't track individual likes anymore
+        likes: 0, // We don't use likes system
+        createdAt: item.created_at,
+        userId: item.user_id
+      }));
+      
+      // Reset offline flag on successful connection
+      this.isOffline = false;
+      return transformedItems;
+      
     } catch (error) {
-      console.log('Database unavailable, using localStorage:', error);
+      console.log('⚠️ Database unavailable, using localStorage:', error);
       this.isOffline = true;
       
       // Fallback to localStorage
@@ -180,8 +211,8 @@ class MarketplaceService {
 
   // Add new marketplace item
   async addItem(newItem: NewMarketplaceItem, userId?: string): Promise<MarketplaceItem> {
-    // Generate unique ID
-    const id = Date.now().toString();
+    // Generate unique ID using crypto.randomUUID() for better database compatibility
+    const id = crypto.randomUUID();
     let imageUrl = '';
 
     // Handle image upload
@@ -212,31 +243,39 @@ class MarketplaceService {
     try {
       // Try database first
       if (!this.isOffline) {
+        console.log('💾 Attempting to save item to database...');
+        
         const { data, error } = await supabase
           .from('marketplace_items')
           .insert([{
             id: marketplaceItem.id,
             title: marketplaceItem.title,
             price: marketplaceItem.price,
+            original_price: null, // We don't capture original price in the form
             category: marketplaceItem.category,
             branch: marketplaceItem.branch,
+            semester: null, // We don't capture semester in the form
             condition: marketplaceItem.condition,
             seller: marketplaceItem.seller,
+            seller_year: null, // We don't capture seller year in the form
             seller_phone: marketplaceItem.sellerPhone,
             image: marketplaceItem.image,
             description: marketplaceItem.description,
-            likes: marketplaceItem.likes,
-            created_at: marketplaceItem.createdAt,
             user_id: userId
           }])
           .select()
           .single();
 
-        if (error) throw error;
+        if (error) {
+          console.error('Database insert error:', error);
+          throw error;
+        }
+        
+        console.log('✅ Successfully saved item to database:', data);
         return marketplaceItem;
       }
     } catch (error) {
-      console.log('Database unavailable, using localStorage:', error);
+      console.log('⚠️ Database unavailable, using localStorage:', error);
       this.isOffline = true;
     }
 
@@ -280,34 +319,9 @@ class MarketplaceService {
     });
   }
 
-  // Toggle like status
+  // Toggle like status (simplified - only localStorage for now)
   async toggleLike(itemId: string): Promise<void> {
-    try {
-      if (!this.isOffline) {
-        // Try database first
-        const { data: item, error: fetchError } = await supabase
-          .from('marketplace_items')
-          .select('likes, liked_by')
-          .eq('id', itemId)
-          .single();
-
-        if (!fetchError) {
-          const newLikes = (item.liked_by || []).length > 0 ? item.likes - 1 : item.likes + 1;
-          
-          const { error: updateError } = await supabase
-            .from('marketplace_items')
-            .update({ likes: newLikes })
-            .eq('id', itemId);
-
-          if (!updateError) return;
-        }
-      }
-    } catch (error) {
-      console.log('Database unavailable for like toggle, using localStorage:', error);
-      this.isOffline = true;
-    }
-
-    // Fallback to localStorage
+    // Since we removed the likes system from database, just update localStorage
     const items = await this.getItems();
     const updatedItems = items.map(item => {
       if (item.id === itemId) {
@@ -325,7 +339,29 @@ class MarketplaceService {
 
   // Remove item from marketplace
   async removeItem(itemId: string): Promise<void> {
-    // For now, using localStorage - will be updated to use database
+    try {
+      if (!this.isOffline) {
+        console.log('🗑️ Attempting to delete item from database...');
+        
+        const { error } = await supabase
+          .from('marketplace_items')
+          .delete()
+          .eq('id', itemId);
+
+        if (error) {
+          console.error('Database delete error:', error);
+          throw error;
+        }
+        
+        console.log('✅ Successfully deleted item from database');
+        return;
+      }
+    } catch (error) {
+      console.log('⚠️ Database unavailable for delete, using localStorage:', error);
+      this.isOffline = true;
+    }
+
+    // Fallback to localStorage
     const existingItems = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
     const filteredItems = existingItems.filter((item: MarketplaceItem) => item.id !== itemId);
     localStorage.setItem(this.storageKey, JSON.stringify(filteredItems));
@@ -334,6 +370,21 @@ class MarketplaceService {
   // Check if using offline mode
   isUsingOfflineMode(): boolean {
     return this.isOffline;
+  }
+
+  // Reset offline mode and try to reconnect
+  async retryConnection(): Promise<boolean> {
+    try {
+      console.log('🔄 Attempting to reconnect to database...');
+      this.isOffline = false;
+      
+      // Test connection by trying to fetch items
+      await this.getItems();
+      return !this.isOffline;
+    } catch (error) {
+      console.log('⚠️ Reconnection failed:', error);
+      return false;
+    }
   }
 }
 

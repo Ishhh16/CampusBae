@@ -1,5 +1,5 @@
 import { GlassCard } from './GlassCard';
-import { Book, FileText, Users, ShoppingBag, Calendar, User, Upload, X, Trash2 } from 'lucide-react';
+import { Book, FileText, Users, ShoppingBag, Calendar, User, Upload, X, Trash2, CheckSquare, Plus } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
 import { Button } from './ui/button';
@@ -16,6 +16,14 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const [timetableImage, setTimetableImage] = useState<string | null>(
     localStorage.getItem('campusbae_timetable') || null
   );
+
+  // Todo state management
+  const [showTodoModal, setShowTodoModal] = useState(false);
+  const [todos, setTodos] = useState<{id: string, text: string, completed: boolean}[]>(() => {
+    const savedTodos = localStorage.getItem('campusbae_todos');
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  });
+  const [newTodoText, setNewTodoText] = useState('');
 
   const branchResources = [
     { name: 'Data Structures', semester: 'Sem 3', type: 'Notes', icon: <Book size={24} /> },
@@ -60,6 +68,39 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     setShowTimetableModal(false);
   };
 
+  // Todo functions
+  const addTodo = () => {
+    if (newTodoText.trim()) {
+      const newTodo = {
+        id: crypto.randomUUID(),
+        text: newTodoText.trim(),
+        completed: false
+      };
+      const updatedTodos = [...todos, newTodo];
+      setTodos(updatedTodos);
+      localStorage.setItem('campusbae_todos', JSON.stringify(updatedTodos));
+      setNewTodoText('');
+    }
+  };
+
+  const toggleTodo = (id: string) => {
+    const updatedTodos = todos.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    );
+    setTodos(updatedTodos);
+    localStorage.setItem('campusbae_todos', JSON.stringify(updatedTodos));
+  };
+
+  const deleteTodo = (id: string) => {
+    const updatedTodos = todos.filter(todo => todo.id !== id);
+    setTodos(updatedTodos);
+    localStorage.setItem('campusbae_todos', JSON.stringify(updatedTodos));
+  };
+
+  const handleCloseTodoModal = () => {
+    setShowTodoModal(false);
+  };
+
   return (
     <div className="pt-24 pb-12 px-4 bg-transparent">
       <div className="max-w-7xl mx-auto bg-transparent">
@@ -74,18 +115,32 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 Your campus companion is ready to help you succeed.
               </p>
             </div>
-            <Button
-              onClick={() => setShowTimetableModal(true)}
-              className="bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border-[#00E5FF]/50 text-[#00E5FF] hover:text-[#00E5FF] flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300"
-              style={{
-                backgroundColor: 'rgba(0, 229, 255, 0.1)',
-                borderColor: 'rgba(0, 229, 255, 0.3)',
-                border: '1px solid'
-              }}
-            >
-              <Calendar size={18} />
-              Timetable
-            </Button>
+            <div className="flex gap-3">
+              <Button
+                onClick={() => setShowTimetableModal(true)}
+                className="bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border-[#00E5FF]/50 text-[#00E5FF] hover:text-[#00E5FF] flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300"
+                style={{
+                  backgroundColor: 'rgba(0, 229, 255, 0.1)',
+                  borderColor: 'rgba(0, 229, 255, 0.3)',
+                  border: '1px solid'
+                }}
+              >
+                <Calendar size={18} />
+                Timetable
+              </Button>
+              <Button
+                onClick={() => setShowTodoModal(true)}
+                className="bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border-[#00E5FF]/50 text-[#00E5FF] hover:text-[#00E5FF] flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300"
+                style={{
+                  backgroundColor: 'rgba(0, 229, 255, 0.1)',
+                  borderColor: 'rgba(0, 229, 255, 0.3)',
+                  border: '1px solid'
+                }}
+              >
+                <CheckSquare size={18} />
+                Todo
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -338,6 +393,94 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Todo Modal Overlay */}
+      {showTodoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-gray-900/95 backdrop-blur-md border border-white/20 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-auto" style={{ backgroundColor: 'rgba(17, 24, 39, 0.95)' }}>
+            <div className="flex items-center justify-between p-6 border-b border-white/10">
+              <h3 className="text-xl font-semibold" style={{ color: '#EAEAEA' }}>
+                My Todos
+              </h3>
+              <button
+                onClick={handleCloseTodoModal}
+                className="text-gray-400 hover:text-gray-200 p-1 rounded-lg hover:bg-white/10 transition-all"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6">
+              {/* Add New Todo */}
+              <div className="mb-6">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newTodoText}
+                    onChange={(e) => setNewTodoText(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && addTodo()}
+                    placeholder="Add a new todo..."
+                    className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#00E5FF]/50"
+                  />
+                  <Button
+                    onClick={addTodo}
+                    className="bg-[#00E5FF]/20 hover:bg-[#00E5FF]/30 border-[#00E5FF]/50 text-[#00E5FF] px-4 py-2"
+                  >
+                    <Plus size={16} />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Todo List */}
+              <div className="space-y-2">
+                {todos.length === 0 ? (
+                  <p className="text-gray-400 text-center py-8">
+                    No todos yet. Add one above!
+                  </p>
+                ) : (
+                  todos.map((todo) => (
+                    <div
+                      key={todo.id}
+                      className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-lg"
+                    >
+                      <button
+                        onClick={() => toggleTodo(todo.id)}
+                        className={`w-5 h-5 border-2 rounded-sm flex items-center justify-center transition-colors ${
+                          todo.completed
+                            ? 'bg-white border-white'
+                            : 'border-white bg-transparent hover:bg-white/10'
+                        }`}
+                      >
+                        {todo.completed && (
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3">
+                            <polyline points="20,6 9,17 4,12"></polyline>
+                          </svg>
+                        )}
+                      </button>
+                      <span
+                        className={`flex-1 transition-all ${
+                          todo.completed
+                            ? 'text-gray-400 line-through'
+                            : 'text-white'
+                        }`}
+                      >
+                        {todo.text}
+                      </span>
+                      <Button
+                        onClick={() => deleteTodo(todo.id)}
+                        className="bg-red-500/20 hover:bg-red-500/30 border-red-500/50 text-red-400 hover:text-red-300 p-2"
+                      >
+                        <Trash2 size={14} />
+                      </Button>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </div>

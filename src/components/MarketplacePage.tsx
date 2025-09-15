@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Search, MessageCircle, Heart, Plus, Upload, X, Phone, Trash2 } from 'lucide-react';
+import { Search, MessageCircle, Heart, Plus, Upload, X, Phone, Trash2, Copy } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { marketplaceService, MarketplaceItem, NewMarketplaceItem } from '../services/marketplaceService';
 import { useAuth } from '../context/AuthContext';
@@ -98,6 +98,24 @@ export function MarketplacePage() {
     }
   };
 
+  const handleCopyPhone = async (phoneNumber: string) => {
+    try {
+      await navigator.clipboard.writeText(phoneNumber);
+      // Brief visual feedback - could be enhanced with toast later
+      console.log('📋 Phone number copied to clipboard:', phoneNumber);
+    } catch (error) {
+      console.error('Failed to copy phone number:', error);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = phoneNumber;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      console.log('📋 Phone number copied to clipboard (fallback):', phoneNumber);
+    }
+  };
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -122,6 +140,9 @@ export function MarketplacePage() {
 
     try {
       setSubmitting(true);
+      console.log('🛍️ Attempting to add marketplace item...');
+      console.log('User ID:', user?.id);
+      console.log('Offline mode:', marketplaceService.isUsingOfflineMode());
       
       const newItem: NewMarketplaceItem = {
         title: sellForm.title,
@@ -135,8 +156,13 @@ export function MarketplacePage() {
         image: sellForm.image || undefined
       };
       
-      await marketplaceService.addItem(newItem, user?.id);
+      console.log('New item data:', newItem);
+      
+      const addedItem = await marketplaceService.addItem(newItem, user?.id);
+      console.log('✅ Item added successfully:', addedItem);
+      
       await loadItems(); // Reload items to show the new item
+      console.log('✅ Items reloaded');
       
       // Reset form
       setIsDialogOpen(false);
@@ -153,9 +179,9 @@ export function MarketplacePage() {
       });
       setImagePreview(null);
       
-      alert('Item listed successfully!');
+      // Item listed successfully - no alert needed
     } catch (error) {
-      console.error('Failed to add item:', error);
+      console.error('❌ Failed to add item:', error);
       alert('Failed to list item. Please try again.');
     } finally {
       setSubmitting(false);
@@ -628,10 +654,20 @@ export function MarketplacePage() {
                   }}
                 >
                   {contactingItems.has(item.id) ? (
-                    <>
+                    <div className="flex items-center gap-2">
                       <Phone size={16} />
-                      {item.sellerPhone}
-                    </>
+                      <span>{item.sellerPhone}</span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCopyPhone(item.sellerPhone);
+                        }}
+                        className="p-1 hover:bg-gray-100 rounded transition-colors"
+                        title="Copy phone number"
+                      >
+                        <Copy size={14} className="text-gray-600 hover:text-gray-800" />
+                      </button>
+                    </div>
                   ) : (
                     <>
                       <MessageCircle size={16} />
