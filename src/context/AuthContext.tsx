@@ -36,8 +36,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    console.log('🔑 Attempting login for:', email);
+    
+    // Validate email format
+    if (!email || !email.includes('@')) {
+      throw new Error('📧 Please enter a valid email address.');
+    }
+    
+    const { data, error } = await supabase.auth.signInWithPassword({ 
+      email: email.trim().toLowerCase(), 
+      password 
+    });
+    
     if (error) {
+      console.error('❌ Login error:', error);
+      
       if (error.message.includes('Invalid login credentials')) {
         throw new Error('🔐 Incorrect email or password. Please check your credentials and try again.');
       }
@@ -47,7 +60,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error.message.includes('Too many requests')) {
         throw new Error('⏱️ Too many login attempts. Please wait a moment and try again.');
       }
+      if (error.message.includes('User not found')) {
+        throw new Error('👤 No account found with this email address. Please sign up first.');
+      }
       throw new Error(`❌ Login failed: ${error.message}`);
+    }
+    
+    if (data.user) {
+      console.log('✅ Login successful for user:', data.user.id);
+      console.log('📊 User metadata:', data.user.user_metadata);
     }
   };
 
@@ -93,7 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           name,
           enrollmentNumber,
           branch,
-          batch,
+          batch: parseInt(batch)
         }
       }
     });
@@ -118,64 +139,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error('❌ Signup failed. Please try again.');
     }
 
-    // insert into students table with all available fields
-    console.log('📝 Attempting to create profile with all fields...');
-    
-    // First try with all fields to see what's supported
-    let { error: profileError } = await supabase
-      .from('students')
-      .insert([{ 
-        id: user.id,
+    // Always save to user metadata first (this is reliable and works immediately)
+    console.log('📝 Saving profile info to user metadata...');
+    const { error: metadataError } = await supabase.auth.updateUser({
+      data: {
         name,
-        email,
         enrollment_number: enrollmentNumber,
+        enrollmentNumber: enrollmentNumber,  // Try both field names
         branch,
-        year: parseInt(batch)
-      }]);
+        batch: parseInt(batch)
+      }
+    });
     
-    // If some columns don't exist, try with basic fields first
-    if (profileError && (profileError.message?.includes('column') || profileError.code === '42703')) {
-      console.log('⚠️ Some columns missing, trying basic insertion...');
-      const { error: basicError } = await supabase
-        .from('students')
-        .insert([{ 
-          id: user.id,
-          name,
-          email
-        }]);
-      
-      if (!basicError) {
-        console.log('✅ Basic profile created, additional fields not available in database');
-      }
-      profileError = basicError;
-    } else if (!profileError) {
-      console.log('✅ Full profile created with all fields');
+    if (metadataError) {
+      console.error('❌ Metadata update failed:', metadataError);
+      throw new Error('Failed to save profile information. Please try again.');
     }
-
-    if (profileError) {
-      console.error('Profile creation error:', profileError);
-      
-      // As a fallback, try to update user metadata with the profile info
-      console.log('🔄 Attempting to save profile info to user metadata...');
-      console.log('📝 Data being saved:', { name, enrollmentNumber, branch, batch });
-      const { error: metadataError } = await supabase.auth.updateUser({
-        data: {
-          name,
-          enrollment_number: enrollmentNumber,
-          enrollmentNumber: enrollmentNumber,  // Try both field names
-          branch,
-          batch: parseInt(batch)
-        }
-      });
-      
-      if (!metadataError) {
-        console.log('✅ Profile info saved to user metadata as fallback');
-        // Don't throw error if we successfully saved to metadata
-        return;
-      }
-      
-      throw new Error(`Failed to create profile: ${profileError.message}`);
-    }
+    
+    console.log('✅ Profile info saved to user metadata successfully');
+    
+    // Don't try database insertion during signup - it can cause foreign key issues
+    // The profile will be created later when user confirms email and logs in
+    console.log('ℹ️ Database profile will be created after email confirmation');
+    
+    // Note: Supabase requires email confirmation by default
+    // The user will need to check their email and confirm before they can login
   };
 
   const signOut = async () => {
@@ -185,52 +173,91 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const getUserProfile = async (): Promise<StudentProfile | null> => {
-    if (!user) return null;
+    if (!user) {
+      console.log('🔍 getUserProfile: No user found');
+      return null;
+    }
+    
+    console.log('🔍 getUserProfile: Fetching profile for user:', user.id);
     
     try {
-      // Start with basic fields and add more if they exist
-      let { data: rawData, error } = await supabase
-        .from('students')
-        .select('name, email')
-        .eq('id', user.id)
-        .single();
+      // Get current user metadata first
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      const userMeta = currentUser?.user_metadata || {};
       
-      // If basic fetch works, try to get additional fields
-      if (!error && rawData) {
-        const { data: fullData } = await supabase
+      console.log('📊 User metadata found:', userMeta);
+      console.log('📧 User email:', currentUser?.email);
+      
+      // Try to fetch from database
+      let rawData = null;
+      try {
+        const { data: dbData, error: dbError } = await supabase
           .from('students')
           .select('name, email, enrollment_number, branch, year')
           .eq('id', user.id)
           .single();
         
-        // Use full data if available, otherwise use basic data
-        rawData = fullData || rawData;
+        if (!dbError && dbData) {
+          console.log('🗄️ Database profile found:', dbData);
+          rawData = dbData;
+        } else {
+          console.log('⚠️ No database profile found:', dbError?.message);
+        }
+      } catch (dbError) {
+        console.log('⚠️ Database query failed:', dbError);
       }
       
-      // Convert data format for UI, with user metadata fallback
-      let data = null;
-      if (rawData) {
-        // Get current user metadata as fallback
-        const { data: { user: currentUser } } = await supabase.auth.getUser();
-        const userMeta = currentUser?.user_metadata || {};
-        
-        data = {
-          name: rawData.name || userMeta.name,
-          email: rawData.email || currentUser?.email,
-          enrollment_number: rawData.enrollment_number || userMeta.enrollment_number || userMeta.enrollmentNumber || 'Not available',
-          branch: rawData.branch || userMeta.branch || 'Not available', 
-          batch: rawData.year || userMeta.batch || 'Not available'  // Convert year to batch
-        };
-      }
+      // Build profile data with metadata fallback
+      const data = {
+        name: rawData?.name || userMeta.name || 'Not available',
+        email: rawData?.email || currentUser?.email || 'Not available',
+        enrollment_number: rawData?.enrollment_number || userMeta.enrollment_number || userMeta.enrollmentNumber || 'Not available',
+        branch: rawData?.branch || userMeta.branch || 'Not available', 
+        batch: rawData?.year || userMeta.batch || 'Not available'
+      };
       
-      if (error) {
-        console.error('Error fetching user profile:', error);
-        return null;
+      console.log('📋 Final profile data:', data);
+      
+      // If we have user metadata but no database record, try to create one
+      if (!rawData && userMeta.name) {
+        console.log('📝 Attempting to create database profile from metadata...');
+        try {
+          await supabase
+            .from('students')
+            .insert([{
+              id: user.id,
+              name: userMeta.name,
+              email: currentUser?.email,
+              enrollment_number: userMeta.enrollment_number || userMeta.enrollmentNumber,
+              branch: userMeta.branch,
+              year: userMeta.batch
+            }]);
+          console.log('✅ Database profile created from metadata');
+        } catch (insertError) {
+          console.log('⚠️ Could not create database profile:', insertError);
+        }
       }
       
       return data as StudentProfile;
     } catch (error) {
-      console.error('Error in getUserProfile:', error);
+      console.error('❌ Error in getUserProfile:', error);
+      
+      // Final fallback - try to get basic info from auth user
+      try {
+        const { data: { user: currentUser } } = await supabase.auth.getUser();
+        if (currentUser?.user_metadata) {
+          return {
+            name: currentUser.user_metadata.name || 'Not available',
+            email: currentUser.email || 'Not available',
+            enrollment_number: currentUser.user_metadata.enrollment_number || currentUser.user_metadata.enrollmentNumber || 'Not available',
+            branch: currentUser.user_metadata.branch || 'Not available',
+            batch: currentUser.user_metadata.batch || 'Not available'
+          } as StudentProfile;
+        }
+      } catch (fallbackError) {
+        console.error('❌ Fallback profile fetch failed:', fallbackError);
+      }
+      
       return null;
     }
   };
@@ -269,52 +296,87 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const fetchUserProfile = async (userId: string) => {
       try {
-        // Start with basic fields and add more if they exist
-        let { data: rawData, error } = await supabase
-          .from('students')
-          .select('name, email')
-          .eq('id', userId)
-          .single();
+        // Get current user metadata first
+        const { data: { user: currentUser } } = await supabase.auth.getUser();
+        const userMeta = currentUser?.user_metadata || {};
         
-        // If basic fetch works, try to get additional fields
-        if (!error && rawData) {
-          const { data: fullData } = await supabase
+        console.log('📊 User metadata found:', userMeta);
+        console.log('📧 User email:', currentUser?.email);
+        
+        // Try to fetch from database
+        let rawData = null;
+        try {
+          const { data: dbData, error: dbError } = await supabase
             .from('students')
             .select('name, email, enrollment_number, branch, year')
             .eq('id', userId)
             .single();
           
-          // Use full data if available, otherwise use basic data
-          rawData = fullData || rawData;
-        }
-        let data = null;
-        if (rawData) {
-          // Get current user metadata as fallback
-          const { data: { user: currentUser } } = await supabase.auth.getUser();
-          const userMeta = currentUser?.user_metadata || {};
-          
-          console.log('🔍 User metadata:', userMeta);
-          
-          data = {
-            name: rawData.name || userMeta.name,
-            email: rawData.email || currentUser?.email,
-            enrollment_number: rawData.enrollment_number || userMeta.enrollment_number || userMeta.enrollmentNumber || 'Not available',
-            branch: rawData.branch || userMeta.branch || 'Not available', 
-            batch: rawData.year || userMeta.batch || 'Not available'  // Convert year to batch
-          };
+          if (!dbError && dbData) {
+            console.log('🗄️ Database profile found:', dbData);
+            rawData = dbData;
+          } else {
+            console.log('⚠️ No database profile found:', dbError?.message);
+          }
+        } catch (dbError) {
+          console.log('⚠️ Database query failed:', dbError);
         }
         
+        // Build profile data with metadata fallback
+        const data = {
+          name: rawData?.name || userMeta.name || 'Not available',
+          email: rawData?.email || currentUser?.email || 'Not available',
+          enrollment_number: rawData?.enrollment_number || userMeta.enrollment_number || userMeta.enrollmentNumber || 'Not available',
+          branch: rawData?.branch || userMeta.branch || 'Not available', 
+          batch: rawData?.year || userMeta.batch || 'Not available'
+        };
+        
+        console.log('📋 Final profile data:', data);
+        
         if (mounted) {
-          if (!error && data) {
-            setUserProfile(data as StudentProfile);
-          } else {
-            setUserProfile(null);
+          setUserProfile(data as StudentProfile);
+        }
+        
+        // If we have user metadata but no database record, try to create one
+        if (!rawData && userMeta.name && mounted) {
+          console.log('📝 Attempting to create database profile from metadata...');
+          try {
+            await supabase
+              .from('students')
+              .insert([{
+                id: userId,
+                name: userMeta.name,
+                email: currentUser?.email,
+                enrollment_number: userMeta.enrollment_number || userMeta.enrollmentNumber,
+                branch: userMeta.branch,
+                year: userMeta.batch
+              }]);
+            console.log('✅ Database profile created from metadata');
+          } catch (insertError) {
+            console.log('⚠️ Could not create database profile:', insertError);
           }
         }
       } catch (error) {
         console.error('Error fetching profile:', error);
         if (mounted) {
-          setUserProfile(null);
+          // Final fallback - use metadata if available
+          try {
+            const { data: { user: currentUser } } = await supabase.auth.getUser();
+            if (currentUser?.user_metadata) {
+              setUserProfile({
+                name: currentUser.user_metadata.name || 'Not available',
+                email: currentUser.email || 'Not available',
+                enrollment_number: currentUser.user_metadata.enrollment_number || currentUser.user_metadata.enrollmentNumber || 'Not available',
+                branch: currentUser.user_metadata.branch || 'Not available',
+                batch: currentUser.user_metadata.batch || 'Not available'
+              } as StudentProfile);
+            } else {
+              setUserProfile(null);
+            }
+          } catch (fallbackError) {
+            console.error('❌ Fallback profile fetch failed:', fallbackError);
+            setUserProfile(null);
+          }
         }
       }
     };

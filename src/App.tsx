@@ -9,6 +9,7 @@ import { MarketplacePage } from './components/MarketplacePage';
 import { SocietiesPage } from './components/SocietiesPage';
 import { NetworkingPage } from './components/NetworkingPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthDebug } from './components/AuthDebug';
 
 function AppContent() {
   const { user, loading } = useAuth();

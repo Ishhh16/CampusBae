@@ -1,18 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GlassCard } from './GlassCard';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Search, MessageCircle, Heart, Plus, Upload, X } from 'lucide-react';
+import { Search, MessageCircle, Heart, Plus, Upload, X, Phone, Trash2 } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { marketplaceService, MarketplaceItem, NewMarketplaceItem } from '../services/marketplaceService';
+import { useAuth } from '../context/AuthContext';
 
 export function MarketplacePage() {
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedBranch, setSelectedBranch] = useState('all');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [items, setItems] = useState<MarketplaceItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isOffline, setIsOffline] = useState(false);
+  const [contactingItems, setContactingItems] = useState<Set<string>>(new Set());
   
   // Sell item form state
   const [sellForm, setSellForm] = useState({
@@ -28,110 +35,30 @@ export function MarketplacePage() {
   });
   
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const marketplaceItems = [
-    {
-      id: 1,
-      title: 'Data Structures Textbook - Cormen',
-      price: '₹800',
-      originalPrice: '₹1200',
-      category: 'Books',
-      branch: 'CSE',
-      semester: 3,
-      condition: 'Good',
-      seller: 'Priya Sharma',
-      sellerYear: '3rd Year',
-      image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300&h=200&fit=crop',
-      description: 'Well-maintained textbook with minimal highlighting',
-      liked: false,
-      likes: 12
-    },
-    {
-      id: 2,
-      title: 'Scientific Calculator (Casio FX-991ES)',
-      price: '₹500',
-      originalPrice: '₹800',
-      category: 'Electronics',
-      branch: 'All',
-      semester: 'All',
-      condition: 'Excellent',
-      seller: 'Ananya Khurana',
-      sellerYear: '2nd Year',
-      image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=300&h=200&fit=crop',
-      description: 'Rarely used calculator in excellent condition',
-      liked: true,
-      likes: 8
-    },
-    {
-      id: 3,
-      title: 'Lab Coat - Size M',
-      price: '₹300',
-      originalPrice: '₹500',
-      category: 'Clothing',
-      branch: 'All',
-      semester: 'All',
-      condition: 'Good',
-      seller: 'Shruti Malik',
-      sellerYear: '4th Year',
-      image: 'https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=300&h=200&fit=crop',
-      description: 'Clean lab coat, used for one semester',
-      liked: false,
-      likes: 3
-    },
-    {
-      id: 4,
-      title: 'Engineering Drawing Instruments Set',
-      price: '₹350',
-      originalPrice: '₹600',
-      category: 'Stationery',
-      branch: 'All',
-      semester: 1,
-      condition: 'Good',
-      seller: 'Riya Patel',
-      sellerYear: '3rd Year',
-      image: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=200&fit=crop',
-      description: 'Complete set with compass, dividers, and rulers',
-      liked: false,
-      likes: 15
-    },
-    {
-      id: 5,
-      title: 'Computer Networks Book - Tanenbaum',
-      price: '₹600',
-      originalPrice: '₹900',
-      category: 'Books',
-      branch: 'CSE',
-      semester: 5,
-      condition: 'Fair',
-      seller: 'Neha Singh',
-      sellerYear: '4th Year',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=200&fit=crop',
-      description: 'Some highlighting and notes in margins',
-      liked: true,
-      likes: 20
-    },
-    {
-      id: 6,
-      title: 'Laptop Stand - Adjustable',
-      price: '₹450',
-      originalPrice: '₹750',
-      category: 'Electronics',
-      branch: 'All',
-      semester: 'All',
-      condition: 'Excellent',
-      seller: 'Kavya Agarwal',
-      sellerYear: '2nd Year',
-      image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=300&h=200&fit=crop',
-      description: 'Portable and lightweight laptop stand',
-      liked: false,
-      likes: 6
+  // Load marketplace items on component mount
+  useEffect(() => {
+    loadItems();
+  }, []);
+
+  const loadItems = async () => {
+    try {
+      setLoading(true);
+      const marketplaceItems = await marketplaceService.getItems();
+      setItems(marketplaceItems);
+      setIsOffline(marketplaceService.isUsingOfflineMode());
+    } catch (error) {
+      console.error('Failed to load marketplace items:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const categories = ['all', 'Books', 'Electronics', 'Clothing', 'Stationery', 'Others'];
   const branches = ['all', 'CSEAI', 'CSE', 'MAC', 'IT', 'AIML', 'ECEAI', 'ECE', 'MAE', 'All'];
 
-  const filteredItems = marketplaceItems.filter(item => {
+  const filteredItems = items.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          item.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
@@ -145,13 +72,30 @@ export function MarketplacePage() {
       case 'Excellent': return '#00FF88';
       case 'Good': return '#FFD700';
       case 'Fair': return '#FF9800';
+      case 'Average': return '#FF9800';
       default: return '#A0AEC0';
     }
   };
 
-  const handleContact = (seller: string) => {
-    // Placeholder for contact functionality
-    alert(`Contact feature coming soon! You'll be able to reach out to ${seller}.`);
+  const handleContact = (itemId: string) => {
+    setContactingItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemId)) {
+        newSet.delete(itemId);
+      } else {
+        newSet.add(itemId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleLike = async (itemId: string) => {
+    try {
+      await marketplaceService.toggleLike(itemId);
+      await loadItems(); // Reload items to show updated likes
+    } catch (error) {
+      console.error('Failed to toggle like:', error);
+    }
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,28 +110,76 @@ export function MarketplacePage() {
     }
   };
 
-  const handleSellFormSubmit = (e: React.FormEvent) => {
+  const handleSellFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Placeholder for form submission
-    alert('Item listing submitted! This feature will be connected to the database soon.');
-    setIsDialogOpen(false);
-    setSellForm({
-      title: '',
-      sellerName: '',
-      phoneNumber: '',
-      description: '',
-      category: '',
-      condition: '',
-      price: '',
-      branch: '',
-      image: null
-    });
-    setImagePreview(null);
+    
+    if (!sellForm.title || !sellForm.sellerName || !sellForm.phoneNumber || 
+        !sellForm.description || !sellForm.category || !sellForm.condition || 
+        !sellForm.price) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      
+      const newItem: NewMarketplaceItem = {
+        title: sellForm.title,
+        sellerName: sellForm.sellerName,
+        phoneNumber: sellForm.phoneNumber,
+        description: sellForm.description,
+        category: sellForm.category,
+        condition: sellForm.condition,
+        price: sellForm.price,
+        branch: sellForm.branch || 'All',
+        image: sellForm.image || undefined
+      };
+      
+      await marketplaceService.addItem(newItem, user?.id);
+      await loadItems(); // Reload items to show the new item
+      
+      // Reset form
+      setIsDialogOpen(false);
+      setSellForm({
+        title: '',
+        sellerName: '',
+        phoneNumber: '',
+        description: '',
+        category: '',
+        condition: '',
+        price: '',
+        branch: '',
+        image: null
+      });
+      setImagePreview(null);
+      
+      alert('Item listed successfully!');
+    } catch (error) {
+      console.error('Failed to add item:', error);
+      alert('Failed to list item. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const removeImage = () => {
     setSellForm({ ...sellForm, image: null });
     setImagePreview(null);
+  };
+
+  const handleRemoveItem = async (itemId: string) => {
+    if (!window.confirm('Are you sure you want to remove this item?')) {
+      return;
+    }
+
+    try {
+      await marketplaceService.removeItem(itemId);
+      // Remove item from local state
+      setItems(prevItems => prevItems.filter(item => item.id !== itemId));
+    } catch (error) {
+      console.error('Error removing item:', error);
+      alert('Failed to remove item. Please try again.');
+    }
   };
 
   return (
@@ -201,6 +193,14 @@ export function MarketplacePage() {
           <p style={{ color: '#A0AEC0' }}>
             Buy and sell items with your fellow IGDTUW students
           </p>
+          {isOffline && (
+            <div className="mt-4 p-3 rounded-lg border border-yellow-500/50 bg-yellow-500/10 backdrop-blur-sm">
+              <p className="text-yellow-400 font-medium text-sm flex items-center gap-2">
+                <span className="text-yellow-500">⚠️</span>
+                Using local storage. Items will sync when database connection is restored.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Filters */}
@@ -295,10 +295,12 @@ export function MarketplacePage() {
                         className="hidden"
                         id="image-upload"
                       />
-                      <label htmlFor="image-upload">
-                        <Button type="button" variant="outline" className="cursor-pointer">
+                      <label htmlFor="image-upload" className="cursor-pointer">
+                        <div 
+                          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-600 bg-transparent hover:bg-gray-800 text-gray-300 hover:text-white transition-all duration-300"
+                        >
                           Choose File
-                        </Button>
+                        </div>
                       </label>
                     </div>
                   ) : (
@@ -397,7 +399,7 @@ export function MarketplacePage() {
                     <label className="block text-sm font-medium mb-2" style={{ color: '#EAEAEA' }}>
                       Category *
                     </label>
-                    <Select value={sellForm.category} onValueChange={(value) => setSellForm({ ...sellForm, category: value })}>
+                    <Select value={sellForm.category} onValueChange={(value: string) => setSellForm({ ...sellForm, category: value })}>
                       <SelectTrigger style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#EAEAEA' }}>
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
@@ -414,7 +416,7 @@ export function MarketplacePage() {
                     <label className="block text-sm font-medium mb-2" style={{ color: '#EAEAEA' }}>
                       Condition *
                     </label>
-                    <Select value={sellForm.condition} onValueChange={(value) => setSellForm({ ...sellForm, condition: value })}>
+                    <Select value={sellForm.condition} onValueChange={(value: string) => setSellForm({ ...sellForm, condition: value })}>
                       <SelectTrigger style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#EAEAEA' }}>
                         <SelectValue placeholder="Select condition" />
                       </SelectTrigger>
@@ -429,7 +431,7 @@ export function MarketplacePage() {
                     <label className="block text-sm font-medium mb-2" style={{ color: '#EAEAEA' }}>
                       Branch
                     </label>
-                    <Select value={sellForm.branch} onValueChange={(value) => setSellForm({ ...sellForm, branch: value })}>
+                    <Select value={sellForm.branch} onValueChange={(value: string) => setSellForm({ ...sellForm, branch: value })}>
                       <SelectTrigger style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#EAEAEA' }}>
                         <SelectValue placeholder="Select branch" />
                       </SelectTrigger>
@@ -483,12 +485,16 @@ export function MarketplacePage() {
                   </Button>
                   <Button
                     type="submit"
+                    disabled={submitting}
                     style={{
-                      background: 'linear-gradient(135deg, #0D47A1, #00BFFF)',
-                      border: 'none'
+                      background: submitting 
+                        ? 'linear-gradient(135deg, #6b7280, #9ca3af)' 
+                        : 'linear-gradient(135deg, #0D47A1, #00BFFF)',
+                      border: 'none',
+                      opacity: submitting ? 0.7 : 1
                     }}
                   >
-                    List Item
+                    {submitting ? 'Listing...' : 'List Item'}
                   </Button>
                 </div>
               </form>
@@ -499,13 +505,21 @@ export function MarketplacePage() {
         {/* Results Count */}
         <div className="mb-6">
           <p style={{ color: '#A0AEC0' }}>
-            Showing {filteredItems.length} items
+            Showing {filteredItems.length} items {loading && '(Loading...)'}
           </p>
         </div>
 
         {/* Items Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map((item) => (
+        {loading ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400 mx-auto mb-4"></div>
+              <p style={{ color: '#A0AEC0' }}>Loading items...</p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredItems.map((item) => (
             <GlassCard key={item.id} className="overflow-hidden">
               {/* Image */}
               <div className="relative mb-4 rounded-lg overflow-hidden">
@@ -514,15 +528,34 @@ export function MarketplacePage() {
                   alt={item.title}
                   className="w-full h-48 object-cover"
                 />
-                <button 
-                  className="absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm"
-                  style={{ 
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    color: item.liked ? '#FF69B4' : '#EAEAEA'
-                  }}
-                >
-                  <Heart size={18} fill={item.liked ? '#FF69B4' : 'none'} />
-                </button>
+                <div className="absolute top-3 right-3 flex gap-2">
+                  {/* Remove button - only show for user's own items */}
+                  {item.userId === user?.id && (
+                    <button 
+                      onClick={() => handleRemoveItem(item.id)}
+                      className="p-2 rounded-full backdrop-blur-sm hover:scale-110 transition-transform"
+                      style={{ 
+                        backgroundColor: 'rgba(220, 38, 38, 0.8)',
+                        color: '#FFFFFF'
+                      }}
+                      title="Remove Item"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  )}
+                  
+                  {/* Like button */}
+                  <button 
+                    onClick={() => handleLike(item.id)}
+                    className="p-2 rounded-full backdrop-blur-sm hover:scale-110 transition-transform"
+                    style={{ 
+                      backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                      color: item.liked ? '#FF69B4' : '#EAEAEA'
+                    }}
+                  >
+                    <Heart size={18} fill={item.liked ? '#FF69B4' : 'none'} />
+                  </button>
+                </div>
                 <div 
                   className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-medium"
                   style={{ 
@@ -585,20 +618,32 @@ export function MarketplacePage() {
                 </div>
 
                 <Button
-                  onClick={() => handleContact(item.seller)}
-                  className="w-full flex items-center justify-center gap-2"
+                  onClick={() => handleContact(item.id)}
+                  className="w-full flex items-center justify-center gap-2 transition-all duration-300"
                   style={{
-                    background: 'linear-gradient(135deg, #0D47A1, #00BFFF)',
+                    background: contactingItems.has(item.id) 
+                      ? 'linear-gradient(135deg, #16a34a, #22c55e)' 
+                      : 'linear-gradient(135deg, #0D47A1, #00BFFF)',
                     border: 'none'
                   }}
                 >
-                  <MessageCircle size={16} />
-                  Contact Seller
+                  {contactingItems.has(item.id) ? (
+                    <>
+                      <Phone size={16} />
+                      {item.sellerPhone}
+                    </>
+                  ) : (
+                    <>
+                      <MessageCircle size={16} />
+                      Contact Seller
+                    </>
+                  )}
                 </Button>
               </div>
             </GlassCard>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* No Results */}
         {filteredItems.length === 0 && (
