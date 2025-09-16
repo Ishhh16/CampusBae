@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseClient';
+import { subjectToStorageMap, storageToSubjectMap } from '../config/subjectStorageMapping';
 
 export interface ResourceFile {
   id: string;
@@ -69,6 +70,7 @@ export class StorageService {
    */
   private async listFilesInFolder(folderPath: string): Promise<StorageObject[]> {
     try {
+      console.log('📚 Listing files in folder:', folderPath);
       const { data, error } = await supabase.storage
         .from(this.bucketName)
         .list(folderPath, {
@@ -76,6 +78,7 @@ export class StorageService {
           offset: 0,
           sortBy: { column: 'name', order: 'asc' }
         });
+      console.log('📋 Storage response:', { data, error });
 
       if (error) {
         console.error(`Error listing files in ${folderPath}:`, error.message);
@@ -94,8 +97,12 @@ export class StorageService {
    */
   async getFilesForSubjectType(subject: string, type: string): Promise<ResourceFile[]> {
     try {
+      console.log('📂 Getting files for:', { subject, type });
       const resources: ResourceFile[] = [];
-      const basePath = `${subject}/${type}`;
+      const storageSubject = subjectToStorageMap[subject] || subject;
+      console.log('🗂 Storage subject mapping:', { displaySubject: subject, storageSubject });
+      const basePath = `${storageSubject}/${type}`;
+      console.log('📍 Looking in path:', basePath);
 
       if (type === 'notes' || type === 'pyqs') {
         // These types have subfolders (units or exam types)
@@ -119,7 +126,7 @@ export class StorageService {
                 name: file.name,
                 displayName: this.getDisplayName(file.name),
                 fullPath,
-                subject,
+                subject: storageToSubjectMap[storageSubject] || subject,
                 type,
                 unit: subfolder.name, // u1, u2, u3, u4 or midsem, endsem
                 signedUrl,
@@ -143,7 +150,7 @@ export class StorageService {
               name: file.name,
               displayName: this.getDisplayName(file.name),
               fullPath,
-              subject,
+              subject: storageToSubjectMap[storageSubject] || subject,
               type,
               signedUrl,
               size: file.metadata?.size,
