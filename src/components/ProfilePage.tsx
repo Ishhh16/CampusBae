@@ -246,9 +246,9 @@ export function ProfilePage() {
                 Enrollment No: {userProfile?.enrollment_number === 'Not available' ? 'Not set' : (userProfile?.enrollment_number || 'Loading...')} • Branch: {userProfile?.branch === 'Not available' ? 'Not set' : (userProfile?.branch || 'Loading...')}
               </p>
               <p style={{ color: '#A0AEC0' }}>
-                Batch: {userProfile?.batch === 'Not available' ? 'Not set' : (userProfile?.batch || 'Loading...')} • Email: {userProfile?.email || 'Loading...'}
+                Batch: {!userProfile?.batch ? 'Not set' : (userProfile.batch || 'Loading...')} • Email: {userProfile?.email || 'Loading...'}
               </p>
-              {(userProfile?.enrollment_number === 'Not available' || userProfile?.branch === 'Not available' || userProfile?.batch === 'Not available') && (
+              {(!userProfile?.enrollment_number || userProfile?.branch === 'Not available' || !userProfile?.batch) && (
                 <p className="text-xs mt-2" style={{ color: '#A0AEC0', opacity: 0.7 }}>
                   ℹ️ Some profile fields are not set. This information was collected during signup but may not be stored in the current database schema.
                 </p>

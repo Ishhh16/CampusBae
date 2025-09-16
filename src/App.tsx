@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { GalaxyBackground } from './components/GalaxyBackground';
 import { LandingPage } from './components/LandingPage';
 import { Navbar } from './components/Navbar';
+import { Footer } from './components/Footer';
 import { Dashboard } from './components/Dashboard';
 import { ProfilePage } from './components/ProfilePage';
 import { BranchResourcesPage } from './components/BranchResourcesPage';
@@ -68,7 +69,7 @@ function AppContent() {
 
   return (
     <div 
-      className="min-h-screen relative"
+      className="min-h-screen relative flex flex-col"
       style={{ 
         fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
       }}
@@ -79,7 +80,7 @@ function AppContent() {
         <Navbar currentPage={currentPage} onNavigate={handleNavigate} />
       )}
       
-      <main className="relative z-10">
+      <main className="relative z-10 flex-1">
         {currentPage === 'landing' ? (
           <LandingPage 
             onLoginSuccess={handleLoginSuccess}
@@ -90,6 +91,8 @@ function AppContent() {
           renderCurrentPage()
         )}
       </main>
+
+      <Footer onNavigate={handleNavigate} currentPage={currentPage} />
     </div>
   );
 }

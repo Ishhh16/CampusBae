@@ -84,27 +84,87 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error('📞 Invalid email format. Please use a valid IGDTUW email address.');
     }
 
-    // Check if email follows IGDTUW naming convention
+    // Enhanced validation for IGDTUW email structure
     const localPart = email.split('@')[0];
-    if (localPart.length < 3) {
-      throw new Error('🏫 Please use your complete college email address.');
+    
+    // Check minimum length
+    if (localPart.length < 5) {
+      throw new Error('🏫 Please use your complete college email address (minimum 5 characters before @igdtuw.ac.in).');
     }
 
-    // Check for common invalid patterns
+    // Check for invalid patterns
     if (localPart.includes('..') || localPart.startsWith('.') || localPart.endsWith('.')) {
       throw new Error('📞 Invalid email format. Please check your email address.');
     }
 
-    // Basic check for realistic email structure (letters, numbers, common characters)
+    // More restrictive validation for realistic email structure
     const validLocalPartRegex = /^[a-zA-Z0-9]([a-zA-Z0-9._-]*[a-zA-Z0-9])?$/;
     if (!validLocalPartRegex.test(localPart)) {
       throw new Error('📞 Please enter a valid IGDTUW email address.');
     }
 
+    // Check for suspicious patterns that indicate fake emails
+    const suspiciousPatterns = [
+      /^test/i, /^fake/i, /^dummy/i, /^sample/i,
+      /test$/i, /fake$/i, /dummy$/i, /sample$/i,
+      /123456/, /qwerty/i, /asdf/i, /^admin/i,
+      /^user/i, /^student/i, /^demo/i
+    ];
+    
+    const isSuspicious = suspiciousPatterns.some(pattern => pattern.test(localPart));
+    if (isSuspicious) {
+      throw new Error('🏫 Please use your actual IGDTUW college email address, not a test or fake email.');
+    }
+
+    // Enhanced IGDTUW email pattern validation
+    // IGDTUW emails follow pattern: name###[bt|mt|phd][branch][year]@igdtuw.ac.in
+    // Example: ishanvi048bteceai24@igdtuw.ac.in
+    
+    // Check if it follows the basic structure: letters + 3 digits + degree + branch + year
+    const igdtuwEmailPattern = /^[a-zA-Z]+[0-9]{3}(bt|mt|phd)(cseai|cse|ece|mae|eceai|mac|it|aiml)(2[2-5])$/;
+    
+    if (!igdtuwEmailPattern.test(localPart)) {
+      // Break down the validation to give specific error messages
+      const nameNumbersPattern = /^[a-zA-Z]+[0-9]{3}/;
+      if (!nameNumbersPattern.test(localPart)) {
+        throw new Error('🏫 IGDTUW email must start with your name followed by 3 digits (e.g., ishanvi048...)');
+      }
+      
+      const degreePattern = /(bt|mt|phd)/;
+      if (!degreePattern.test(localPart)) {
+        throw new Error('🏫 IGDTUW email must include degree code: bt (BTech), mt (MTech), or phd (PhD)');
+      }
+      
+      const branchPattern = /(cseai|cse|ece|mae|eceai|mac|it|aiml)/;
+      if (!branchPattern.test(localPart)) {
+        throw new Error('🏫 IGDTUW email must include valid branch code: cseai, cse, ece, mae, eceai, mac, it, or aiml');
+      }
+      
+      const yearPattern = /(2[2-5])$/;
+      if (!yearPattern.test(localPart)) {
+        throw new Error('🏫 IGDTUW email must end with admission year: 22, 23, 24, or 25');
+      }
+      
+      // If we reach here, there's some other formatting issue
+      throw new Error('🏫 Please use correct IGDTUW email format: yourname###bt/mt/phd + branch + year@igdtuw.ac.in (e.g., ishanvi048bteceai24@igdtuw.ac.in)');
+    }
+
+    console.log('✅ IGDTUW email format validation passed');
+    console.log('📊 Email breakdown:', {
+      name: localPart.match(/^[a-zA-Z]+/)?.[0],
+      rollNumber: localPart.match(/[0-9]{3}/)?.[0],
+      degree: localPart.match(/(bt|mt|phd)/)?.[0],
+      branch: localPart.match(/(cseai|cse|ece|mae|eceai|mac|it|aiml)/)?.[0],
+      year: localPart.match(/(2[2-5])$/)?.[0]
+    });
+
     // Validate password strength
     if (password.length < 6) {
       throw new Error('🔒 Password must be at least 6 characters long');
     }
+
+    console.log('📝 Attempting signup with email:', email);
+    console.log('🔍 Validating IGDTUW email format...');
 
     const { data: { user }, error: signUpError } = await supabase.auth.signUp({
       email,
@@ -120,27 +180,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     if (signUpError) {
+      console.error('❌ Signup error:', signUpError);
+      
       if (signUpError.message.includes('User already registered')) {
         throw new Error('📝 This email is already registered. Please try logging in instead.');
       }
       if (signUpError.message.includes('Password should be')) {
         throw new Error('🔒 Password is too weak. Please use a stronger password.');
       }
-      if (signUpError.message.includes('Unable to validate email address')) {
-        throw new Error('📞 Invalid email address. Please check if your IGDTUW email is correct.');
+      if (signUpError.message.includes('Unable to validate email address') || 
+          signUpError.message.includes('Invalid email') ||
+          signUpError.message.includes('Email address is invalid')) {
+        throw new Error('📞 Invalid email address. Please check if your IGDTUW email is correct and exists.');
       }
-      if (signUpError.message.includes('Invalid email')) {
-        throw new Error('📞 Please enter a valid IGDTUW email address.');
+      if (signUpError.message.includes('Signup is disabled')) {
+        throw new Error('🚫 Account registration is temporarily disabled. Please contact support.');
       }
       throw new Error(`❌ Signup failed: ${signUpError.message}`);
     }
     
     if (!user) {
-      throw new Error('❌ Signup failed. Please try again.');
+      throw new Error('❌ Signup failed. Please try again with a valid email address.');
     }
 
     console.log('✅ User created successfully:', user.id);
-    console.log('📧 Email confirmation required');
+    console.log('📧 Confirmation email sent to:', email);
+    console.log('⚠️ Note: If you don\'t receive the email, please verify your email address is correct');
 
     // Save profile info to user metadata (more reliable approach)
     console.log('📝 Saving profile info to user metadata...');
@@ -170,10 +235,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.warn('⚠️ Profile info not saved but signup succeeded. User can complete profile later.');
       // Don't throw error here - signup was successful
     }
-    
-    // Don't try database insertion during signup - it can cause foreign key issues
-    // The profile will be created later when user confirms email and logs in
-    console.log('ℹ️ Database profile will be created after email confirmation');
     
     // Note: Supabase requires email confirmation by default
     // The user will need to check their email and confirm before they can login

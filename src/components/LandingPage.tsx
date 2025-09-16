@@ -51,7 +51,7 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
               setShowLogin(true);
               setShowForm(true);
               setSignupSuccess(false);
-              onAuthError(null); // Clear any errors
+              onAuthError(''); // Clear any errors
             }}
             className={`
               text-lg px-12 py-4 rounded-full
@@ -77,7 +77,7 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
               setShowLogin(false);
               setShowForm(true);
               setSignupSuccess(false);
-              onAuthError(null); // Clear any errors
+              onAuthError(''); // Clear any errors
             }}
             className={`
               text-lg px-12 py-4 rounded-full
@@ -107,7 +107,7 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
                 onSuccess={() => {
                   setSignupSuccess(true);
                   setShowLogin(true);
-                  onAuthError(null); // Clear any previous errors
+                  onAuthError(''); // Clear any previous errors
                 }} 
                 onError={onAuthError} 
                 hasError={!!authError}
@@ -125,7 +125,10 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
               <div className="mt-4 p-3 rounded-lg border border-green-500/50 bg-green-500/10 backdrop-blur-sm">
                 <p className="font-medium text-sm flex items-center gap-2" style={{color: '#22c55e !important'}}>
                   <span style={{color: '#22c55e'}}>✅</span>
-                  Signup successful! Please check your IGDTUW email for confirmation, then login.
+                  You have entered a valid IGDTUW email! Please check your email for verification.
+                </p>
+                <p className="text-xs mt-2" style={{color: '#22c55e', opacity: 0.8}}>
+                  Check your inbox and spam folder for the confirmation email, then login.
                 </p>
               </div>
             )}
@@ -177,13 +180,13 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
       </div>
 
       {/* Meet the Creators Section */}
-      <div id="creators-section" className="pt-20 pb-32 px-4">
+      <div id="creators-section" className="pt-20 pb-20 px-4">
         <div className="max-w-6xl mx-auto">
           <h2 
             className="text-4xl md:text-5xl font-bold text-center mb-4"
             style={{ color: '#EAEAEA' }}
           >
-            Meet the 
+            Meet the{' '}
             <span 
               style={{ 
                 color: '#00E5FF', 
@@ -194,13 +197,13 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
             </span>
           </h2>
           <p 
-            className="text-xl text-center mb-16 max-w-2xl mx-auto"
+            className="text-xl text-center mb-12 max-w-2xl mx-auto"
             style={{ color: '#A0AEC0' }}
           >
             The passionate team behind CampusBae
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
             {/* Ishanvi Srivastava */}
             <div className="group">
               <div 
