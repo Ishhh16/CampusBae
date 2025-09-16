@@ -6,12 +6,19 @@ import { Search, Filter } from 'lucide-react';
 import { ResourcesList } from './ResourcesList';
 import { branches, semesters, types, getSubjectsForBranchSemester } from '../config/subjectMapping';
 
-export function BranchResourcesPage() {
+interface BranchResourcesPageProps {
+  initialBranch?: string;
+  initialSemester?: string;
+  initialSubject?: string;
+  initialType?: string;
+}
+
+export function BranchResourcesPage({ initialBranch = '', initialSemester = '', initialSubject = '', initialType = '' }: BranchResourcesPageProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedBranch, setSelectedBranch] = useState('');
-  const [selectedSemester, setSelectedSemester] = useState('');
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedBranch, setSelectedBranch] = useState(initialBranch);
+  const [selectedSemester, setSelectedSemester] = useState(initialSemester);
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>(initialSubject ? [initialSubject] : []);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(initialType ? [initialType] : []);
   
   // Available subjects based on branch and semester
   const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);

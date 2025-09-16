@@ -16,6 +16,18 @@ function AppContent() {
   const { user, loading } = useAuth();
   const [currentPage, setCurrentPage] = useState<'landing' | 'home' | 'profile' | 'resources' | 'marketplace' | 'societies' | 'networking'>('landing');
   const [authError, setAuthError] = useState<string | null>(null);
+  
+  // State for navigation filters
+  const [resourceFilters, setResourceFilters] = useState<{
+    branch?: string;
+    semester?: string;
+    subject?: string;
+    type?: string;
+  }>({});
+  
+  const [societyFilters, setSocietyFilters] = useState<{
+    scrollToSociety?: number;
+  }>({});
 
   // Simple navigation logic without complex state management
   useEffect(() => {
@@ -28,8 +40,18 @@ function AppContent() {
     }
   }, [user, loading]); // Remove currentPage from deps to prevent infinite loop
 
-  const handleNavigate = (page: string) => {
+  const handleNavigate = (page: string, filters?: any) => {
     setAuthError(null);
+    if (page === 'resources' && filters) {
+      setResourceFilters(filters);
+      setSocietyFilters({});
+    } else if (page === 'societies' && filters) {
+      setSocietyFilters(filters);
+      setResourceFilters({});
+    } else {
+      setResourceFilters({});
+      setSocietyFilters({});
+    }
     setCurrentPage(page as any);
   };
 
@@ -55,11 +77,16 @@ function AppContent() {
       case 'profile':
         return <ProfilePage />;
       case 'resources':
-        return <BranchResourcesPage />;
+        return <BranchResourcesPage 
+          initialBranch={resourceFilters.branch}
+          initialSemester={resourceFilters.semester}
+          initialSubject={resourceFilters.subject}
+          initialType={resourceFilters.type}
+        />;
       case 'marketplace':
         return <MarketplacePage />;
       case 'societies':
-        return <SocietiesPage />;
+        return <SocietiesPage scrollToSociety={societyFilters.scrollToSociety} />;
       case 'networking':
         return <NetworkingPage />;
       default:

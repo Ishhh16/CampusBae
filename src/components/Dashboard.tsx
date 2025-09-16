@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Button } from './ui/button';
 
 interface DashboardProps {
-  onNavigate: (page: string) => void;
+  onNavigate: (page: string, filters?: any) => void;
 }
 
 export function Dashboard({ onNavigate }: DashboardProps) {
@@ -26,17 +26,17 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const [newTodoText, setNewTodoText] = useState('');
 
   const branchResources = [
-    { name: 'Data Structures', semester: 'Sem 3', type: 'Notes', icon: <Book size={24} /> },
-    { name: 'Computer Networks', semester: 'Sem 5', type: 'PYQs', icon: <FileText size={24} /> },
-    { name: 'Database Systems', semester: 'Sem 4', type: 'Books', icon: <Book size={24} /> },
-    { name: 'Operating Systems', semester: 'Sem 4', type: 'Syllabus', icon: <FileText size={24} /> }
+    { name: 'Applied Mathematics - AM', semester: 'Sem 1', type: 'Notes', icon: <Book size={24} />, branch: 'CSE', subject: 'Applied Mathematics - AM (BAS 101)' },
+    { name: 'Data Structures and Algorithms - DSA', semester: 'Sem 2', type: 'PYQs', icon: <FileText size={24} />, branch: 'CSE', subject: 'Data Structures and Algorithms - DSA (BCS 103)' },
+    { name: 'Programming with Python - PP', semester: 'Sem 1', type: 'Notes', icon: <Book size={24} />, branch: 'CSE-AI', subject: 'Programming with Python - PP (BAI 101)' },
+    { name: 'Web Application Development - WAD', semester: 'Sem 1', type: 'Syllabus', icon: <FileText size={24} />, branch: 'CSE-AI', subject: 'Web Application Development - WAD (BCS 102)' }
   ];
 
   const societies = [
-    { name: 'TechSoc IGDTUW', type: 'Technical', members: '500+' },
-    { name: 'Cultural Society', type: 'Cultural', members: '300+' },
-    { name: 'Literary Club', type: 'Literary', members: '200+' },
-    { name: 'Sports Club', type: 'Sports', members: '400+' }
+    { id: 1, name: 'Google Developer Student Clubs(GDSC)', type: 'Technical', members: '500+', image: '/gdsc .png' },
+    { id: 2, name: 'Assetmerkle', type: 'Blockchain & Web3', members: '350+', image: '/assetmerkle.png' },
+    { id: 3, name: 'IEEE Student Chapter', type: 'Technical', members: '200+', image: '/ieee.png' },
+    { id: 4, name: 'Microsoft Student Chapter(MSC)', type: 'Technical', members: '400+', image: '/msc.png' }
   ];
 
   const marketplaceItems = [
@@ -160,7 +160,16 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {branchResources.map((resource, index) => (
-              <GlassCard key={index} className="cursor-pointer group hover:scale-[1.02] transition-transform">
+              <GlassCard 
+                key={index} 
+                className="cursor-pointer group hover:scale-[1.02] transition-transform"
+                onClick={() => onNavigate('resources', {
+                  branch: resource.branch,
+                  semester: resource.semester.replace('Sem ', ''),
+                  subject: resource.subject,
+                  type: resource.type
+                })}
+              >
                 <div className="flex items-center mb-3 text-[#00E5FF]">
                   {resource.icon}
                 </div>
@@ -194,11 +203,19 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {societies.map((society, index) => (
-              <GlassCard key={index} className="cursor-pointer">
-                <div className="flex items-center mb-3 text-[#00E5FF]">
-                  <Users size={24} />
+              <GlassCard 
+                key={index} 
+                className="cursor-pointer"
+                onClick={() => onNavigate('societies', { scrollToSociety: society.id })}
+              >
+                <div className="flex items-center justify-center mb-3 h-12">
+                  <img 
+                    src={society.image} 
+                    alt={society.name}
+                    className="h-10 w-auto object-contain"
+                  />
                 </div>
-                <h3 className="font-semibold mb-2" style={{ color: '#EAEAEA' }}>
+                <h3 className="font-semibold mb-2 text-sm" style={{ color: '#EAEAEA' }}>
                   {society.name}
                 </h3>
                 <p className="text-sm mb-2" style={{ color: '#A0AEC0' }}>
@@ -212,7 +229,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           </div>
         </div>
 
-        {/* Marketplace Preview */}
+        {/* Marketplace Preview - Temporarily Commented Out
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-semibold" style={{ color: '#EAEAEA' }}>
@@ -228,7 +245,11 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {marketplaceItems.map((item, index) => (
-              <GlassCard key={index} className="cursor-pointer">
+              <GlassCard 
+                key={index} 
+                className="cursor-pointer"
+                onClick={() => onNavigate('marketplace')}
+              >
                 <div className="flex items-center mb-3 text-[#00E5FF]">
                   <ShoppingBag size={24} />
                 </div>
@@ -245,6 +266,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             ))}
           </div>
         </div>
+        */}
 
         {/* Quick Actions */}
         <div>

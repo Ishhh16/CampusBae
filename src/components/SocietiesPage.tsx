@@ -1,12 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { GlassCard } from './GlassCard';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { Search, Users, ExternalLink, Calendar, MapPin, Mail, Instagram, Linkedin } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
-export function SocietiesPage() {
+interface SocietiesPageProps {
+  scrollToSociety?: number;
+}
+
+export function SocietiesPage({ scrollToSociety }: SocietiesPageProps) {
   const [searchQuery, setSearchQuery] = useState('');
+  const societyRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
+
+  // Scroll to specific society when scrollToSociety prop changes
+  useEffect(() => {
+    if (scrollToSociety && societyRefs.current[scrollToSociety]) {
+      const element = societyRefs.current[scrollToSociety];
+      if (element) {
+        element.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start',
+          inline: 'nearest'
+        });
+      }
+    }
+  }, [scrollToSociety]);
 
   const societies = [
     {
@@ -364,7 +383,11 @@ export function SocietiesPage() {
         {/* Societies Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {filteredSocieties.map((society) => (
-            <GlassCard key={society.id} className="overflow-hidden">
+            <div 
+              key={society.id}
+              ref={(el) => (societyRefs.current[society.id] = el)}
+            >
+              <GlassCard className="overflow-hidden">
               {/* Header Image */}
               <div className="relative mb-6 rounded-lg overflow-hidden">
                 <ImageWithFallback
@@ -450,6 +473,7 @@ export function SocietiesPage() {
                 </div>
               </div>
             </GlassCard>
+            </div>
           ))}
         </div>
 
