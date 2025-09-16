@@ -1,117 +1,70 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GlassCard } from './GlassCard';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Book, FileText, Download, ExternalLink, Search } from 'lucide-react';
+import { Search, Filter } from 'lucide-react';
+import { ResourcesList } from './ResourcesList';
+import { branches, semesters, types, getSubjectsForBranchSemester } from '../config/subjectMapping';
 
 export function BranchResourcesPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedBranch, setSelectedBranch] = useState('all');
-  const [selectedSemester, setSelectedSemester] = useState('all');
-  const [selectedType, setSelectedType] = useState('all');
+  const [selectedBranch, setSelectedBranch] = useState('');
+  const [selectedSemester, setSelectedSemester] = useState('');
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  
+  // Available subjects based on branch and semester
+  const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);
 
-  const resources = [
-    {
-      id: 1,
-      title: 'Data Structures and Algorithms',
-      subject: 'DSA',
-      branch: 'CSE',
-      semester: 3,
-      type: 'Notes',
-      author: 'Prof. Sharma',
-      size: '2.5 MB',
-      downloads: 1200
-    },
-    {
-      id: 2,
-      title: 'Computer Networks PYQ 2023',
-      subject: 'CN',
-      branch: 'CSE',
-      semester: 5,
-      type: 'PYQs',
-      author: 'Question Bank',
-      size: '1.8 MB',
-      downloads: 890
-    },
-    {
-      id: 3,
-      title: 'Database Management Systems',
-      subject: 'DBMS',
-      branch: 'CSE',
-      semester: 4,
-      type: 'Books',
-      author: 'Korth & Silberschatz',
-      size: '15.2 MB',
-      downloads: 2100
-    },
-    {
-      id: 4,
-      title: 'Operating Systems Syllabus 2024',
-      subject: 'OS',
-      branch: 'CSE',
-      semester: 4,
-      type: 'Syllabus',
-      author: 'IGDTUW',
-      size: '500 KB',
-      downloads: 650
-    },
-    {
-      id: 5,
-      title: 'Machine Learning Notes',
-      subject: 'ML',
-      branch: 'CSE',
-      semester: 7,
-      type: 'Notes',
-      author: 'Prof. Gupta',
-      size: '4.2 MB',
-      downloads: 780
-    },
-    {
-      id: 6,
-      title: 'Software Engineering PYQ 2022-23',
-      subject: 'SE',
-      branch: 'CSE',
-      semester: 6,
-      type: 'PYQs',
-      author: 'Question Bank',
-      size: '2.1 MB',
-      downloads: 560
+  // Update available subjects when branch or semester changes
+  useEffect(() => {
+    if (selectedBranch && selectedSemester) {
+      const subjects = getSubjectsForBranchSemester(selectedBranch, selectedSemester);
+      setAvailableSubjects(subjects);
+      // Reset selected subjects when branch/semester changes
+      setSelectedSubjects([]);
+    } else {
+      setAvailableSubjects([]);
+      setSelectedSubjects([]);
     }
-  ];
+  }, [selectedBranch, selectedSemester]);
 
-  const branches = ['all', 'CSEAI', 'CSE', 'MAC', 'IT', 'AIML', 'ECEAI', 'ECE', 'MAE'];
-  const semesters = ['all', 1, 2, 3, 4, 5, 6, 7, 8];
-  const types = ['all', 'Notes', 'PYQs', 'Books', 'Syllabus'];
-
-  const filteredResources = resources.filter(resource => {
-    const matchesSearch = resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         resource.subject.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesBranch = selectedBranch === 'all' || resource.branch === selectedBranch;
-    const matchesSemester = selectedSemester === 'all' || resource.semester === parseInt(selectedSemester);
-    const matchesType = selectedType === 'all' || resource.type === selectedType;
-
-    return matchesSearch && matchesBranch && matchesSemester && matchesType;
-  });
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'Notes': return <Book size={20} />;
-      case 'Books': return <Book size={20} />;
-      case 'PYQs': return <FileText size={20} />;
-      case 'Syllabus': return <FileText size={20} />;
-      default: return <FileText size={20} />;
-    }
+  const handleSubjectToggle = (subject: string) => {
+    setSelectedSubjects(prev => {
+      if (prev.includes(subject)) {
+        return prev.filter(s => s !== subject);
+      } else {
+        return [...prev, subject];
+      }
+    });
   };
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'Notes': return '#00E5FF';
-      case 'Books': return '#4CAF50';
-      case 'PYQs': return '#FF9800';
-      case 'Syllabus': return '#9C27B0';
-      default: return '#00E5FF';
-    }
+  const handleTypeToggle = (type: string) => {
+    setSelectedTypes(prev => {
+      if (prev.includes(type)) {
+        return prev.filter(t => t !== type);
+      } else {
+        return [...prev, type];
+      }
+    });
   };
+
+  const selectAllSubjects = () => {
+    setSelectedSubjects([...availableSubjects]);
+  };
+
+  const clearAllSubjects = () => {
+    setSelectedSubjects([]);
+  };
+
+  const selectAllTypes = () => {
+    setSelectedTypes([...types]);
+  };
+
+  const clearAllTypes = () => {
+    setSelectedTypes([]);
+  };
+
 
   return (
     <div className="pt-24 pb-12 px-4">
@@ -127,160 +80,166 @@ export function BranchResourcesPage() {
         </div>
 
         {/* Filters */}
-        <GlassCard className="mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {/* Search */}
-            <div className="lg:col-span-2 relative">
-              <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#A0AEC0]" />
-              <Input
-                placeholder="Search subjects, topics..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-                style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  color: '#EAEAEA'
-                }}
-              />
+        <div className="space-y-6 mb-8">
+          {/* Primary Filters */}
+          <GlassCard>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              {/* Search */}
+              <div className="relative">
+                <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#A0AEC0]" />
+                <Input
+                  placeholder="Search files..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    color: '#EAEAEA'
+                  }}
+                />
+              </div>
+
+              {/* Branch Filter */}
+              <Select value={selectedBranch} onValueChange={setSelectedBranch}>
+                <SelectTrigger style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#EAEAEA' }}>
+                  <SelectValue placeholder="Select Branch" />
+                </SelectTrigger>
+                <SelectContent>
+                  {branches.map(branch => (
+                    <SelectItem key={branch} value={branch}>
+                      {branch}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Semester Filter */}
+              <Select 
+                value={selectedSemester} 
+                onValueChange={setSelectedSemester}
+                disabled={!selectedBranch}
+              >
+                <SelectTrigger style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#EAEAEA' }}>
+                  <SelectValue placeholder="Select Semester" />
+                </SelectTrigger>
+                <SelectContent>
+                  {semesters.map(sem => (
+                    <SelectItem key={sem} value={sem}>
+                      Semester {sem}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+          </GlassCard>
 
-            {/* Branch Filter */}
-            <Select value={selectedBranch} onValueChange={setSelectedBranch}>
-              <SelectTrigger style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#EAEAEA' }}>
-                <SelectValue placeholder="Branch" />
-              </SelectTrigger>
-              <SelectContent>
-                {branches.map(branch => (
-                  <SelectItem key={branch} value={branch}>
-                    {branch === 'all' ? 'All Branches' : branch}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {/* Semester Filter */}
-            <Select value={selectedSemester} onValueChange={setSelectedSemester}>
-              <SelectTrigger style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#EAEAEA' }}>
-                <SelectValue placeholder="Semester" />
-              </SelectTrigger>
-              <SelectContent>
-                {semesters.map(sem => (
-                  <SelectItem key={sem} value={sem.toString()}>
-                    {sem === 'all' ? 'All Semesters' : `Semester ${sem}`}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {/* Type Filter */}
-            <Select value={selectedType} onValueChange={setSelectedType}>
-              <SelectTrigger style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#EAEAEA' }}>
-                <SelectValue placeholder="Type" />
-              </SelectTrigger>
-              <SelectContent>
-                {types.map(type => (
-                  <SelectItem key={type} value={type}>
-                    {type === 'all' ? 'All Types' : type}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </GlassCard>
-
-        {/* Results Count */}
-        <div className="mb-6">
-          <p style={{ color: '#A0AEC0' }}>
-            Showing {filteredResources.length} resources
-          </p>
-        </div>
-
-        {/* Resources Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredResources.map((resource) => (
-            <GlassCard key={resource.id} className="cursor-pointer group">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div style={{ color: getTypeColor(resource.type) }}>
-                    {getTypeIcon(resource.type)}
-                  </div>
-                  <div>
-                    <span 
-                      className="text-xs px-2 py-1 rounded-full font-medium"
-                      style={{ 
-                        backgroundColor: `${getTypeColor(resource.type)}20`,
-                        color: getTypeColor(resource.type)
-                      }}
-                    >
-                      {resource.type}
-                    </span>
-                  </div>
+          {/* Subject Selection */}
+          {availableSubjects.length > 0 && (
+            <GlassCard>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold" style={{ color: '#EAEAEA' }}>Subjects</h3>
+                <div className="flex gap-2">
+                  <button
+                    onClick={selectAllSubjects}
+                    className="text-xs px-3 py-1 rounded-full transition-colors"
+                    style={{ backgroundColor: 'rgba(0, 229, 255, 0.2)', color: '#00E5FF' }}
+                  >
+                    Select All
+                  </button>
+                  <button
+                    onClick={clearAllSubjects}
+                    className="text-xs px-3 py-1 rounded-full transition-colors"
+                    style={{ backgroundColor: 'rgba(255, 107, 107, 0.2)', color: '#FF6B6B' }}
+                  >
+                    Clear All
+                  </button>
                 </div>
-                <span 
-                  className="text-xs px-2 py-1 rounded-full"
-                  style={{ backgroundColor: 'rgba(0, 229, 255, 0.2)', color: '#00E5FF' }}
-                >
-                  Sem {resource.semester}
-                </span>
               </div>
-
-              <h3 className="text-lg font-semibold mb-2" style={{ color: '#EAEAEA' }}>
-                {resource.title}
-              </h3>
-
-              <p className="text-sm mb-2" style={{ color: '#A0AEC0' }}>
-                {resource.subject} • {resource.branch}
-              </p>
-
-              <p className="text-sm mb-4" style={{ color: '#A0AEC0' }}>
-                By {resource.author}
-              </p>
-
-              <div className="flex items-center justify-between text-xs mb-4" style={{ color: '#A0AEC0' }}>
-                <span>{resource.size}</span>
-                <span>{resource.downloads.toLocaleString()} downloads</span>
-              </div>
-
-              <div className="flex gap-2">
-                <button 
-                  className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg transition-colors duration-200"
-                  style={{ 
-                    backgroundColor: 'rgba(0, 229, 255, 0.2)', 
-                    color: '#00E5FF',
-                    border: '1px solid rgba(0, 229, 255, 0.3)'
-                  }}
-                >
-                  <Download size={16} />
-                  Download
-                </button>
-                <button 
-                  className="flex items-center justify-center gap-2 py-2 px-3 rounded-lg transition-colors duration-200"
-                  style={{ 
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)', 
-                    color: '#EAEAEA',
-                    border: '1px solid rgba(255, 255, 255, 0.1)'
-                  }}
-                >
-                  <ExternalLink size={16} />
-                  View
-                </button>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                {availableSubjects.map(subject => (
+                  <button
+                    key={subject}
+                    onClick={() => handleSubjectToggle(subject)}
+                    className={`text-sm px-3 py-2 rounded-lg transition-all ${
+                      selectedSubjects.includes(subject) 
+                        ? 'scale-105'
+                        : 'hover:scale-105'
+                    }`}
+                    style={{
+                      backgroundColor: selectedSubjects.includes(subject)
+                        ? 'rgba(0, 229, 255, 0.3)'
+                        : 'rgba(255, 255, 255, 0.05)',
+                      color: selectedSubjects.includes(subject) ? '#00E5FF' : '#EAEAEA',
+                      border: `1px solid ${selectedSubjects.includes(subject) 
+                        ? 'rgba(0, 229, 255, 0.5)' 
+                        : 'rgba(255, 255, 255, 0.1)'}`
+                    }}
+                  >
+                    {subject}
+                  </button>
+                ))}
               </div>
             </GlassCard>
-          ))}
+          )}
+
+          {/* Type Selection */}
+          <GlassCard>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold" style={{ color: '#EAEAEA' }}>Resource Types</h3>
+              <div className="flex gap-2">
+                <button
+                  onClick={selectAllTypes}
+                  className="text-xs px-3 py-1 rounded-full transition-colors"
+                  style={{ backgroundColor: 'rgba(0, 229, 255, 0.2)', color: '#00E5FF' }}
+                >
+                  Select All
+                </button>
+                <button
+                  onClick={clearAllTypes}
+                  className="text-xs px-3 py-1 rounded-full transition-colors"
+                  style={{ backgroundColor: 'rgba(255, 107, 107, 0.2)', color: '#FF6B6B' }}
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {types.map(type => (
+                <button
+                  key={type}
+                  onClick={() => handleTypeToggle(type)}
+                  className={`text-sm px-4 py-3 rounded-lg transition-all flex items-center gap-2 ${
+                    selectedTypes.includes(type) 
+                      ? 'scale-105'
+                      : 'hover:scale-105'
+                  }`}
+                  style={{
+                    backgroundColor: selectedTypes.includes(type)
+                      ? 'rgba(156, 39, 176, 0.3)'
+                      : 'rgba(255, 255, 255, 0.05)',
+                    color: selectedTypes.includes(type) ? '#9C27B0' : '#EAEAEA',
+                    border: `1px solid ${selectedTypes.includes(type) 
+                      ? 'rgba(156, 39, 176, 0.5)' 
+                      : 'rgba(255, 255, 255, 0.1)'}`
+                  }}
+                >
+                  <Filter size={16} />
+                  {type.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </GlassCard>
         </div>
 
-        {/* No Results */}
-        {filteredResources.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-xl mb-2" style={{ color: '#A0AEC0' }}>
-              No resources found
-            </p>
-            <p style={{ color: '#A0AEC0' }}>
-              Try adjusting your filters or search terms
-            </p>
-          </div>
-        )}
+        {/* Resources List */}
+        <ResourcesList
+          selectedBranch={selectedBranch}
+          selectedSemester={selectedSemester}
+          selectedSubjects={selectedSubjects}
+          selectedTypes={selectedTypes}
+          searchQuery={searchQuery}
+        />
 
         {/* Upload Note */}
         <GlassCard className="mt-12 text-center">
