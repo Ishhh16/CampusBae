@@ -207,7 +207,7 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
             {/* Ishanvi Srivastava */}
             <div className="group">
               <div 
-                className="p-6 rounded-2xl backdrop-blur-sm border transition-all duration-300 hover:scale-105 hover:shadow-2xl text-center"
+                className="p-6 rounded-2xl backdrop-blur-sm border transition-all duration-300 hover:scale-105 hover:shadow-2xl text-center min-h-96"
                 style={{
                   background: 'rgba(255, 255, 255, 0.05)',
                   border: '1px solid rgba(0, 229, 255, 0.2)',
@@ -216,31 +216,18 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
               >
                 <div className="mb-4">
                   <div 
-                    className="w-20 h-20 mx-auto mb-4 transition-all duration-300 group-hover:scale-110 overflow-hidden border-2 border-cyan-400/30"
+                    className="w-28 h-28 mx-auto mb-4 transition-all duration-300 group-hover:scale-110 overflow-hidden border-2 border-cyan-400/30"
                     style={{
                       borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #00E5FF, #0D47A1)',
-                      boxShadow: '0 8px 32px rgba(0, 229, 255, 0.3)',
                       aspectRatio: '1 / 1'
                     }}
                   >
-                    <div 
-                      className="w-full h-full flex items-center justify-center bg-gray-800/50"
+                    <img 
+                      src="/ish.jpg" 
+                      alt="Ish" 
+                      className="w-full h-full object-cover"
                       style={{ borderRadius: '50%' }}
-                    >
-                      <svg 
-                        width="32" 
-                        height="32" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="1.5"
-                        className="text-cyan-300"
-                      >
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                      </svg>
-                    </div>
+                    />
                   </div>
                   <h3 
                     className="text-xl font-bold mb-1"
@@ -252,14 +239,14 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
                     className="text-sm mb-3"
                     style={{ color: '#00BFFF' }}
                   >
-                    ECE-AI'28
+                    The Brain Behind the Bae
                   </p>
                 </div>
                 <p 
                   className="text-sm leading-relaxed"
                   style={{ color: '#A0AEC0' }}
                 >
-                  "Turning ideas into reality through code. Building solutions that make campus life easier and more connected."
+                  Carrying the spark that made this happen.
                 </p>
               </div>
             </div>
@@ -267,7 +254,7 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
             {/* Nishtha */}
             <div className="group">
               <div 
-                className="p-6 rounded-2xl backdrop-blur-sm border transition-all duration-300 hover:scale-105 hover:shadow-2xl text-center"
+                className="p-6 rounded-2xl backdrop-blur-sm border transition-all duration-300 hover:scale-105 hover:shadow-2xl text-center min-h-96"
                 style={{
                   background: 'rgba(255, 255, 255, 0.05)',
                   border: '1px solid rgba(0, 229, 255, 0.2)',
@@ -276,31 +263,18 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
               >
                 <div className="mb-4">
                   <div 
-                    className="w-20 h-20 mx-auto mb-4 transition-all duration-300 group-hover:scale-110 overflow-hidden border-2 border-cyan-400/30"
+                    className="w-28 h-28 mx-auto mb-4 transition-all duration-300 group-hover:scale-110 overflow-hidden border-2 border-cyan-400/30"
                     style={{
                       borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #00E5FF, #0D47A1)',
-                      boxShadow: '0 8px 32px rgba(0, 229, 255, 0.3)',
                       aspectRatio: '1 / 1'
                     }}
                   >
-                    <div 
-                      className="w-full h-full flex items-center justify-center bg-gray-800/50"
+                    <img 
+                      src="/nish.png" 
+                      alt="Nish" 
+                      className="w-full h-full object-cover"
                       style={{ borderRadius: '50%' }}
-                    >
-                      <svg 
-                        width="32" 
-                        height="32" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="1.5"
-                        className="text-cyan-300"
-                      >
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                      </svg>
-                    </div>
+                    />
                   </div>
                   <h3 
                     className="text-xl font-bold mb-1"
@@ -312,14 +286,14 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
                     className="text-sm mb-3"
                     style={{ color: '#00BFFF' }}
                   >
-                    ECE-AI'28
+                    Always full of vibes
                   </p>
                 </div>
                 <p 
                   className="text-sm leading-relaxed"
                   style={{ color: '#A0AEC0' }}
                 >
-                  "Passionate about creating intuitive user experiences. Designing with empathy to solve real student problems."
+                  Brings warmth wherever they go.
                 </p>
               </div>
             </div>
@@ -327,7 +301,7 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
             {/* Kavya */}
             <div className="group">
               <div 
-                className="p-6 rounded-2xl backdrop-blur-sm border transition-all duration-300 hover:scale-105 hover:shadow-2xl text-center"
+                className="p-6 rounded-2xl backdrop-blur-sm border transition-all duration-300 hover:scale-105 hover:shadow-2xl text-center min-h-96"
                 style={{
                   background: 'rgba(255, 255, 255, 0.05)',
                   border: '1px solid rgba(0, 229, 255, 0.2)',
@@ -336,50 +310,37 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
               >
                 <div className="mb-4">
                   <div 
-                    className="w-20 h-20 mx-auto mb-4 transition-all duration-300 group-hover:scale-110 overflow-hidden border-2 border-cyan-400/30"
+                    className="w-28 h-28 mx-auto mb-4 transition-all duration-300 group-hover:scale-110 overflow-hidden border-2 border-cyan-400/30"
                     style={{
                       borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #00E5FF, #0D47A1)',
-                      boxShadow: '0 8px 32px rgba(0, 229, 255, 0.3)',
                       aspectRatio: '1 / 1'
                     }}
                   >
-                    <div 
-                      className="w-full h-full flex items-center justify-center bg-gray-800/50"
+                    <img 
+                      src="/kavya.jpg" 
+                      alt="Kavya" 
+                      className="w-full h-full object-cover"
                       style={{ borderRadius: '50%' }}
-                    >
-                      <svg 
-                        width="32" 
-                        height="32" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="1.5"
-                        className="text-cyan-300"
-                      >
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                      </svg>
-                    </div>
+                    />
                   </div>
                   <h3 
                     className="text-xl font-bold mb-1"
                     style={{ color: '#EAEAEA' }}
                   >
-                    Kavya
+                    Kavya Jain
                   </h3>
                   <p 
                     className="text-sm mb-3"
                     style={{ color: '#00BFFF' }}
                   >
-                    ECE-AI'28
+                    The calm soul
                   </p>
                 </div>
                 <p 
                   className="text-sm leading-relaxed"
                   style={{ color: '#A0AEC0' }}
                 >
-                  "Bridging technology and creativity. Focused on building features that enhance student collaboration and learning."
+                  Easygoing and grounded to the core.
                 </p>
               </div>
             </div>
@@ -387,7 +348,7 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
             {/* Manvi */}
             <div className="group">
               <div 
-                className="p-6 rounded-2xl backdrop-blur-sm border transition-all duration-300 hover:scale-105 hover:shadow-2xl text-center"
+                className="p-6 rounded-2xl backdrop-blur-sm border transition-all duration-300 hover:scale-105 hover:shadow-2xl text-center min-h-96"
                 style={{
                   background: 'rgba(255, 255, 255, 0.05)',
                   border: '1px solid rgba(0, 229, 255, 0.2)',
@@ -396,31 +357,18 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
               >
                 <div className="mb-4">
                   <div 
-                    className="w-20 h-20 mx-auto mb-4 transition-all duration-300 group-hover:scale-110 overflow-hidden border-2 border-cyan-400/30"
+                    className="w-28 h-28 mx-auto mb-4 transition-all duration-300 group-hover:scale-110 overflow-hidden border-2 border-cyan-400/30"
                     style={{
                       borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #00E5FF, #0D47A1)',
-                      boxShadow: '0 8px 32px rgba(0, 229, 255, 0.3)',
                       aspectRatio: '1 / 1'
                     }}
                   >
-                    <div 
-                      className="w-full h-full flex items-center justify-center bg-gray-800/50"
+                    <img 
+                      src="/manvi.jpg" 
+                      alt="Manvi" 
+                      className="w-full h-full object-cover"
                       style={{ borderRadius: '50%' }}
-                    >
-                      <svg 
-                        width="32" 
-                        height="32" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="1.5"
-                        className="text-cyan-300"
-                      >
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                      </svg>
-                    </div>
+                    />
                   </div>
                   <h3 
                     className="text-xl font-bold mb-1"
@@ -432,14 +380,14 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
                     className="text-sm mb-3"
                     style={{ color: '#00BFFF' }}
                   >
-                    ECE-AI'28
+                    The endless energy
                   </p>
                 </div>
                 <p 
                   className="text-sm leading-relaxed"
                   style={{ color: '#A0AEC0' }}
                 >
-                  "Dedicated to innovation and problem-solving. Building robust systems that empower students to achieve their goals."
+                  A spirit that keeps things light and lively.
                 </p>
               </div>
             </div>
