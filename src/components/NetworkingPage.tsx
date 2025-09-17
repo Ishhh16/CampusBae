@@ -52,7 +52,7 @@ export function NetworkingPage() {
       branch: 'ECEAI',
       year: '2nd Year',
       linkedin: 'https://www.linkedin.com/in/nishtha-malik-8877a6325/',
-      image: 'https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=150&h=150&fit=crop&crop=face'
+      image: '/nish.png'
     },
     {
       id: 5,
@@ -85,6 +85,38 @@ export function NetworkingPage() {
       year: '2nd Year',
       linkedin: 'https://www.linkedin.com/in/jayati-s-tiwary/',
       image: '/jayati.png'
+    },
+    {
+      id: 9,
+      name: 'Payal',
+      branch: 'CSEAI',
+      year: '2nd Year',
+      linkedin: 'https://www.linkedin.com/in/payal-b8a5a2323/',
+      image: '/payal.jpg'
+    },
+    {
+      id: 10,
+      name: 'Aafia Iqbal',
+      branch: 'AIML',
+      year: '2nd Year',
+      linkedin: 'https://www.linkedin.com/in/aafia-iqbal/',
+      image: '/aafia.jpg'
+    },
+    {
+      id: 11,
+      name: 'Richa Sukla',
+      branch: 'CSE',
+      year: '2nd Year',
+      linkedin: 'https://www.linkedin.com/in/richa-sukla-2484482bb/',
+      image: '/rs.png'
+    },
+    {
+      id: 12,
+      name: 'Baani Kaur',
+      branch: 'ECEAI',
+      year: '2nd Year',
+      linkedin: 'https://www.linkedin.com/in/baani-kaur-048a61307/',
+      image: '/baani.jpg'
     }
   ];
 

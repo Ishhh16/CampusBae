@@ -321,6 +321,38 @@ export function SocietiesPage({ scrollToSociety }: SocietiesPageProps) {
         { name: 'Shark Tank Igdtuw', date: '2024-04-10' }
       ],
       achievements: ['Designathon', 'Mentorship Circles']
+    },
+    {
+      id: 19,
+      name: 'Taarangana', 
+      category: 'Fest Organising societies',
+      president: '',
+      description: 'Taarangana, the annual cultural fest of Indira Gandhi Delhi Technical University for Women (IGDTUW), is a much-anticipated event that brings a burst of energy, creativity, and celebration to the campus. This fest is renowned for its vibrant atmosphere and diverse range of activities, providing students with a unique platform to showcase their talents and immerse themselves in cultural festivities. Taarangana stands out as a hallmark of IGDTUW, fostering a sense of community and artistic expression among students.',
+      email: 'ecell@igdtuw.ac.in',
+      website: '',
+      instagram: 'https://www.instagram.com/taarangana/',
+      image: '/tarrang.jpg',
+      upcomingEvents: [
+        { name: 'Summer Skills Sprint Challenge', date: '2024-03-30' },
+        { name: 'Shark Tank Igdtuw', date: '2024-04-10' }
+      ],
+      achievements: ['taarangana-25(mohit chauhan)', 'taarangana-24(shaan)']
+    },
+    {
+      id: 20,
+      name: 'Synergy', 
+      category: 'Sports',
+      president: 'Pranchal',
+      description: 'Synergy is the Official Sports Club of IGDTUW. At Synergy, we are passionate about fostering a love for sports among women. Our club has proudly represented IGDTUW, earning numerous accolades at inter-college sports meets. We host a variety of intra-college tournaments, from volleyball and cricket to badminton and more, ensuring theres something for every sports enthusiast. We believe in the power of sports to bring people together and empower women to break barriers.',
+      email: 'ecell@igdtuw.ac.in',
+      website: '',
+      instagram: 'https://www.instagram.com/synergy_igdtuw/',
+      image: '/synergy.jpg',
+      upcomingEvents: [
+        { name: 'Summer Skills Sprint Challenge', date: '2024-03-30' },
+        { name: 'Shark Tank Igdtuw', date: '2024-04-10' }
+      ],
+      achievements: ['Relay Rush', 'Tug of war']
     }
   ];
 
