@@ -48,7 +48,6 @@ export class StorageService {
         .createSignedUrl(filePath, 3600); // 1 hour expiry
 
       if (error) {
-        console.error(`Error creating signed URL for ${filePath}:`, error);
         throw error;
       }
 
@@ -60,7 +59,6 @@ export class StorageService {
 
       return data.signedUrl;
     } catch (error) {
-      console.error(`Error in getSignedUrl for ${filePath}:`, error);
       throw error;
     }
   }
@@ -70,7 +68,6 @@ export class StorageService {
    */
   private async listFilesInFolder(folderPath: string): Promise<StorageObject[]> {
     try {
-      console.log('📚 Listing files in folder:', folderPath);
       const { data, error } = await supabase.storage
         .from(this.bucketName)
         .list(folderPath, {
@@ -78,16 +75,13 @@ export class StorageService {
           offset: 0,
           sortBy: { column: 'name', order: 'asc' }
         });
-      console.log('📋 Storage response:', { data, error });
 
       if (error) {
-        console.error(`Error listing files in ${folderPath}:`, error.message);
         return [];
       }
 
       return data || [];
     } catch (error) {
-      console.error(`Unexpected error in listFilesInFolder for ${folderPath}:`, error);
       return [];
     }
   }
@@ -97,12 +91,9 @@ export class StorageService {
    */
   async getFilesForSubjectType(subject: string, type: string): Promise<ResourceFile[]> {
     try {
-      console.log('📂 Getting files for:', { subject, type });
       const resources: ResourceFile[] = [];
       const storageSubject = subjectToStorageMap[subject] || subject;
-      console.log('🗂 Storage subject mapping:', { displaySubject: subject, storageSubject });
       const basePath = `${storageSubject}/${type}`;
-      console.log('📍 Looking in path:', basePath);
 
       if (type === 'notes' || type === 'pyqs') {
         // These types have subfolders (units or exam types)
@@ -163,7 +154,6 @@ export class StorageService {
       return resources;
 
     } catch (error) {
-      console.error(`Error fetching files for ${subject}/${type}:`, error);
       return [];
     }
   }
@@ -177,7 +167,6 @@ export class StorageService {
     searchQuery?: string;
   }): Promise<ResourceFile[]> {
     try {
-      console.log('🔍 Fetching filtered files:', filters);
       
       const allResources: ResourceFile[] = [];
       const { subjects = [], types = [], searchQuery = '' } = filters;
@@ -199,8 +188,6 @@ export class StorageService {
       let filteredResources = allResources;
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase().trim();
-        console.log(`🔍 Applying search filter: "${query}"`);
-        console.log(`📊 Before search: ${allResources.length} files`);
         
         filteredResources = allResources.filter(resource => {
           const nameMatch = resource.name.toLowerCase().includes(query);
@@ -212,20 +199,16 @@ export class StorageService {
           const matches = nameMatch || displayMatch || subjectMatch || typeMatch || unitMatch;
           
           if (matches) {
-            console.log(`✅ Match found: ${resource.displayName}`);
           }
           
           return matches;
         });
         
-        console.log(`📊 After search: ${filteredResources.length} files`);
       }
 
-      console.log(`📦 Returning ${filteredResources.length} filtered files`);
       return filteredResources;
 
     } catch (error) {
-      console.error('Error in getFilteredFiles:', error);
       return [];
     }
   }

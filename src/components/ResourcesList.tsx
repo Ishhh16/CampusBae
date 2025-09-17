@@ -38,12 +38,6 @@ export function ResourcesList({
         return;
       }
 
-      console.log('🚀 ResourcesList: Loading resources with filters:', {
-        subjects: selectedSubjects,
-        types: selectedTypes,
-        searchQuery
-      });
-
       const fetchedResources = await storageService.getFilteredFiles({
         subjects: selectedSubjects,
         types: selectedTypes,
@@ -53,7 +47,6 @@ export function ResourcesList({
       setResources(fetchedResources);
 
     } catch (err) {
-      console.error('❌ ResourcesList: Error loading resources:', err);
       setError(err instanceof Error ? err.message : 'Failed to load resources');
     } finally {
       setLoading(false);
@@ -100,12 +93,10 @@ export function ResourcesList({
   };
 
   const handleOpen = (resource: ResourceFile) => {
-    console.log('🔗 Opening file:', resource.displayName);
     window.open(resource.signedUrl, '_blank');
   };
 
   const handleDownload = async (resource: ResourceFile) => {
-    console.log('📥 Downloading file:', resource.displayName);
     
     try {
       // Fetch the file as a blob
@@ -129,7 +120,6 @@ export function ResourcesList({
       window.URL.revokeObjectURL(downloadUrl);
       
     } catch (error) {
-      console.error('Download failed:', error);
       // Fallback to opening in new tab if download fails
       window.open(resource.signedUrl, '_blank');
     }

@@ -50,7 +50,6 @@ export function MarketplacePage() {
       setItems(marketplaceItems);
       setIsOffline(marketplaceService.isUsingOfflineMode());
     } catch (error) {
-      console.error('Failed to load marketplace items:', error);
     } finally {
       setLoading(false);
     }
@@ -95,7 +94,6 @@ export function MarketplacePage() {
       await marketplaceService.toggleLike(itemId);
       await loadItems(); // Reload items to show updated likes
     } catch (error) {
-      console.error('Failed to toggle like:', error);
     }
   };
 
@@ -103,14 +101,12 @@ export function MarketplacePage() {
     try {
       await navigator.clipboard.writeText(phoneNumber);
       setCopiedPhone(phoneNumber);
-      console.log('📋 Phone number copied to clipboard:', phoneNumber);
       
       // Clear the copied state after 2 seconds
       setTimeout(() => {
         setCopiedPhone(null);
       }, 2000);
     } catch (error) {
-      console.error('Failed to copy phone number:', error);
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
       textArea.value = phoneNumber;
@@ -119,7 +115,6 @@ export function MarketplacePage() {
       document.execCommand('copy');
       document.body.removeChild(textArea);
       setCopiedPhone(phoneNumber);
-      console.log('📋 Phone number copied to clipboard (fallback):', phoneNumber);
       
       // Clear the copied state after 2 seconds
       setTimeout(() => {
@@ -152,9 +147,6 @@ export function MarketplacePage() {
 
     try {
       setSubmitting(true);
-      console.log('🛍️ Attempting to add marketplace item...');
-      console.log('User ID:', user?.id);
-      console.log('Offline mode:', marketplaceService.isUsingOfflineMode());
       
       const newItem: NewMarketplaceItem = {
         title: sellForm.title,
@@ -168,13 +160,10 @@ export function MarketplacePage() {
         image: sellForm.image || undefined
       };
       
-      console.log('New item data:', newItem);
       
       const addedItem = await marketplaceService.addItem(newItem, user?.id);
-      console.log('✅ Item added successfully:', addedItem);
       
       await loadItems(); // Reload items to show the new item
-      console.log('✅ Items reloaded');
       
       // Reset form
       setIsDialogOpen(false);
@@ -193,7 +182,6 @@ export function MarketplacePage() {
       
       // Item listed successfully - no alert needed
     } catch (error) {
-      console.error('❌ Failed to add item:', error);
       alert('Failed to list item. Please try again.');
     } finally {
       setSubmitting(false);
@@ -215,7 +203,6 @@ export function MarketplacePage() {
       // Remove item from local state
       setItems(prevItems => prevItems.filter(item => item.id !== itemId));
     } catch (error) {
-      console.error('Error removing item:', error);
       alert('Failed to remove item. Please try again.');
     }
   };

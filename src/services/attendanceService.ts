@@ -80,7 +80,6 @@ class LocalStorageAttendanceService {
   }
 
   async addSubject(subjectName: string): Promise<Subject> {
-    console.log('📦 Adding subject to LOCAL STORAGE:', subjectName);
     const subjects = this.getStoredSubjects();
     if (!subjects.includes(subjectName)) {
       subjects.push(subjectName);
@@ -95,7 +94,6 @@ class LocalStorageAttendanceService {
   }
 
   async deleteSubject(subjectName: string): Promise<void> {
-    console.log('📦 Deleting subject from LOCAL STORAGE:', subjectName);
     const subjects = this.getStoredSubjects().filter(s => s !== subjectName);
     this.saveSubjects(subjects);
     

@@ -158,7 +158,6 @@ class MarketplaceService {
   // Get all marketplace items
   async getItems(): Promise<MarketplaceItem[]> {
     try {
-      console.log('🔄 Attempting to fetch items from database...');
       
       // Try database first
       const { data, error } = await supabase
@@ -167,11 +166,9 @@ class MarketplaceService {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Database error:', error);
         throw error;
       }
       
-      console.log('✅ Successfully fetched from database:', data?.length, 'items');
       
       // Transform database items to match our interface
       const transformedItems: MarketplaceItem[] = (data || []).map(item => ({
@@ -199,7 +196,6 @@ class MarketplaceService {
       return transformedItems;
       
     } catch (error) {
-      console.log('⚠️ Database unavailable, using localStorage:', error);
       this.isOffline = true;
       
       // Fallback to localStorage
@@ -243,7 +239,6 @@ class MarketplaceService {
     try {
       // Try database first
       if (!this.isOffline) {
-        console.log('💾 Attempting to save item to database...');
         
         const { data, error } = await supabase
           .from('marketplace_items')
@@ -267,15 +262,12 @@ class MarketplaceService {
           .single();
 
         if (error) {
-          console.error('Database insert error:', error);
           throw error;
         }
         
-        console.log('✅ Successfully saved item to database:', data);
         return marketplaceItem;
       }
     } catch (error) {
-      console.log('⚠️ Database unavailable, using localStorage:', error);
       this.isOffline = true;
     }
 
@@ -306,7 +298,6 @@ class MarketplaceService {
         }
       }
     } catch (error) {
-      console.log('Image upload to storage failed, using base64:', error);
     }
 
     // Fallback to base64 encoding for localStorage
@@ -341,7 +332,6 @@ class MarketplaceService {
   async removeItem(itemId: string): Promise<void> {
     try {
       if (!this.isOffline) {
-        console.log('🗑️ Attempting to delete item from database...');
         
         const { error } = await supabase
           .from('marketplace_items')
@@ -349,15 +339,12 @@ class MarketplaceService {
           .eq('id', itemId);
 
         if (error) {
-          console.error('Database delete error:', error);
           throw error;
         }
         
-        console.log('✅ Successfully deleted item from database');
         return;
       }
     } catch (error) {
-      console.log('⚠️ Database unavailable for delete, using localStorage:', error);
       this.isOffline = true;
     }
 
@@ -375,14 +362,12 @@ class MarketplaceService {
   // Reset offline mode and try to reconnect
   async retryConnection(): Promise<boolean> {
     try {
-      console.log('🔄 Attempting to reconnect to database...');
       this.isOffline = false;
       
       // Test connection by trying to fetch items
       await this.getItems();
       return !this.isOffline;
     } catch (error) {
-      console.log('⚠️ Reconnection failed:', error);
       return false;
     }
   }

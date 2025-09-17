@@ -24,22 +24,6 @@ export function NetworkingPage() {
   const students: Student[] = [
     {
       id: 1,
-      name: 'Radhika Jindal',
-      branch: 'CSEAI',
-      year: '2nd Year',
-      linkedin: 'https://www.linkedin.com/in/radhika-2213b3345/',
-      image: '/rj.png'
-    },
-    {
-      id: 2,
-      name: 'Prachi Gupta',
-      branch: 'CSEAI',
-      year: '2nd Year',
-      linkedin: 'https://www.linkedin.com/in/prachi-gupta-19ab61318/',
-      image: '/pg.png'
-    },
-    {
-      id: 3,
       name: 'Ishanvi Srivastava',
       branch: 'ECEAI',
       year: '2nd Year',
@@ -47,13 +31,30 @@ export function NetworkingPage() {
       image: '/ish.png'
     },
     {
-      id: 4,
+      id: 2,
       name: 'Nishtha',
       branch: 'ECEAI',
       year: '2nd Year',
       linkedin: 'https://www.linkedin.com/in/nishtha-malik-8877a6325/',
       image: '/nish.png'
     },
+    {
+      id: 3,
+      name: 'Kavya Jain',
+      branch: 'ECEAI',
+      year: '2nd Year',
+      linkedin: 'https://www.linkedin.com/in/kavya-jain-b6b0a0320/',
+      image: '/kj.png'
+    },
+    {
+      id: 4,
+      name: 'Radhika Jindal',
+      branch: 'CSEAI',
+      year: '2nd Year',
+      linkedin: 'https://www.linkedin.com/in/radhika-2213b3345/',
+      image: '/rj.png'
+    },
+    
     {
       id: 5,
       name: 'Manvi',
@@ -64,11 +65,11 @@ export function NetworkingPage() {
     },
     {
       id: 6,
-      name: 'Kavya Jain',
-      branch: 'ECEAI',
+      name: 'Prachi Gupta',
+      branch: 'CSEAI',
       year: '2nd Year',
-      linkedin: 'https://www.linkedin.com/in/kavya-jain-b6b0a0320/',
-      image: '/kj.png'
+      linkedin: 'https://www.linkedin.com/in/prachi-gupta-19ab61318/',
+      image: '/pg.png'
     },
     {
       id: 7,

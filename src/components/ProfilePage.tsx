@@ -54,7 +54,6 @@ export function ProfilePage() {
       
       setAttendance(attendanceData);
     } catch (err) {
-      console.error('Error loading attendance data:', err);
       setError('Failed to load attendance data. Please refresh the page.');
     } finally {
       setLoading(false);
@@ -79,7 +78,6 @@ export function ProfilePage() {
       });
       setNewSubject('');
     } catch (err) {
-      console.error('Error adding subject:', err);
       setError('Failed to add subject. Please try again.');
     } finally {
       setActionLoading(null);
@@ -104,7 +102,6 @@ export function ProfilePage() {
       delete newLastActions[subjectToDelete];
       setLastActions(newLastActions);
     } catch (err) {
-      console.error('Error deleting subject:', err);
       setError('Failed to delete subject. Please try again.');
     } finally {
       setActionLoading(null);
@@ -133,7 +130,6 @@ export function ProfilePage() {
         [subject]: { type, timestamp: Date.now() }
       }));
     } catch (err) {
-      console.error('Error marking attendance:', err);
       setError('Failed to mark attendance. Please try again.');
     } finally {
       setActionLoading(null);
@@ -167,7 +163,6 @@ export function ProfilePage() {
         [subject]: null
       }));
     } catch (err) {
-      console.error('Error undoing attendance:', err);
       setError('Failed to undo attendance. Please try again.');
     } finally {
       setActionLoading(null);
@@ -197,7 +192,6 @@ export function ProfilePage() {
       setShowResetConfirm(false);
       
     } catch (err) {
-      console.error('Error resetting attendance:', err);
       setError('Failed to reset attendance. Please try again.');
     } finally {
       setResetLoading(false);
