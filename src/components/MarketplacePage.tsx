@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Search, MessageCircle, Heart, Plus, Upload, X, Phone, Trash2, Copy } from 'lucide-react';
+import { Search, MessageCircle, Heart, Plus, Upload, X, Phone, Trash2, Copy, Check } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { marketplaceService, MarketplaceItem, NewMarketplaceItem } from '../services/marketplaceService';
 import { useAuth } from '../context/AuthContext';
@@ -20,6 +20,7 @@ export function MarketplacePage() {
   const [loading, setLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
   const [contactingItems, setContactingItems] = useState<Set<string>>(new Set());
+  const [copiedPhone, setCopiedPhone] = useState<string | null>(null);
   
   // Sell item form state
   const [sellForm, setSellForm] = useState({
@@ -101,8 +102,13 @@ export function MarketplacePage() {
   const handleCopyPhone = async (phoneNumber: string) => {
     try {
       await navigator.clipboard.writeText(phoneNumber);
-      // Brief visual feedback - could be enhanced with toast later
+      setCopiedPhone(phoneNumber);
       console.log('📋 Phone number copied to clipboard:', phoneNumber);
+      
+      // Clear the copied state after 2 seconds
+      setTimeout(() => {
+        setCopiedPhone(null);
+      }, 2000);
     } catch (error) {
       console.error('Failed to copy phone number:', error);
       // Fallback for older browsers
@@ -112,7 +118,13 @@ export function MarketplacePage() {
       textArea.select();
       document.execCommand('copy');
       document.body.removeChild(textArea);
+      setCopiedPhone(phoneNumber);
       console.log('📋 Phone number copied to clipboard (fallback):', phoneNumber);
+      
+      // Clear the copied state after 2 seconds
+      setTimeout(() => {
+        setCopiedPhone(null);
+      }, 2000);
     }
   };
 
@@ -662,10 +674,18 @@ export function MarketplacePage() {
                           e.stopPropagation();
                           handleCopyPhone(item.sellerPhone);
                         }}
-                        className="p-1 hover:bg-gray-100 rounded transition-colors"
-                        title="Copy phone number"
+                        className={`p-1 rounded transition-all duration-200 ${
+                          copiedPhone === item.sellerPhone 
+                            ? 'bg-green-100 hover:bg-green-200' 
+                            : 'hover:bg-gray-100'
+                        }`}
+                        title={copiedPhone === item.sellerPhone ? "Copied!" : "Copy phone number"}
                       >
-                        <Copy size={14} className="text-gray-600 hover:text-gray-800" />
+                        {copiedPhone === item.sellerPhone ? (
+                          <Check size={14} className="text-green-600" />
+                        ) : (
+                          <Copy size={14} className="text-gray-600 hover:text-gray-800" />
+                        )}
                       </button>
                     </div>
                   ) : (

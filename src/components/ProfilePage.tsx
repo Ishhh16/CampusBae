@@ -365,10 +365,31 @@ export function ProfilePage() {
               {subjects.map((subject) => (
                 <div
                   key={subject}
-                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 rounded-lg border border-white/10 space-y-4 sm:space-y-0"
-                  style={{ backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                  style={{ 
+                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                    padding: '16px',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '16px'
+                  }}
+                  className="sm:flex-row sm:items-center sm:gap-0"
                 >
-                  <span className="font-medium text-lg sm:text-base" style={{ color: '#EAEAEA' }}>{subject}</span>
+                  <div 
+                    style={{ 
+                      color: '#EAEAEA',
+                      fontSize: '16px',
+                      fontWeight: '500',
+                      minWidth: '300px',
+                      width: '300px',
+                      flexShrink: 0,
+                      paddingRight: '32px'
+                    }}
+                    className="text-lg sm:text-base"
+                  >
+                    {subject}
+                  </div>
                   <div className="flex flex-wrap gap-2 items-center">
                     <Button
                       size="sm"
@@ -523,14 +544,24 @@ export function ProfilePage() {
                   <Button
                     onClick={() => setShowResetConfirm(false)}
                     disabled={resetLoading}
-                    className="px-4 py-2 bg-gray-600/20 hover:bg-gray-600/30 border-gray-500/50 text-gray-200"
+                    className="px-4 py-2 bg-white hover:bg-gray-100 border-gray-300 text-gray-900"
+                    style={{
+                      backgroundColor: 'white',
+                      color: 'black',
+                      border: '1px solid #d1d5db'
+                    }}
                   >
                     Cancel
                   </Button>
                   <Button
                     onClick={handleResetAllAttendance}
                     disabled={resetLoading}
-                    className="px-4 py-2 bg-red-600/20 hover:bg-red-600/30 border-red-500/50 text-red-200"
+                    className="px-4 py-2 bg-red-600 hover:bg-red-700 border-red-600 text-white"
+                    style={{
+                      backgroundColor: '#dc2626',
+                      color: 'white',
+                      border: '1px solid #dc2626'
+                    }}
                   >
                     {resetLoading ? (
                       <>
