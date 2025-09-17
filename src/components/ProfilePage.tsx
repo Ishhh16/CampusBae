@@ -314,7 +314,7 @@ export function ProfilePage() {
               <Button
                 onClick={addSubject}
                 disabled={actionLoading === 'add-subject'}
-                className="px-6"
+                className="px-6 cursor-pointer"
                 style={{
                   background: 'linear-gradient(135deg, #0D47A1, #00BFFF)',
                   border: 'none'

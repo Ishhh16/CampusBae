@@ -8,14 +8,16 @@ import { ProfilePage } from './components/ProfilePage';
 import { BranchResourcesPage } from './components/BranchResourcesPage';
 import { MarketplacePage } from './components/MarketplacePage';
 import { SocietiesPage } from './components/SocietiesPage';
+import { RoadmapPage } from './components/RoadmapPage';
 import { NetworkingPage } from './components/NetworkingPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AuthDebug } from './components/AuthDebug';
 
 function AppContent() {
   const { user, loading } = useAuth();
-  const [currentPage, setCurrentPage] = useState<'landing' | 'home' | 'profile' | 'resources' | 'marketplace' | 'societies' | 'networking'>('landing');
+  const [currentPage, setCurrentPage] = useState<'landing' | 'home' | 'profile' | 'resources' | 'marketplace' | 'societies' | 'roadmap' | 'networking'>('landing');
   const [authError, setAuthError] = useState<string | null>(null);
+  const [isPdfOpen, setIsPdfOpen] = useState<boolean>(false);
   
   // State for navigation filters
   const [resourceFilters, setResourceFilters] = useState<{
@@ -87,6 +89,8 @@ function AppContent() {
         return <MarketplacePage />;
       case 'societies':
         return <SocietiesPage scrollToSociety={societyFilters.scrollToSociety} />;
+      case 'roadmap':
+        return <RoadmapPage onPdfStateChange={setIsPdfOpen} />;
       case 'networking':
         return <NetworkingPage />;
       default:
@@ -103,7 +107,7 @@ function AppContent() {
     >
       <GalaxyBackground />
       
-      {user && currentPage !== 'landing' && (
+      {user && currentPage !== 'landing' && !isPdfOpen && (
         <Navbar currentPage={currentPage} onNavigate={handleNavigate} />
       )}
       

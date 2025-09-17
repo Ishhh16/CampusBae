@@ -118,7 +118,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             <div className="flex gap-3">
               <Button
                 onClick={() => setShowTimetableModal(true)}
-                className="bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border-[#00E5FF]/50 text-[#00E5FF] hover:text-[#00E5FF] flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300"
+                className="bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border-[#00E5FF]/50 text-[#00E5FF] hover:text-[#00E5FF] flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 cursor-pointer"
                 style={{
                   backgroundColor: 'rgba(0, 229, 255, 0.1)',
                   borderColor: 'rgba(0, 229, 255, 0.3)',
@@ -130,7 +130,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               </Button>
               <Button
                 onClick={() => setShowTodoModal(true)}
-                className="bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border-[#00E5FF]/50 text-[#00E5FF] hover:text-[#00E5FF] flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300"
+                className="bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border-[#00E5FF]/50 text-[#00E5FF] hover:text-[#00E5FF] flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 cursor-pointer"
                 style={{
                   backgroundColor: 'rgba(0, 229, 255, 0.1)',
                   borderColor: 'rgba(0, 229, 255, 0.3)',
@@ -221,9 +221,6 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 <p className="text-sm mb-2" style={{ color: '#A0AEC0' }}>
                   {society.type}
                 </p>
-                <div className="text-xs" style={{ color: '#00E5FF' }}>
-                  {society.members} members
-                </div>
               </GlassCard>
             ))}
           </div>

@@ -15,6 +15,7 @@ export function Navbar({ currentPage, onNavigate }: NavbarProps) {
     { id: 'resources', label: 'Branch Resources' },
     { id: 'marketplace', label: 'Marketplace' },
     { id: 'societies', label: 'Societies' },
+    { id: 'roadmap', label: 'Roadmaps' },
     { id: 'networking', label: 'Networking' },
     { id: 'profile', label: 'Profile' }
   ];
