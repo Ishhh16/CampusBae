@@ -3,7 +3,7 @@ import { GlassCard } from './GlassCard';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Button } from './ui/button';
-import { Search, LinkedinIcon, Github, GraduationCap } from 'lucide-react';
+import { Search, LinkedinIcon, GraduationCap } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
 export function NetworkingPage() {
@@ -12,86 +12,79 @@ export function NetworkingPage() {
   const [selectedYear, setSelectedYear] = useState('all');
 
 
-  const students = [
+  interface Student {
+    id: number;
+    name: string;
+    branch: string;
+    year: string;
+    linkedin: string;
+    image: string;
+  }
+
+  const students: Student[] = [
     {
       id: 1,
-      name: 'Arya Sharma',
+      name: 'Radhika Jindal',
       branch: 'CSEAI',
-      year: '4th Year',
-      description: 'Passionate about AI/ML and full-stack development. Leading technical initiatives at college.',
-      linkedin: 'https://linkedin.com/in/aryasharma',
-      github: 'https://github.com/aryasharma',
-      image: 'https://images.unsplash.com/photo-1494790108755-2616b612b5bc?w=150&h=150&fit=crop&crop=face'
+      year: '2nd Year',
+      linkedin: 'https://www.linkedin.com/in/radhika-2213b3345/',
+      image: '/rj.png'
     },
     {
       id: 2,
-      name: 'Priya Mehta',
-      branch: 'CSE',
-      year: '3rd Year',
-      description: 'Frontend developer with a passion for creating beautiful user experiences.',
-      linkedin: 'https://linkedin.com/in/priyamehta',
-      github: 'https://github.com/priyamehta',
-      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face'
+      name: 'Prachi Gupta',
+      branch: 'CSEAI',
+      year: '2nd Year',
+      linkedin: 'https://www.linkedin.com/in/prachi-gupta-19ab61318/',
+      image: '/pg.png'
     },
     {
       id: 3,
-      name: 'Sakshi Gupta',
+      name: 'Ishanvi Srivastava',
       branch: 'ECEAI',
-      year: '4th Year',
-      description: 'Working on IoT and embedded systems research. Interested in hardware-software integration.',
-      linkedin: 'https://linkedin.com/in/sakshigupta',
-      github: 'https://github.com/sakshigupta',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'
+      year: '2nd Year',
+      linkedin: 'https://www.linkedin.com/in/ishanvi-srivastava-16i/',
+      image: '/ish.png'
     },
     {
       id: 4,
-      name: 'Neha Singh',
-      branch: 'AIML',
-      year: '3rd Year',
-      description: 'Data enthusiast working on machine learning projects and data analytics.',
-      linkedin: 'https://linkedin.com/in/nehasingh',
-      github: 'https://github.com/nehasingh',
+      name: 'Nishtha',
+      branch: 'ECEAI',
+      year: '2nd Year',
+      linkedin: 'https://www.linkedin.com/in/nishtha-malik-8877a6325/',
       image: 'https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=150&h=150&fit=crop&crop=face'
     },
     {
       id: 5,
-      name: 'Kavya Reddy',
-      branch: 'IT',
-      year: '4th Year',
-      description: 'Aspiring product manager with experience in user research and product strategy.',
-      linkedin: 'https://linkedin.com/in/kavyareddy',
-      github: 'https://github.com/kavyareddy',
-      image: 'https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=150&h=150&fit=crop&crop=face'
+      name: 'Manvi',
+      branch: 'ECEAI',
+      year: '2nd Year',
+      linkedin: 'http://www.linkedin.com/in/manvi-falwaria-097834319/',
+      image: '/manvi.png'
     },
     {
       id: 6,
-      name: 'Rhea Kapoor',
-      branch: 'MAC',
-      year: '4th Year',
-      description: 'Building a fintech startup focused on student financial literacy and management.',
-      linkedin: 'https://linkedin.com/in/rheakapoor',
-      github: 'https://github.com/rheakapoor',
-      image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face'
+      name: 'Kavya Jain',
+      branch: 'ECEAI',
+      year: '2nd Year',
+      linkedin: 'https://www.linkedin.com/in/kavya-jain-b6b0a0320/',
+      image: '/kj.png'
     },
     {
       id: 7,
-      name: 'Ananya Kumar',
-      branch: 'ECE',
+      name: 'Kritika Singh',
+      branch: 'ECEAI',
       year: '2nd Year',
-      description: 'Electronics enthusiast working on signal processing and communication systems.',
-      linkedin: 'https://linkedin.com/in/ananyakumar',
-      github: 'https://github.com/ananyakumar',
-      image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face'
+      linkedin: 'https://www.linkedin.com/in/kritika1220/',
+      image: '/kk.png'
     },
     {
       id: 8,
-      name: 'Simran Verma',
-      branch: 'MAE',
-      year: '3rd Year',
-      description: 'Mechanical engineering student passionate about automation and robotics.',
-      linkedin: 'https://linkedin.com/in/simranverma',
-      github: 'https://github.com/simranverma',
-      image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop&crop=face'
+      name: 'Jayati s. Tiwary',
+      branch: 'ECEAI',
+      year: '2nd Year',
+      linkedin: 'https://www.linkedin.com/in/jayati-s-tiwary/',
+      image: '/jayati.png'
     }
   ];
 
@@ -101,7 +94,7 @@ export function NetworkingPage() {
 
   const filteredStudents = students.filter(student => {
     const matchesSearch = student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         student.description.toLowerCase().includes(searchQuery.toLowerCase());
+                         student.branch.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesBranch = selectedBranch === 'all' || student.branch === selectedBranch;
     const matchesYear = selectedYear === 'all' || student.year === selectedYear;
 
@@ -182,9 +175,8 @@ export function NetworkingPage() {
         {/* Students Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredStudents.map((student) => (
-            <GlassCard key={student.id}>
-              {/* Profile Header */}
-              <div className="flex items-start gap-4 mb-4">
+            <GlassCard key={student.id} className="p-4">
+              <div className="flex items-center gap-4">
                 <div className="relative">
                   <ImageWithFallback
                     src={student.image}
@@ -197,45 +189,24 @@ export function NetworkingPage() {
                   />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold mb-1" style={{ color: '#EAEAEA' }}>
+                  <h3 className="text-xl font-bold" style={{ color: '#EAEAEA' }}>
                     {student.name}
                   </h3>
-                  <div className="flex items-center gap-3 text-sm" style={{ color: '#A0AEC0' }}>
-                    <div className="flex items-center gap-1">
-                      <GraduationCap size={14} />
-                      {student.branch} • {student.year}
-                    </div>
+                  <div className="flex items-center gap-2 text-sm mt-1" style={{ color: '#A0AEC0' }}>
+                    <GraduationCap size={14} />
+                    {student.branch} • {student.year}
                   </div>
+                  <a
+                    href={student.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm mt-3 px-4 py-1.5 rounded-lg transition-all duration-200 hover:bg-white/10"
+                    style={{ color: '#0077B5' }}
+                  >
+                    <LinkedinIcon size={18} />
+                    LinkedIn
+                  </a>
                 </div>
-              </div>
-
-              {/* Description */}
-              <p className="text-sm mb-6" style={{ color: '#A0AEC0' }}>
-                {student.description}
-              </p>
-
-              {/* Contact Links */}
-              <div className="flex items-center justify-center gap-6">
-                <a
-                  href={student.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm px-4 py-2 rounded-lg transition-all duration-200 hover:bg-white/10"
-                  style={{ color: '#0077B5' }}
-                >
-                  <LinkedinIcon size={18} />
-                  LinkedIn
-                </a>
-                <a
-                  href={student.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm px-4 py-2 rounded-lg transition-all duration-200 hover:bg-white/10"
-                  style={{ color: '#A0AEC0' }}
-                >
-                  <Github size={18} />
-                  GitHub
-                </a>
               </div>
             </GlassCard>
           ))}

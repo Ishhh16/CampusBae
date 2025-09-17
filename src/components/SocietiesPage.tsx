@@ -153,7 +153,7 @@ export function SocietiesPage({ scrollToSociety }: SocietiesPageProps) {
       description: 'Minerva is the tech forum of IGDTUW, creating a platform where alumni and professionals share expertise in fields like web development, AR/VR, competitive programming, automation, and robotics through sessions and articles. With insights on scholarships and career journeys, Minerva fosters learning, collaboration, and empowerment within the IGDTUW tech community.',
       president: 'Shweta Tyagi',
       
-      website: 'https://www.linkedin.com/company/aws-cloud-club-igdtuw/',
+      website: '',
       instagram: 'https://www.instagram.com/minerva.igdtuw/',
       image: '/minerva.png',
       upcomingEvents: [
@@ -217,14 +217,14 @@ export function SocietiesPage({ scrollToSociety }: SocietiesPageProps) {
       president: 'Vidhi Saxena',
       description: ' Tarannum, the music society of IGDTUW, is a vibrant platform for students to explore and showcase their musical talents. Known for hosting diverse events and competitions across genres like classical, semi-classical, and a capella, Tarannum also organizes workshops with professional musicians, fostering growth, creativity, and excellence for both budding and seasoned performers.',
       email: 'ecell@igdtuw.ac.in',
-      website: 'https://www.linkedin.com/company/aiclubigdtuw/',
+      website: '',
       instagram: 'https://www.instagram.com/tarannum.igdtuw/',
       image: '/tarannum.png',
       upcomingEvents: [
         { name: 'Summer Skills Sprint Challenge', date: '2024-03-30' },
         { name: 'Shark Tank Igdtuw', date: '2024-04-10' }
       ],
-      achievements: ['Mashwara-e-Mentorship', 'A3: AI Arcade Arena']
+      achievements: ['', '']
     },
     {
       id: 13,
@@ -233,14 +233,14 @@ export function SocietiesPage({ scrollToSociety }: SocietiesPageProps) {
       president: 'Vaapi , Mishty',
       description: ' Hypnotics, the Western Dance Society of Indira Gandhi Delhi Technical University for Women, is renowned for its charm and talent. The team has brought numerous laurels to the University, distinguishing itself in the Delhi Dance Circuit. Members of this society excel in a multitude of dance forms, including waacking, locking, hip-hop, freestyle, krump, house, and jazz. They have won several awards and accolades, establishing a prominent place in the dance community. The mission of Hypnotics is to provide professional training and development in various western dance forms, fostering leadership, team spirit, and a continuous learning attitude among its members.',
       email: 'ecell@igdtuw.ac.in',
-      website: 'https://www.linkedin.com/company/aiclubigdtuw/',
+      website: '',
       instagram: 'https://www.instagram.com/hypnotics_igdtuw/',
       image: '/hypnotics.png',
       upcomingEvents: [
         { name: 'Summer Skills Sprint Challenge', date: '2024-03-30' },
         { name: 'Shark Tank Igdtuw', date: '2024-04-10' }
       ],
-      achievements: ['Mashwara-e-Mentorship', 'A3: AI Arcade Arena']
+      achievements: ['', '']
     },
     {
       id: 14,
@@ -249,14 +249,14 @@ export function SocietiesPage({ scrollToSociety }: SocietiesPageProps) {
       president: 'Peehu Sadaran , Chanda Jha',
       description: ' RAHNUMA, the dramatics society of Indira Gandhi Delhi Technical University for Women, was established on 16th November 2013, when the Indira Gandhi Institute of Technology became Indira Gandhi Delhi Technical University for Women. The name "RAHNUMA" is derived from an Urdu word meaning "the one who guides." Over the past eleven years, RAHNUMA has won numerous street play competitions and received widespread acclaim for their productions. The society is dedicated to spreading awareness about various social issues through powerful and empathetic storytelling. Their public performances on various occasions have not only entertained but also enlightened audiences, showcasing their commitment to using theater as a medium for social change and education.',
       email: 'ecell@igdtuw.ac.in',
-      website: 'https://www.linkedin.com/company/aiclubigdtuw/',
+      website: '',
       instagram: 'https://www.instagram.com/rahnuma_igdtuw/',
       image: '/rahnuma.png',
       upcomingEvents: [
         { name: 'Summer Skills Sprint Challenge', date: '2024-03-30' },
         { name: 'Shark Tank Igdtuw', date: '2024-04-10' }
       ],
-      achievements: ['Mashwara-e-Mentorship', 'A3: AI Arcade Arena']
+      achievements: ['Aaghaz-25', 'The Gag Chapter']
     },
     {
       id: 15,
@@ -265,14 +265,14 @@ export function SocietiesPage({ scrollToSociety }: SocietiesPageProps) {
       president: 'Harjas Kaur',
       description: 'Prekshya, the photography society of IGDTUW, hosts creative events like photowalks, workshops, competitions, and photoshoots while capturing the essence of university life through major fests and events. With opportunities for hands-on learning and collaboration, it provides a supportive space for both budding and seasoned photographers to hone their skills, explore creativity, and grow as artists.',
       email: 'ecell@igdtuw.ac.in',
-      website: 'https://www.linkedin.com/company/aiclubigdtuw/',
+      website: '',
       instagram: 'https://www.instagram.com/prekshya_igdtuw/',
       image: '/prekshya.jpg',
       upcomingEvents: [
         { name: 'Summer Skills Sprint Challenge', date: '2024-03-30' },
         { name: 'Shark Tank Igdtuw', date: '2024-04-10' }
       ],
-      achievements: ['Mashwara-e-Mentorship', 'A3: AI Arcade Arena']
+      achievements: ['Yamuna Ghat photowalk', 'Psychedelic Euphoria']
     },
     {
       id: 16,
@@ -297,7 +297,7 @@ export function SocietiesPage({ scrollToSociety }: SocietiesPageProps) {
       president: 'Navya Kalaria',
       description: 'Zena, the fashion society of IGDTUW, is where creativity and confidence meet the runway. Through performances that highlight social causes, Zena challenges stereotypes in fashion, supports body positivity, and celebrates diversity by welcoming members of all body types. More than glamour, it’s a movement that empowers students to express themselves, raise awareness, and let confidence shine above all.',
       email: 'ecell@igdtuw.ac.in',
-      website: 'https://www.linkedin.com/company/aiclubigdtuw/',
+      website: '',
       instagram: 'https://www.instagram.com/zena.igdtuw/',
       image: '/zena.png',
       upcomingEvents: [
@@ -313,7 +313,7 @@ export function SocietiesPage({ scrollToSociety }: SocietiesPageProps) {
       president: 'Shreya Sisodia , Navya Verma',
       description: 'club offers a unique platform for students to explore, learn, and excel in various design fields such as UI/UX, graphic design, and branding. With exciting competitions, hands-on mentorship, and access to the latest industry trends, Nirvana is the perfect place to develop your skills and prepare for a thriving career in design.',
       email: 'ecell@igdtuw.ac.in',
-      website: 'https://www.linkedin.com/company/aiclubigdtuw/',
+      website: '',
       instagram: 'https://www.instagram.com/designclubigdtuw/',
       image: '/nirvana.png',
       upcomingEvents: [
@@ -385,7 +385,7 @@ export function SocietiesPage({ scrollToSociety }: SocietiesPageProps) {
           {filteredSocieties.map((society) => (
             <div 
               key={society.id}
-              ref={(el) => (societyRefs.current[society.id] = el)}
+              ref={el => { societyRefs.current[society.id] = el }}
             >
               <GlassCard className="overflow-hidden">
               {/* Header Image */}
@@ -426,19 +426,19 @@ export function SocietiesPage({ scrollToSociety }: SocietiesPageProps) {
 
 
 
-                {/* Recent Events */}
+                {/* Past Events */}
                 <div className="mb-6">
                   <h4 className="font-semibold mb-2" style={{ color: '#EAEAEA' }}>
-                    Recent Events
+                    Past Events
                   </h4>
                   <div className="space-y-1">
-                    {society.upcomingEvents.map((event, index) => (
+                    {society.achievements.map((achievement, index) => (
                       <div key={index} className="text-sm flex items-start gap-2">
                         <div 
                           className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0"
                           style={{ backgroundColor: getCategoryColor(society.category) }}
                         />
-                        <span style={{ color: '#A0AEC0' }}>{event.name}</span>
+                        <span style={{ color: '#A0AEC0' }}>{achievement}</span>
                       </div>
                     ))}
                   </div>
