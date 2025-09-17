@@ -36,7 +36,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const signIn = async (email: string, password: string) => {
-    console.log('🔑 Attempting login for:', email);
     
     // Validate email format
     if (!email || !email.includes('@')) {
@@ -49,7 +48,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
     
     if (error) {
-      console.error('❌ Login error:', error);
       
       if (error.message.includes('Invalid login credentials')) {
         throw new Error('🔐 Incorrect email or password. Please check your credentials and try again.');
@@ -67,8 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     
     if (data.user) {
-      console.log('✅ Login successful for user:', data.user.id);
-      console.log('📊 User metadata:', data.user.user_metadata);
+      
     }
   };
 
@@ -149,22 +146,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error('🏫 Please use correct IGDTUW email format: yourname###bt/mt/phd + branch + year@igdtuw.ac.in (e.g., ishanvi048bteceai24@igdtuw.ac.in)');
     }
 
-    console.log('✅ IGDTUW email format validation passed');
-    console.log('📊 Email breakdown:', {
-      name: localPart.match(/^[a-zA-Z]+/)?.[0],
-      rollNumber: localPart.match(/[0-9]{3}/)?.[0],
-      degree: localPart.match(/(bt|mt|phd)/)?.[0],
-      branch: localPart.match(/(cseai|cse|ece|mae|eceai|mac|it|aiml)/)?.[0],
-      year: localPart.match(/(2[2-5])$/)?.[0]
-    });
+    
 
     // Validate password strength
     if (password.length < 6) {
       throw new Error('🔒 Password must be at least 6 characters long');
     }
 
-    console.log('📝 Attempting signup with email:', email);
-    console.log('🔍 Validating IGDTUW email format...');
 
     const { data: { user }, error: signUpError } = await supabase.auth.signUp({
       email,
@@ -180,7 +168,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     if (signUpError) {
-      console.error('❌ Signup error:', signUpError);
       
       if (signUpError.message.includes('User already registered')) {
         throw new Error('📝 This email is already registered. Please try logging in instead.');
@@ -203,12 +190,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error('❌ Signup failed. Please try again with a valid email address.');
     }
 
-    console.log('✅ User created successfully:', user.id);
-    console.log('📧 Confirmation email sent to:', email);
-    console.log('⚠️ Note: If you don\'t receive the email, please verify your email address is correct');
 
     // Save profile info to user metadata (more reliable approach)
-    console.log('📝 Saving profile info to user metadata...');
     
     try {
       // First, get a fresh user session to ensure we have the latest user object
@@ -224,15 +207,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       
       if (metadataError) {
-        console.error('❌ Metadata update failed:', metadataError);
-        console.warn('⚠️ Profile info not saved but signup succeeded. User can complete profile later.');
         // Don't throw error here - signup was successful, profile can be completed later
       } else {
-        console.log('✅ Profile info saved to user metadata successfully');
       }
     } catch (err) {
-      console.error('❌ Error during metadata update:', err);
-      console.warn('⚠️ Profile info not saved but signup succeeded. User can complete profile later.');
       // Don't throw error here - signup was successful
     }
     
@@ -248,19 +226,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const getUserProfile = async (): Promise<StudentProfile | null> => {
     if (!user) {
-      console.log('🔍 getUserProfile: No user found');
       return null;
     }
     
-    console.log('🔍 getUserProfile: Fetching profile for user:', user.id);
     
     try {
       // Get current user metadata first
       const { data: { user: currentUser } } = await supabase.auth.getUser();
       const userMeta = currentUser?.user_metadata || {};
       
-      console.log('📊 User metadata found:', userMeta);
-      console.log('📧 User email:', currentUser?.email);
       
       // Try to fetch from database
       let rawData = null;
@@ -272,13 +246,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           .single();
         
         if (!dbError && dbData) {
-          console.log('🗄️ Database profile found:', dbData);
           rawData = dbData;
         } else {
-          console.log('⚠️ No database profile found:', dbError?.message);
         }
       } catch (dbError) {
-        console.log('⚠️ Database query failed:', dbError);
       }
       
       // Build profile data with metadata fallback
@@ -290,11 +261,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         batch: rawData?.year || userMeta.batch || 'Not available'
       };
       
-      console.log('📋 Final profile data:', data);
       
       // If we have user metadata but no database record, try to create one
       if (!rawData && userMeta.name) {
-        console.log('📝 Attempting to create database profile from metadata...');
         try {
           await supabase
             .from('students')
@@ -306,15 +275,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               branch: userMeta.branch,
               year: userMeta.batch
             }]);
-          console.log('✅ Database profile created from metadata');
         } catch (insertError) {
-          console.log('⚠️ Could not create database profile:', insertError);
         }
       }
       
       return data as StudentProfile;
     } catch (error) {
-      console.error('❌ Error in getUserProfile:', error);
       
       // Final fallback - try to get basic info from auth user
       try {
@@ -329,7 +295,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           } as StudentProfile;
         }
       } catch (fallbackError) {
-        console.error('❌ Fallback profile fetch failed:', fallbackError);
       }
       
       return null;
@@ -344,7 +309,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
         if (error) {
-          console.error('Error getting session:', error);
         }
         if (mounted) {
           const newUser = session?.user ?? null;
@@ -359,7 +323,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
         }
       } catch (error) {
-        console.error('Error in getSession:', error);
         if (mounted) {
           setUser(null);
           setUserProfile(null);
@@ -374,12 +337,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const { data: { user: currentUser } } = await supabase.auth.getUser();
         const userMeta = currentUser?.user_metadata || {};
         
-        console.log('📊 User metadata found:', userMeta);
-        console.log('📧 User email:', currentUser?.email);
         
         // We don't use a separate students table anymore - all profile data is in user_metadata
         // This makes the system more reliable and doesn't require database schema
-        console.log('📊 Using user_metadata for profile data');
         
         // Build profile data from metadata only
         const data = {
@@ -390,7 +350,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           batch: userMeta.batch || 'Not available'
         };
         
-        console.log('📋 Final profile data:', data);
         
         if (mounted) {
           setUserProfile(data as StudentProfile);
@@ -399,7 +358,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // No need to create database records since we use user_metadata only
         
       } catch (error) {
-        console.error('Error fetching profile:', error);
         if (mounted) {
           // Final fallback - use metadata if available
           try {
@@ -416,7 +374,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               setUserProfile(null);
             }
           } catch (fallbackError) {
-            console.error('❌ Fallback profile fetch failed:', fallbackError);
             setUserProfile(null);
           }
         }

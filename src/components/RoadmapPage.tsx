@@ -159,9 +159,7 @@ export function RoadmapPage({ onPdfStateChange }: RoadmapPageProps) {
                 className="w-full h-full"
                 title="Career Roadmap PDF"
                 style={{ border: 'none' }}
-                onLoad={() => console.log('PDF loaded successfully')}
                 onError={() => {
-                  console.error('Failed to load PDF');
                   setPdfError(true);
                 }}
               />

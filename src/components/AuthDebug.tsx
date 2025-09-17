@@ -31,9 +31,7 @@ export function AuthDebug() {
       };
 
       setDebugInfo(debugData);
-      console.log('🔍 Debug Info:', debugData);
     } catch (error) {
-      console.error('Debug error:', error);
       setDebugInfo({ error: error.message });
     }
     setLoading(false);
