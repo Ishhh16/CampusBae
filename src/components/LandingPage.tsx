@@ -239,14 +239,14 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
                     className="text-sm mb-3"
                     style={{ color: '#00BFFF' }}
                   >
-                    The Brain Behind the Bae
+                    ECE-AI'28
                   </p>
                 </div>
                 <p 
                   className="text-sm leading-relaxed"
                   style={{ color: '#A0AEC0' }}
                 >
-                  Carrying the spark that made this happen.
+                  Always ready to guide you through.
                 </p>
               </div>
             </div>
@@ -286,14 +286,14 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
                     className="text-sm mb-3"
                     style={{ color: '#00BFFF' }}
                   >
-                    Always full of vibes
+                    ECE-AI'28
                   </p>
                 </div>
                 <p 
                   className="text-sm leading-relaxed"
                   style={{ color: '#A0AEC0' }}
                 >
-                  Brings warmth wherever they go.
+                  Always ready to help you out.
                 </p>
               </div>
             </div>
@@ -333,14 +333,14 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
                     className="text-sm mb-3"
                     style={{ color: '#00BFFF' }}
                   >
-                    The calm soul
+                    ECE-AI'28
                   </p>
                 </div>
                 <p 
                   className="text-sm leading-relaxed"
                   style={{ color: '#A0AEC0' }}
                 >
-                  Easygoing and grounded to the core.
+                  Always ready to cheer you up.
                 </p>
               </div>
             </div>
@@ -380,14 +380,14 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
                     className="text-sm mb-3"
                     style={{ color: '#00BFFF' }}
                   >
-                    The endless energy
+                    ECE-AI'28
                   </p>
                 </div>
                 <p 
                   className="text-sm leading-relaxed"
                   style={{ color: '#A0AEC0' }}
                 >
-                  A spirit that keeps things light and lively.
+                  Always ready to make things fun.
                 </p>
               </div>
             </div>
