@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { GlassCard } from './GlassCard';
-import { Book, FileText, Download, ExternalLink, Loader2, AlertCircle } from 'lucide-react';
-import { storageService, ResourceFile } from '../services/storageService';
+import { Book, FileText, Download, Eye, Loader2, AlertCircle } from 'lucide-react';
+import { resourcesService, ProcessedResource } from '../services/resourcesService';
+import { PDFViewerModal } from './PDFViewerModal';
 
 interface ResourcesListProps {
   selectedBranch: string;
@@ -18,9 +19,11 @@ export function ResourcesList({
   selectedTypes, 
   searchQuery 
 }: ResourcesListProps) {
-  const [resources, setResources] = useState<ResourceFile[]>([]);
+  const [resources, setResources] = useState<ProcessedResource[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedResource, setSelectedResource] = useState<ProcessedResource | null>(null);
+  const [isPDFViewerOpen, setIsPDFViewerOpen] = useState(false);
 
   // Load resources when filters change
   useEffect(() => {
@@ -38,7 +41,7 @@ export function ResourcesList({
         return;
       }
 
-      const fetchedResources = await storageService.getFilteredFiles({
+      const fetchedResources = await resourcesService.getFilteredFiles({
         subjects: selectedSubjects,
         types: selectedTypes,
         searchQuery
@@ -92,36 +95,33 @@ export function ResourcesList({
     }
   };
 
-  const handleOpen = (resource: ResourceFile) => {
-    window.open(resource.signedUrl, '_blank');
+  const handleOpen = (resource: ProcessedResource) => {
+    setSelectedResource(resource);
+    setIsPDFViewerOpen(true);
   };
 
-  const handleDownload = async (resource: ResourceFile) => {
-    
+  const closePDFViewer = () => {
+    setIsPDFViewerOpen(false);
+    setSelectedResource(null);
+  };
+
+  const handleDownload = async (resource: ProcessedResource) => {
     try {
-      // Fetch the file as a blob
-      const response = await fetch(resource.signedUrl);
-      if (!response.ok) throw new Error('Download failed');
+      // Extract file ID from Google Drive URL
+      const fileId = resource.publicUrl.match(/\/file\/d\/([a-zA-Z0-9-_]+)/)?.[1];
       
-      const blob = await response.blob();
-      
-      // Create download URL and trigger download
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = resource.name;
-      link.style.display = 'none';
-      
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Clean up the blob URL
-      window.URL.revokeObjectURL(downloadUrl);
+      if (!fileId) {
+        throw new Error('Could not extract file ID');
+      }
+
+      // Open Google Drive in new tab - user can download from there
+      const downloadUrl = `https://drive.google.com/file/d/${fileId}/view?usp=sharing`;
+      window.open(downloadUrl, '_blank');
       
     } catch (error) {
-      // Fallback to opening in new tab if download fails
-      window.open(resource.signedUrl, '_blank');
+      console.error('Download failed:', error);
+      // Fallback: open original URL
+      window.open(resource.publicUrl, '_blank');
     }
   };
 
@@ -267,8 +267,8 @@ export function ResourcesList({
                   border: '1px solid rgba(0, 229, 255, 0.3)'
                 }}
               >
-                <ExternalLink size={16} />
-                Open
+                <Eye size={16} />
+                View
               </button>
               <button 
                 onClick={() => handleDownload(resource)}
@@ -304,6 +304,13 @@ export function ResourcesList({
           </div>
         </div>
       )}
+
+      {/* PDF Viewer Modal */}
+      <PDFViewerModal
+        resource={selectedResource}
+        isOpen={isPDFViewerOpen}
+        onClose={closePDFViewer}
+      />
     </>
   );
 }
