@@ -1,6 +1,7 @@
 import { useState, FormEvent, ChangeEvent } from 'react'
 import { Button } from '../ui/button'
 import { useAuth } from '../../context/AuthContext'
+import { Eye, EyeOff } from 'lucide-react'
 
 interface SignupFormProps {
   onSuccess: () => void;
@@ -17,6 +18,7 @@ export function SignupForm({ onSuccess, onError, hasError }: SignupFormProps) {
     branch: '',
     batch: ''
   })
+  const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [emailValidationMessage, setEmailValidationMessage] = useState<string | null>(null)
   const { signUp } = useAuth()
@@ -134,19 +136,30 @@ export function SignupForm({ onSuccess, onError, hasError }: SignupFormProps) {
           </p>
         )}
       </div>
-      <input 
-        name="password" 
-        type="password" 
-        placeholder="Password" 
-        onChange={handleChange} 
-        required 
-        className={`w-full p-2 rounded text-white transition-colors ${
-          hasError 
-            ? 'bg-red-500/10 border-red-500/50 focus:border-red-400' 
-            : 'bg-white/10 border-white/20 focus:border-blue-400'
-        }`}
-        disabled={isLoading}
-      />
+      <div className="relative">
+        <input 
+          name="password" 
+          type={showPassword ? "text" : "password"}
+          placeholder="Password" 
+          value={form.password}
+          onChange={handleChange} 
+          required 
+          className={`w-full p-2 pr-10 rounded text-white transition-colors ${
+            hasError 
+              ? 'bg-red-500/10 border-red-500/50 focus:border-red-400' 
+              : 'bg-white/10 border-white/20 focus:border-blue-400'
+          }`}
+          disabled={isLoading}
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400 hover:text-blue-300"
+          disabled={isLoading}
+        >
+          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+        </button>
+      </div>
       <input 
         name="enrollmentNumber" 
         placeholder="Enrollment Number" 

@@ -53,6 +53,7 @@ const storageToSubjectMap: { [key: string]: string } = {
   // Communication & Skills
   'CS': 'Communication Skills - CS (HMC 101)',
   'SSPD': 'Soft Skills and Personality Development - SSPD (HMC 102)',
+  'sspd': 'Soft Skills and Personality Development - SSPD (HMC 102)', // lowercase variant
   
   // Sciences
   'EVS': 'Environmental Sciences - EVS (BAS 104)',
@@ -134,8 +135,9 @@ class ResourcesService {
       unit = pathParts[2];
     }
 
-    // Map storage subject name to display name
-    const displaySubject = storageToSubjectMap[storageSubject] || storageSubject;
+    // Map storage subject name to display name (case-insensitive)
+    const upperStorageSubject = storageSubject.toUpperCase();
+    const displaySubject = storageToSubjectMap[upperStorageSubject] || storageToSubjectMap[storageSubject] || storageSubject;
 
     return {
       subject: displaySubject,
