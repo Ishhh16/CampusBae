@@ -82,7 +82,27 @@ class ResourcesService {
         return [];
       }
 
-      return data || [];
+      // Filter out placeholder files and other unwanted files
+      const filteredData = (data || []).filter(resource => {
+        const fileName = resource.file_name?.toLowerCase() || '';
+        
+        // Skip placeholder files
+        if (fileName.includes('emptyfolderplaceholder')) {
+          return false;
+        }
+        
+        // Skip other common placeholder/system files
+        if (fileName.includes('placeholder') || 
+            fileName.includes('.ds_store') || 
+            fileName.includes('thumbs.db') ||
+            fileName.includes('desktop.ini')) {
+          return false;
+        }
+        
+        return true;
+      });
+
+      return filteredData;
     } catch (error) {
       console.error('Error fetching resources:', error);
       return [];
