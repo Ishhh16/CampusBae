@@ -24,8 +24,8 @@ export const subjectToStorageMap: { [key: string]: string } = {
   'Workshop Practice - WP (BMA 107)': 'WP',
   'Engineering Graphics - EG (BMA 102)': 'EG',
   'Engineering Mechanics - EM (BMA 103)': 'EM',
-  'Calculus I - CAL1 (BAS 105)': 'CAL1',
-  'Calculus II - CAL2 (BAS 106)': 'CAL2',
+  'Calculus I - CAL1 (BAS 105)': 'calculus_1',
+  'Calculus II - CAL2 (BAS 106)': 'calculus_2',
   'Linear Algebra - LA (BAS 107)': 'LA',
   'Programming Tools for Mathematics - PTM (BAS 108)': 'PTM'
 };

@@ -27,6 +27,19 @@ const storageToSubjectMap: { [key: string]: string } = {
   
   // Mathematics subjects
   'calculus 1': 'Calculus I - CAL1 (BAS 105)',
+  'calculus_1': 'Calculus I - CAL1 (BAS 105)', // underscore version from database
+  'Calculus 1': 'Calculus I - CAL1 (BAS 105)', // capitalized version
+  'calculus1': 'Calculus I - CAL1 (BAS 105)',  // no space version
+  'Calculus1': 'Calculus I - CAL1 (BAS 105)',  // capitalized no space
+  'calculus 2': 'Calculus II - CAL2 (BAS 106)',
+  'calculus_2': 'Calculus II - CAL2 (BAS 106)', // underscore version from database
+  'Calculus 2': 'Calculus II - CAL2 (BAS 106)',
+  'calculus2': 'Calculus II - CAL2 (BAS 106)',
+  'Calculus2': 'Calculus II - CAL2 (BAS 106)',
+  'CAL1': 'Calculus I - CAL1 (BAS 105)',
+  'CAL2': 'Calculus II - CAL2 (BAS 106)',
+  'calculus': 'Calculus I - CAL1 (BAS 105)', // fallback mapping
+  'Calculus': 'Calculus I - CAL1 (BAS 105)', // capitalized fallback
   'AM': 'Applied Mathematics - AM (BAS 101)',
   'EME': 'Elements of Mechanical Engineering - EME (BMA 106)',
   
@@ -136,8 +149,10 @@ class ResourcesService {
     }
 
     // Map storage subject name to display name (case-insensitive)
-    const upperStorageSubject = storageSubject.toUpperCase();
-    const displaySubject = storageToSubjectMap[upperStorageSubject] || storageToSubjectMap[storageSubject] || storageSubject;
+    const displaySubject = storageToSubjectMap[storageSubject] || 
+                          storageToSubjectMap[storageSubject.toLowerCase()] ||
+                          storageToSubjectMap[storageSubject.toUpperCase()] ||
+                          storageSubject;
 
     return {
       subject: displaySubject,
@@ -191,23 +206,54 @@ class ResourcesService {
     try {
       const { subjects = [], types = [], searchQuery = '' } = filters;
 
+      console.log('🔍 ResourcesService Debug:', { subjects, types, searchQuery });
+
       // If no subjects or types specified, return empty array
       if (subjects.length === 0 || types.length === 0) {
+        console.log('❌ No subjects or types specified');
         return [];
       }
 
       // Get all resources from database
       const rawResources = await this.getAllResources();
+      console.log(`📚 Found ${rawResources.length} total resources in database`);
       
       // Process them into the format expected by frontend
       const processedResources = this.processResources(rawResources);
+      console.log(`✅ Processed ${processedResources.length} resources`);
+
+      // Log first few processed resources to see what subjects we have
+      if (processedResources.length > 0) {
+        console.log('📋 Sample processed resources:', processedResources.slice(0, 3).map(r => ({
+          name: r.name,
+          subject: r.subject,
+          type: r.type,
+          path: r.fullPath
+        })));
+      }
 
       // Filter by subjects and types
       let filteredResources = processedResources.filter(resource => {
         const subjectMatch = subjects.includes(resource.subject);
         const typeMatch = types.includes(resource.type);
+        
+        // Debug log for calculus
+        if (resource.subject.toLowerCase().includes('calculus') || resource.fullPath.toLowerCase().includes('calculus')) {
+          console.log(`🧮 Calculus resource found:`, {
+            name: resource.name,
+            subject: resource.subject,
+            type: resource.type,
+            path: resource.fullPath,
+            subjectMatch,
+            typeMatch,
+            lookingFor: { subjects, types }
+          });
+        }
+        
         return subjectMatch && typeMatch;
       });
+
+      console.log(`🎯 Filtered to ${filteredResources.length} resources after subject/type filter`);
 
       // Apply search filter if specified
       if (searchQuery.trim()) {
@@ -221,6 +267,8 @@ class ResourcesService {
           
           return nameMatch || displayMatch || subjectMatch || typeMatch || unitMatch;
         });
+        
+        console.log(`🔍 After search filter: ${filteredResources.length} resources`);
       }
 
       return filteredResources;
