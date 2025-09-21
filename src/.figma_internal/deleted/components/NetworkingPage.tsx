@@ -116,10 +116,10 @@ export function NetworkingPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4" style={{ color: '#EAEAEA' }}>
-            Student Networking
+            Senior Networking
           </h1>
           <p style={{ color: '#A0AEC0' }}>
-            Connect with talented students, share experiences, and build your professional network
+            Connect with the Seniors who are ready to guide you through the chaos! and build your professional network.
           </p>
         </div>
 

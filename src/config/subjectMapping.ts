@@ -180,7 +180,7 @@ export const subjectMapping: SubjectMapping = {
 };
 
 export const branches = ['CSE', 'CSE-AI', 'ECE', 'ECE-AI', 'IT', 'AI&ML', 'MAE/DMAM', 'MAC'];
-export const semesters = ['1', '2'];
+export const semesters = ['1', '2', '3', '4', '5', '6', '7', '8'];
 export const types = ['notes', 'pyqs', 'syllab', 'book'];
 
 // Get subjects for a specific branch and semester

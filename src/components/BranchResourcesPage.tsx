@@ -190,6 +190,31 @@ export function BranchResourcesPage({ initialBranch = '', initialSemester = '', 
             </GlassCard>
           )}
 
+          {/* Coming Soon Message when no subjects available */}
+          {selectedBranch && selectedSemester && availableSubjects.length === 0 && (
+            <GlassCard>
+              <div className="text-center py-12">
+                <div className="text-6xl mb-4">🚀</div>
+                <h3 className="text-2xl font-bold mb-4" style={{ color: '#00E5FF' }}>
+                  Coming Soon!
+                </h3>
+                <p className="text-lg mb-2" style={{ color: '#EAEAEA' }}>
+                  We're working hard to add resources for
+                </p>
+                <p className="text-xl font-semibold mb-4" style={{ color: '#00E5FF' }}>
+                  {selectedBranch} - Semester {selectedSemester}
+                </p>
+                <p className="text-sm" style={{ color: '#A0AEC0' }}>
+                  Stay tuned for updates! 📚✨
+                </p>
+                <div className="mt-6 text-sm" style={{ color: '#A0AEC0' }}>
+                  <p>Want to help us add resources faster?</p>
+                  <p style={{ color: '#00E5FF' }}>Contact us via WhatsApp or Instagram below! 👇</p>
+                </div>
+              </div>
+            </GlassCard>
+          )}
+
           {/* Type Selection */}
           <GlassCard>
             <div className="flex items-center justify-between mb-4">
@@ -251,13 +276,13 @@ export function BranchResourcesPage({ initialBranch = '', initialSemester = '', 
         {/* Upload Note */}
         <GlassCard className="mt-12 text-center">
           <h3 className="text-xl font-semibold mb-2" style={{ color: '#EAEAEA' }}>
-            Can't find what you're looking for?
+            Want to help us curate the best notes?
           </h3>
           <p className="mb-4" style={{ color: '#A0AEC0' }}>
-            Help your fellow students by uploading resources you have!
+            Do you want to help us in curating the best notes by contributing? Then contact us!
           </p>
           <p className="text-sm" style={{ color: '#00E5FF' }}>
-            Upload feature coming soon...
+            Reach out to us via WhatsApp or Instagram in the footer below 👇
           </p>
         </GlassCard>
       </div>

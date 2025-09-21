@@ -1,4 +1,4 @@
-import { Heart, Instagram } from 'lucide-react';
+import { Heart, Instagram, MessageCircle } from 'lucide-react';
 
 interface FooterProps {
   onNavigate?: (page: string) => void;
@@ -29,6 +29,15 @@ export function Footer({ onNavigate, currentPage }: FooterProps) {
               title="Follow us on Instagram"
             >
               <Instagram size={20} />
+            </a>
+            <a
+              href="https://chat.whatsapp.com/IsDcwlhyQ0BFBwLz6ZNEVx?mode=ems_copy_t"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-green-500 transition-colors duration-200 cursor-pointer"
+              title="Join our WhatsApp group"
+            >
+              <MessageCircle size={20} />
             </a>
           </div>
         </div>

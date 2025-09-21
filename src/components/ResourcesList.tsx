@@ -290,18 +290,34 @@ export function ResourcesList({
       {/* No Results */}
       {resources.length === 0 && !loading && (
         <div className="text-center py-12">
-          <p className="text-xl mb-2" style={{ color: '#A0AEC0' }}>
-            No resources found
-          </p>
-          <p style={{ color: '#A0AEC0' }}>
-            {searchQuery 
-              ? `No files match "${searchQuery}" in the selected filters` 
-              : 'No files found for the selected subjects and types'
-            }
-          </p>
-          <div className="mt-4 text-sm" style={{ color: '#A0AEC0' }}>
-            <p>Selected: {selectedSubjects.join(', ')} • {selectedTypes.join(', ')}</p>
-          </div>
+          {parseInt(selectedSemester) > 2 ? (
+            <div>
+              <p className="text-xl mb-2" style={{ color: '#00E5FF' }}>
+                Coming Soon! 🚀
+              </p>
+              <p style={{ color: '#A0AEC0' }}>
+                We're working hard to add resources for Semester {selectedSemester}
+              </p>
+              <p className="text-sm mt-2" style={{ color: '#A0AEC0' }}>
+                Stay tuned for updates!
+              </p>
+            </div>
+          ) : (
+            <div>
+              <p className="text-xl mb-2" style={{ color: '#00E5FF' }}>
+                Coming Soon! 🚀
+              </p>
+              <p style={{ color: '#A0AEC0' }}>
+                {searchQuery 
+                  ? `No files match "${searchQuery}" in the selected filters` 
+                  : 'No files found for the selected subjects and types'
+                }
+              </p>
+              <div className="mt-4 text-sm" style={{ color: '#A0AEC0' }}>
+                <p>Selected: {selectedSubjects.join(', ')} • {selectedTypes.join(', ')}</p>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
