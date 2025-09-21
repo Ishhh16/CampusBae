@@ -122,14 +122,22 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
               </div>
             )}
             {signupSuccess && showLogin && (
-              <div className="mt-4 p-3 rounded-lg border border-green-500/50 bg-green-500/10 backdrop-blur-sm">
+              <div className="mt-4 p-4 rounded-lg border border-green-500/50 bg-green-500/10 backdrop-blur-sm">
                 <p className="font-medium text-sm flex items-center gap-2" style={{color: '#22c55e !important'}}>
                   <span style={{color: '#22c55e'}}>✅</span>
-                  You have entered a valid IGDTUW email! Please check your email for verification.
+                  Signup Successful! Please verify your IGDTUW email.
                 </p>
-                <p className="text-xs mt-2" style={{color: '#22c55e', opacity: 0.8}}>
-                  Check your inbox and spam folder for the confirmation email, then login.
-                </p>
+                <div className="text-xs mt-3 space-y-1" style={{color: '#22c55e', opacity: 0.9}}>
+                  <p>📧 <strong>Check your IGDTUW email inbox</strong> for verification link</p>
+                  <p>📁 <strong>Check spam/junk folder</strong> if not in inbox</p>
+                  <p>⏱️ <strong>Wait 5-10 minutes</strong> for email delivery</p>
+                  <p>🔗 <strong>Click the verification link</strong>, then return here to login</p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-green-500/20">
+                  <p className="text-xs" style={{color: '#22c55e', opacity: 0.7}}>
+                    💡 <strong>Tip:</strong> Make sure you used your correct IGDTUW email address
+                  </p>
+                </div>
               </div>
             )}
           </div>

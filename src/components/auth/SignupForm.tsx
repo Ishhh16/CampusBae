@@ -21,6 +21,7 @@ export function SignupForm({ onSuccess, onError, hasError }: SignupFormProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [emailValidationMessage, setEmailValidationMessage] = useState<string | null>(null)
+  const [nameValidationMessage, setNameValidationMessage] = useState<string | null>(null)
   const { signUp } = useAuth()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -34,11 +35,54 @@ export function SignupForm({ onSuccess, onError, hasError }: SignupFormProps) {
     } else if (name === 'email') {
       setEmailValidationMessage(null);
     }
+    
+    // Real-time name validation
+    if (name === 'name' && value.length > 0) {
+      const error = validateName(value);
+      setNameValidationMessage(error);
+    } else if (name === 'name') {
+      setNameValidationMessage(null);
+    }
   }
 
+  const validateName = (name: string): string | null => {
+    // Trim whitespace
+    name = name.trim();
+    
+    // Check minimum length
+    if (name.length < 2) {
+      return '📝 Name must be at least 2 characters long';
+    }
+    
+    // Check for valid characters (letters, spaces, hyphens, apostrophes)
+    const nameRegex = /^[a-zA-Z\s'-]+$/;
+    if (!nameRegex.test(name)) {
+      return '📝 Name can only contain letters, spaces, hyphens, and apostrophes';
+    }
+    
+    // For single names, ensure they're at least 3 characters (common names)
+    if (!name.includes(' ') && name.length < 3) {
+      return '📝 Single names should be at least 3 characters (e.g., "raj", "priya")';
+    }
+    
+    // Check for excessive spaces
+    if (name.includes('  ')) {
+      return '📝 Please use single spaces between names';
+    }
+    
+    return null; // Valid name
+  };
+
   const validateEmail = (email: string): string | null => {
-    // Check domain
+    // Trim whitespace
+    email = email.trim().toLowerCase();
+    
+    // Check domain first - this is the main validation
     if (!email.endsWith('@igdtuw.ac.in')) {
+      // Check for common typos in domain only if it doesn't end with correct domain
+      if (email.endsWith('@igdtuw.ac.i') || email.endsWith('@igdtuw.co.in') || email.endsWith('@igdtuw.com')) {
+        return '📞 Please double-check your domain: should be @igdtuw.ac.in';
+      }
       return '🏫 Please use your official IGDTUW college email address (@igdtuw.ac.in)';
     }
 
@@ -59,13 +103,19 @@ export function SignupForm({ onSuccess, onError, hasError }: SignupFormProps) {
       return '📞 Invalid email format. Please check your email address.';
     }
 
-    return null; // No errors
+    return null; // No errors - email is valid!
   }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     
     // Client-side validation
+    const nameError = validateName(form.name);
+    if (nameError) {
+      onError(nameError);
+      return;
+    }
+    
     const emailError = validateEmail(form.email);
     if (emailError) {
       onError(emailError);
@@ -95,18 +145,35 @@ export function SignupForm({ onSuccess, onError, hasError }: SignupFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
-      <input 
-        name="name" 
-        placeholder="Name" 
-        onChange={handleChange} 
-        required 
-        className={`w-full p-2 rounded text-white transition-colors ${
-          hasError 
-            ? 'bg-red-500/10 border-red-500/50 focus:border-red-400' 
-            : 'bg-white/10 border-white/20 focus:border-blue-400'
-        }`}
-        disabled={isLoading}
-      />
+      <div className="relative">
+        <input 
+          name="name" 
+          placeholder="Name" 
+          value={form.name}
+          onChange={handleChange} 
+          required 
+          className={`w-full p-2 rounded text-white transition-colors ${
+            nameValidationMessage || hasError
+              ? 'bg-red-500/10 border-red-500/50 focus:border-red-400' 
+              : form.name && !nameValidationMessage
+              ? 'bg-green-500/10 border-green-500/50 focus:border-green-400'
+              : 'bg-white/10 border-white/20 focus:border-blue-400'
+          }`}
+          disabled={isLoading}
+        />
+        {nameValidationMessage && (
+          <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
+            <span>⚠️</span>
+            {nameValidationMessage}
+          </p>
+        )}
+        {form.name && !nameValidationMessage && form.name.length >= 2 && (
+          <p className="text-green-400 text-xs mt-1 flex items-center gap-1">
+            <span>✓</span>
+            Valid name format
+          </p>
+        )}
+      </div>
       <div className="relative">
         <input 
           name="email" 
