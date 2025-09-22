@@ -118,7 +118,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Example: ishanvi048bteceai24@igdtuw.ac.in
     
     // Check if it follows the basic structure: letters + 3 digits + degree + branch + year
-    const igdtuwEmailPattern = /^[a-zA-Z]+[0-9]{3}(bt|mt|phd)(cseai|cse|ece|mae|eceai|mac|it|aiml)(2[2-5])$/;
+    const igdtuwEmailPattern = /^[a-zA-Z]+[0-9]{3}(bt|mt|phd)(cseai|cse|ece|mae|eceai|mac|it|aiml|dmam)(2[2-5])$/;
     
     if (!igdtuwEmailPattern.test(localPart)) {
       // Break down the validation to give specific error messages
@@ -132,9 +132,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error('🏫 IGDTUW email must include degree code: bt (BTech), mt (MTech), or phd (PhD)');
       }
       
-      const branchPattern = /(cseai|cse|ece|mae|eceai|mac|it|aiml)/;
+      const branchPattern = /(cseai|cse|ece|mae|eceai|mac|it|aiml|dmam)/;
       if (!branchPattern.test(localPart)) {
-        throw new Error('🏫 IGDTUW email must include valid branch code: cseai, cse, ece, mae, eceai, mac, it, or aiml');
+        throw new Error('🏫 IGDTUW email must include valid branch code: cseai, cse, ece, mae, eceai, mac, it, aiml, or dmam');
       }
       
       const yearPattern = /(2[2-5])$/;
