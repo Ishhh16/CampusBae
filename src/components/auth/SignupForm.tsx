@@ -103,6 +103,13 @@ export function SignupForm({ onSuccess, onError, hasError }: SignupFormProps) {
       return '📞 Invalid email format. Please check your email address.';
     }
 
+    // Check for valid branch codes in email (including DMAM)
+    const validBranchCodes = ['cse', 'ece', 'it', 'ai', 'ml', 'mae', 'dmam', 'mac', 'bt', 'btech', 'mtech'];
+    const hasBranchCode = validBranchCodes.some(branch => localPart.includes(branch));
+    
+    // Note: This is informational - emails are still valid even without explicit branch codes
+    // as some students might have different email formats
+
     return null; // No errors - email is valid!
   }
 
