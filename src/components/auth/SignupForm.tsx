@@ -221,7 +221,8 @@ export function SignupForm({ onSuccess, onError, hasError }: SignupFormProps) {
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400 hover:text-blue-300"
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 hover:text-blue-300"
+          style={{ color: '#00E5FF' }}
           disabled={isLoading}
         >
           {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}

@@ -6,10 +6,11 @@ import { Eye, EyeOff } from 'lucide-react'
 interface LoginFormProps {
   onSuccess: () => void;
   onError: (error: string) => void;
+  onForgotPassword: () => void;
   hasError?: boolean;
 }
 
-export function LoginForm({ onSuccess, onError, hasError }: LoginFormProps) {
+export function LoginForm({ onSuccess, onError, onForgotPassword, hasError }: LoginFormProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -61,7 +62,8 @@ export function LoginForm({ onSuccess, onError, hasError }: LoginFormProps) {
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400 hover:text-blue-300"
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 hover:text-blue-300"
+          style={{ color: '#00E5FF' }}
           disabled={isLoading}
         >
           {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -74,6 +76,18 @@ export function LoginForm({ onSuccess, onError, hasError }: LoginFormProps) {
       >
         {isLoading ? 'Logging in...' : 'Login'}
       </Button>
+      
+      {/* Forgot Password Link */}
+      <div className="text-center">
+        <button
+          type="button"
+          onClick={onForgotPassword}
+          className="text-sm text-white hover:text-blue-300 transition-colors"
+          disabled={isLoading}
+        >
+          Forgot your password?
+        </button>
+      </div>
     </form>
   )
 }

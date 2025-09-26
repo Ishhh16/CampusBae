@@ -18,6 +18,7 @@ interface AuthContextType {
   signUp: (name: string, email: string, password: string, enrollmentNumber: string, branch: string, batch: string) => Promise<void>;
   signOut: () => Promise<void>;
   getUserProfile: () => Promise<StudentProfile | null>;
+  resetPassword: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({ 
@@ -27,7 +28,8 @@ const AuthContext = createContext<AuthContextType>({
   signIn: async () => {},
   signUp: async () => {},
   signOut: async () => {},
-  getUserProfile: async () => null
+  getUserProfile: async () => null,
+  resetPassword: async () => {}
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -224,6 +226,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUserProfile(null); // Clear profile on logout
   };
 
+  const resetPassword = async (email: string) => {
+    // Validate email format
+    if (!email || !email.includes('@')) {
+      throw new Error('📧 Please enter a valid email address.');
+    }
+
+    // Enhanced email validation - check if it's an IGDTUW email with proper branch codes including DMAM
+    const igdtuwRegex = /^bt(\d{2})(cse|ece|it|eee|mae|ce|bt|dmam)(\d{3})@igdtuw\.ac\.in$/i;
+    if (!igdtuwRegex.test(email.toLowerCase())) {
+      throw new Error('🏫 Please use your official IGDTUW college email address.');
+    }
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`
+      });
+
+      if (error) {
+        // Check for specific SMTP/email related errors
+        if (error.message.includes('SMTP') || 
+            error.message.includes('email') || 
+            error.message.includes('rate limit') ||
+            error.message.includes('sending')) {
+          throw new Error('� Password reset is temporarily unavailable due to email service configuration. Please contact support or try again later.');
+        }
+        if (error.message.includes('Invalid email')) {
+          throw new Error('📞 Email address not found. Please check if your email is correct.');
+        }
+        throw new Error(`❌ Password reset failed: ${error.message}`);
+      }
+
+      // Success - no error means email was sent (or would be sent if SMTP was enabled)
+    } catch (err: any) {
+      // If it's our custom error, re-throw it
+      if (err.message.includes('📧') || err.message.includes('🏫') || err.message.includes('📞')) {
+        throw err;
+      }
+      // For other errors, show SMTP message
+      throw new Error('📧 Password reset is temporarily unavailable. Please contact support for password reset assistance.');
+    }
+  };
+
   const getUserProfile = async (): Promise<StudentProfile | null> => {
     if (!user) {
       return null;
@@ -405,7 +449,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, userProfile, loading, signIn, signUp, signOut, getUserProfile }}>
+    <AuthContext.Provider value={{ user, userProfile, loading, signIn, signUp, signOut, getUserProfile, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );

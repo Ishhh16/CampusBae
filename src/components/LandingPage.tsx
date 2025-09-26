@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from './ui/button';
 import { LoginForm } from './auth/LoginForm';
 import { SignupForm } from './auth/SignupForm';
+import { ForgotPasswordForm } from './auth/ForgotPasswordForm';
 
 interface LandingPageProps {
   onLoginSuccess: () => void;
@@ -13,6 +14,8 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
   const [showLogin, setShowLogin] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotPasswordSuccess, setForgotPasswordSuccess] = useState(false);
   return (
     <div className="min-h-screen">
       {/* Main Landing Section */}
@@ -51,6 +54,8 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
               setShowLogin(true);
               setShowForm(true);
               setSignupSuccess(false);
+              setShowForgotPassword(false);
+              setForgotPasswordSuccess(false);
               onAuthError(''); // Clear any errors
             }}
             className={`
@@ -77,6 +82,8 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
               setShowLogin(false);
               setShowForm(true);
               setSignupSuccess(false);
+              setShowForgotPassword(false);
+              setForgotPasswordSuccess(false);
               onAuthError(''); // Clear any errors
             }}
             className={`
@@ -100,20 +107,45 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
         {/* Auth Forms */}
         {showForm && (
           <div className="max-w-md mx-auto mb-12">
-            {showLogin ? (
-              <LoginForm onSuccess={onLoginSuccess} onError={onAuthError} hasError={!!authError} />
+            {showForgotPassword ? (
+              <ForgotPasswordForm 
+                onBack={() => {
+                  setShowForgotPassword(false);
+                  setForgotPasswordSuccess(false);
+                  onAuthError(''); // Clear any errors
+                }}
+                onSuccess={(message) => {
+                  setForgotPasswordSuccess(true);
+                  onAuthError(''); // Clear any errors
+                  // Show success message via authError state
+                  onAuthError(message);
+                }}
+                onError={onAuthError}
+              />
+            ) : showLogin ? (
+              <LoginForm 
+                onSuccess={onLoginSuccess} 
+                onError={onAuthError} 
+                onForgotPassword={() => {
+                  setShowForgotPassword(true);
+                  setForgotPasswordSuccess(false);
+                  onAuthError(''); // Clear any errors
+                }}
+                hasError={!!authError} 
+              />
             ) : (
               <SignupForm 
                 onSuccess={() => {
                   setSignupSuccess(true);
                   setShowLogin(true);
+                  setShowForgotPassword(false);
                   onAuthError(''); // Clear any previous errors
                 }} 
                 onError={onAuthError} 
                 hasError={!!authError}
               />
             )}
-            {authError && (
+            {authError && !forgotPasswordSuccess && (
               <div className="mt-4 p-3 rounded-lg border border-red-500/50 bg-red-500/10 backdrop-blur-sm">
                 <p className="text-red-400 font-medium text-sm flex items-center gap-2">
                   <span className="text-red-500">⚠️</span>
@@ -121,7 +153,15 @@ export function LandingPage({ onLoginSuccess, onAuthError, authError }: LandingP
                 </p>
               </div>
             )}
-            {signupSuccess && showLogin && (
+            {forgotPasswordSuccess && authError && (
+              <div className="mt-4 p-4 rounded-lg border border-green-500/50 bg-green-500/10 backdrop-blur-sm">
+                <p className="font-medium text-sm flex items-center gap-2" style={{color: '#22c55e !important'}}>
+                  <span style={{color: '#22c55e'}}>✅</span>
+                  {authError}
+                </p>
+              </div>
+            )}
+            {signupSuccess && showLogin && !showForgotPassword && (
               <div className="mt-4 p-4 rounded-lg border border-green-500/50 bg-green-500/10 backdrop-blur-sm">
                 <p className="font-medium text-sm flex items-center gap-2" style={{color: '#22c55e !important'}}>
                   <span style={{color: '#22c55e'}}>✅</span>
