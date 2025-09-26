@@ -234,37 +234,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Enhanced email validation - check if it's an IGDTUW email with proper branch codes including DMAM
     const igdtuwRegex = /^bt(\d{2})(cse|ece|it|eee|mae|ce|bt|dmam)(\d{3})@igdtuw\.ac\.in$/i;
-    if (!igdtuwRegex.test(email.toLowerCase())) {
-      throw new Error('🏫 Please use your official IGDTUW college email address.');
+    if (!igdtuwRegex.test(email.trim().toLowerCase())) {
+      throw new Error('🏫 Password reset is only available for IGDTUW student emails (e.g., bt21cse001@igdtuw.ac.in or bt21dmam001@igdtuw.ac.in).');
     }
 
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`
-      });
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
+      redirectTo: `${window.location.origin}/reset-password`
+    });
 
-      if (error) {
-        // Check for specific SMTP/email related errors
-        if (error.message.includes('SMTP') || 
-            error.message.includes('email') || 
-            error.message.includes('rate limit') ||
-            error.message.includes('sending')) {
-          throw new Error('� Password reset is temporarily unavailable due to email service configuration. Please contact support or try again later.');
-        }
-        if (error.message.includes('Invalid email')) {
-          throw new Error('📞 Email address not found. Please check if your email is correct.');
-        }
-        throw new Error(`❌ Password reset failed: ${error.message}`);
+    if (error) {
+      // Handle rate limiting
+      if (error.message.includes('rate limit') || error.message.includes('too many requests')) {
+        throw new Error('⏰ Too many reset attempts. Please wait a few minutes before trying again.');
       }
-
-      // Success - no error means email was sent (or would be sent if SMTP was enabled)
-    } catch (err: any) {
-      // If it's our custom error, re-throw it
-      if (err.message.includes('📧') || err.message.includes('🏫') || err.message.includes('📞')) {
-        throw err;
+      // Handle user not found  
+      if (error.message.includes('not found') || error.message.includes('user not found')) {
+        throw new Error('📞 No account found with this email address. Please check your email or sign up.');
       }
-      // For other errors, show SMTP message
-      throw new Error('📧 Password reset is temporarily unavailable. Please contact support for password reset assistance.');
+      // Handle any other error as temporary issue (including 504 timeouts)
+      throw new Error('📧 Email service is temporarily down. Please contact support via WhatsApp or Instagram for immediate assistance.');
     }
   };
 
