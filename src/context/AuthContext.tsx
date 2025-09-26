@@ -232,17 +232,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error('📧 Please enter a valid email address.');
     }
 
-    // Enhanced email validation - check if it's an IGDTUW email with proper branch codes including DMAM
-    const igdtuwRegex = /^bt(\d{2})(cse|ece|it|eee|mae|ce|bt|dmam)(\d{3})@igdtuw\.ac\.in$/i;
-    if (!igdtuwRegex.test(email.trim().toLowerCase())) {
-      throw new Error('🏫 Password reset is only available for IGDTUW student emails (e.g., bt21cse001@igdtuw.ac.in or bt21dmam001@igdtuw.ac.in).');
+    // Use same email validation as signup - just check domain and basic format
+    const trimmedEmail = email.trim().toLowerCase();
+    
+    // Check domain first - this is the main validation
+    if (!trimmedEmail.endsWith('@igdtuw.ac.in')) {
+      throw new Error('🏫 Please use your official IGDTUW college email address (@igdtuw.ac.in).');
     }
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
+    // Check basic email format
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@igdtuw\.ac\.in$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      throw new Error('📞 Invalid email format. Please use a valid IGDTUW email address.');
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(trimmedEmail, {
       redirectTo: `${window.location.origin}/reset-password`
     });
 
     if (error) {
+      console.log('🔍 Password reset error:', error.message);
+      
       // Handle rate limiting
       if (error.message.includes('rate limit') || error.message.includes('too many requests')) {
         throw new Error('⏰ Too many reset attempts. Please wait a few minutes before trying again.');
@@ -251,8 +261,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error.message.includes('not found') || error.message.includes('user not found')) {
         throw new Error('📞 No account found with this email address. Please check your email or sign up.');
       }
-      // Handle any other error as temporary issue (including 504 timeouts)
-      throw new Error('📧 Email service is temporarily down. Please contact support via WhatsApp or Instagram for immediate assistance.');
+      // Handle SMTP/email sending errors specifically
+      if (error.message.includes('Error sending recovery email') || error.status === 500) {
+        throw new Error('📧 Email delivery is not configured on the server. This is a server-side issue that needs to be fixed by setting up SMTP email service. Please contact support via WhatsApp or Instagram for manual password reset assistance.');
+      }
+      // Handle any other error
+      throw new Error(`❌ Password reset failed: ${error.message}`);
     }
   };
 
