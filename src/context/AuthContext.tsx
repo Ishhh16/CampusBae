@@ -247,8 +247,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     // Now with SendGrid SMTP configured, try to send the reset email
+    // Use current origin for both development and production
+    const redirectUrl = window.location.origin;
+    
+    console.log('🔗 Password reset will redirect to:', redirectUrl);
+      
     const { error } = await supabase.auth.resetPasswordForEmail(trimmedEmail, {
-      redirectTo: `${window.location.origin}/reset-password`
+      redirectTo: redirectUrl
     });
 
     if (error) {

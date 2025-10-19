@@ -41,23 +41,35 @@ export function PasswordResetPage() {
           currentSession: !!session 
         });
 
-        if (type === 'recovery' && accessToken) {
-          // Set the session with the recovery tokens
-          const { data, error } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken || ''
-          });
+        // Check if this looks like a test link with fake tokens
+        const isFakeToken = accessToken && (
+          accessToken.includes('fake_token') || 
+          accessToken.includes('test_token') || 
+          accessToken.length < 50 // Real Supabase tokens are much longer
+        );
 
-          if (error) {
-            console.error('❌ Session error:', error);
-            setError('Invalid or expired reset link. Please request a new password reset.');
+        if (type === 'recovery' && accessToken) {
+          if (isFakeToken) {
+            console.log('🧪 Detected test/fake token - showing test message');
+            setError('This is a test link with fake tokens. For real testing, use the "Forgot Password" form to get a real reset email.');
           } else {
-            console.log('✅ Recovery session established');
-            setValidSession(true);
-            
-            // Clean up the URL to prevent re-processing tokens
-            if (window.history && window.history.replaceState) {
-              window.history.replaceState({}, document.title, window.location.pathname);
+            // Set the session with the recovery tokens
+            const { data, error } = await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken || ''
+            });
+
+            if (error) {
+              console.error('❌ Session error:', error);
+              setError('Invalid or expired reset link. Please request a new password reset.');
+            } else {
+              console.log('✅ Recovery session established');
+              setValidSession(true);
+              
+              // Clean up the URL to prevent re-processing tokens
+              if (window.history && window.history.replaceState) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+              }
             }
           }
         } else if (session) {
