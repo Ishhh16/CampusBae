@@ -246,9 +246,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error('📞 Invalid email format. Please use a valid IGDTUW email address.');
     }
 
-    // Since Gmail SMTP has deliverability issues for transactional emails,
-    // provide a helpful contact-based alternative for users
-    throw new Error('📧 Password reset emails are temporarily unavailable due to email service limitations. Please contact us via WhatsApp or Instagram (links in footer) for immediate password reset assistance. We apologize for the inconvenience!');
+    // Now with SendGrid SMTP configured, try to send the reset email
+    const { error } = await supabase.auth.resetPasswordForEmail(trimmedEmail, {
+      redirectTo: `${window.location.origin}/reset-password`
+    });
+
+    if (error) {
+      console.log('🔍 Password reset error:', error.message, error.status);
+      
+      // Handle rate limiting
+      if (error.message.includes('rate limit') || error.message.includes('too many requests')) {
+        throw new Error('⏰ Too many reset attempts. Please wait a few minutes before trying again.');
+      }
+      // Handle user not found  
+      if (error.message.includes('not found') || error.message.includes('user not found')) {
+        throw new Error('� No account found with this email address. Please check your email or sign up.');
+      }
+      // Handle SMTP issues
+      if (error.message.includes('Error sending recovery email') || error.status === 500) {
+        throw new Error('📧 Email service is having issues. Please try again in a few minutes or contact support via WhatsApp/Instagram.');
+      }
+      // Handle any other error
+      throw new Error(`❌ Password reset failed: ${error.message}`);
+    }
   };
 
   const getUserProfile = async (): Promise<StudentProfile | null> => {

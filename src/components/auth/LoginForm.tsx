@@ -6,11 +6,11 @@ import { Eye, EyeOff } from 'lucide-react'
 interface LoginFormProps {
   onSuccess: () => void;
   onError: (error: string) => void;
-  onForgotPassword: () => void;
   hasError?: boolean;
+  onForgotPassword?: () => void;
 }
 
-export function LoginForm({ onSuccess, onError, onForgotPassword, hasError }: LoginFormProps) {
+export function LoginForm({ onSuccess, onError, hasError, onForgotPassword }: LoginFormProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -62,8 +62,7 @@ export function LoginForm({ onSuccess, onError, onForgotPassword, hasError }: Lo
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 hover:text-blue-300"
-          style={{ color: '#00E5FF' }}
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400 hover:text-blue-300"
           disabled={isLoading}
         >
           {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -77,17 +76,18 @@ export function LoginForm({ onSuccess, onError, onForgotPassword, hasError }: Lo
         {isLoading ? 'Logging in...' : 'Login'}
       </Button>
       
-      {/* Forgot Password Link */}
-      <div className="text-center">
-        <button
-          type="button"
-          onClick={onForgotPassword}
-          className="text-sm text-white hover:text-blue-300 transition-colors"
-          disabled={isLoading}
-        >
-          Forgot your password?
-        </button>
-      </div>
+      {onForgotPassword && (
+        <div className="text-center mt-4">
+          <button
+            type="button"
+            onClick={onForgotPassword}
+            className="text-white hover:text-blue-300 underline text-sm transition-colors"
+            disabled={isLoading}
+          >
+            Forgot Password?
+          </button>
+        </div>
+      )}
     </form>
   )
 }
