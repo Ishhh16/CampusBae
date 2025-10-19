@@ -20,14 +20,26 @@ export function PasswordResetPage() {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         
-        // Check URL parameters for recovery tokens
+        // Check URL parameters for recovery tokens (query params)
         const urlParams = new URLSearchParams(window.location.search);
-        const accessToken = urlParams.get('access_token');
-        const refreshToken = urlParams.get('refresh_token');
-        const type = urlParams.get('type');
+        let accessToken = urlParams.get('access_token');
+        let refreshToken = urlParams.get('refresh_token');
+        let type = urlParams.get('type');
 
-        console.log('🔍 URL params:', { accessToken: !!accessToken, refreshToken: !!refreshToken, type });
-        console.log('🔍 Current session:', !!session);
+        // Also check hash fragment (Supabase might send tokens in hash)
+        if (!accessToken && window.location.hash) {
+          const hashParams = new URLSearchParams(window.location.hash.substring(1));
+          accessToken = hashParams.get('access_token');
+          refreshToken = hashParams.get('refresh_token');
+          type = hashParams.get('type');
+        }
+
+        console.log('🔍 Recovery tokens:', { 
+          accessToken: accessToken ? accessToken.substring(0, 20) + '...' : null, 
+          refreshToken: !!refreshToken, 
+          type,
+          currentSession: !!session 
+        });
 
         if (type === 'recovery' && accessToken) {
           // Set the session with the recovery tokens
@@ -42,11 +54,18 @@ export function PasswordResetPage() {
           } else {
             console.log('✅ Recovery session established');
             setValidSession(true);
+            
+            // Clean up the URL to prevent re-processing tokens
+            if (window.history && window.history.replaceState) {
+              window.history.replaceState({}, document.title, window.location.pathname);
+            }
           }
         } else if (session) {
           // Already have a valid session
+          console.log('✅ Using existing session');
           setValidSession(true);
         } else {
+          console.log('❌ No recovery tokens found');
           setError('Invalid or expired reset link. Please request a new password reset.');
         }
       } catch (err: any) {

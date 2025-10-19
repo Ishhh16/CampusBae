@@ -34,23 +34,52 @@ function AppContent() {
 
   // Simple navigation logic without complex state management
   useEffect(() => {
-    // Check if we're on the password reset page
+    // Check if we're on the password reset page FIRST (before checking user login status)
     const urlParams = new URLSearchParams(window.location.search);
     const type = urlParams.get('type');
+    const accessToken = urlParams.get('access_token');
+    const hash = window.location.hash;
     
-    if (window.location.pathname === '/reset-password' || type === 'recovery') {
+    // Debug logging
+    console.log('🔍 URL Debug:', {
+      pathname: window.location.pathname,
+      search: window.location.search,
+      hash: window.location.hash,
+      type,
+      hasAccessToken: !!accessToken
+    });
+    
+    // Parse hash parameters as well
+    let hashType = null;
+    let hashAccessToken = null;
+    if (hash) {
+      const hashParams = new URLSearchParams(hash.substring(1));
+      hashType = hashParams.get('type');
+      hashAccessToken = hashParams.get('access_token');
+    }
+    
+    // Check multiple possible formats for password reset - PRIORITY OVER USER LOGIN
+    if (type === 'recovery' || 
+        hashType === 'recovery' ||
+        hash.includes('type=recovery') || 
+        hash.includes('access_token') ||
+        accessToken ||
+        hashAccessToken ||
+        window.location.pathname === '/reset-password') {
+      console.log('✅ Password reset detected, forcing reset page', { type, hashType, hasToken: !!(accessToken || hashAccessToken) });
       setCurrentPage('reset-password');
-      return;
+      return; // Don't check user login status if we're on reset page
     }
 
-    if (!loading) {
+    // Only handle regular login/navigation if NOT on reset page
+    if (!loading && currentPage !== 'reset-password') {
       if (user && currentPage === 'landing') {
         setCurrentPage('home');
-      } else if (!user && currentPage !== 'landing' && currentPage !== 'reset-password') {
+      } else if (!user && currentPage !== 'landing') {
         setCurrentPage('landing');
       }
     }
-  }, [user, loading]); // Remove currentPage from deps to prevent infinite loop
+  }, [user, loading, currentPage]); // Added currentPage back to ensure reset page takes priority
 
   const handleNavigate = (page: string, filters?: any) => {
     setAuthError(null);
