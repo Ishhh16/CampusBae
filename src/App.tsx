@@ -10,12 +10,13 @@ import { MarketplacePage } from './components/MarketplacePage';
 import { SocietiesPage } from './components/SocietiesPage';
 import { RoadmapPage } from './components/RoadmapPage';
 import { NetworkingPage } from './components/NetworkingPage';
+import { PasswordResetPage } from './components/auth/PasswordResetPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AuthDebug } from './components/AuthDebug';
 
 function AppContent() {
   const { user, loading } = useAuth();
-  const [currentPage, setCurrentPage] = useState<'landing' | 'home' | 'profile' | 'resources' | 'marketplace' | 'societies' | 'roadmap' | 'networking'>('landing');
+  const [currentPage, setCurrentPage] = useState<'landing' | 'home' | 'profile' | 'resources' | 'marketplace' | 'societies' | 'roadmap' | 'networking' | 'reset-password'>('landing');
   const [authError, setAuthError] = useState<string | null>(null);
   const [isPdfOpen, setIsPdfOpen] = useState<boolean>(false);
   
@@ -33,10 +34,19 @@ function AppContent() {
 
   // Simple navigation logic without complex state management
   useEffect(() => {
+    // Check if we're on the password reset page
+    const urlParams = new URLSearchParams(window.location.search);
+    const type = urlParams.get('type');
+    
+    if (window.location.pathname === '/reset-password' || type === 'recovery') {
+      setCurrentPage('reset-password');
+      return;
+    }
+
     if (!loading) {
       if (user && currentPage === 'landing') {
         setCurrentPage('home');
-      } else if (!user && currentPage !== 'landing') {
+      } else if (!user && currentPage !== 'landing' && currentPage !== 'reset-password') {
         setCurrentPage('landing');
       }
     }
@@ -74,6 +84,8 @@ function AppContent() {
     switch (currentPage) {
       case 'landing':
         return <LandingPage onLoginSuccess={handleLoginSuccess} onAuthError={handleAuthError} authError={authError} />;
+      case 'reset-password':
+        return <PasswordResetPage />;
       case 'home':
         return <Dashboard onNavigate={handleNavigate} />;
       case 'profile':
@@ -97,6 +109,11 @@ function AppContent() {
         return <Dashboard onNavigate={handleNavigate} />;
     }
   };
+
+  // Special case for password reset page - show only the reset component
+  if (currentPage === 'reset-password') {
+    return <PasswordResetPage />;
+  }
 
   return (
     <div 
