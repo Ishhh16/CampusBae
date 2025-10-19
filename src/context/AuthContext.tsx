@@ -235,7 +235,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Use same email validation as signup - just check domain and basic format
     const trimmedEmail = email.trim().toLowerCase();
     
-    // Check domain first - this is the main validation
+    // Check domain first
     if (!trimmedEmail.endsWith('@igdtuw.ac.in')) {
       throw new Error('🏫 Please use your official IGDTUW college email address (@igdtuw.ac.in).');
     }
@@ -246,28 +246,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error('📞 Invalid email format. Please use a valid IGDTUW email address.');
     }
 
-    const { error } = await supabase.auth.resetPasswordForEmail(trimmedEmail, {
-      redirectTo: `${window.location.origin}/reset-password`
-    });
-
-    if (error) {
-      console.log('🔍 Password reset error:', error.message);
-      
-      // Handle rate limiting
-      if (error.message.includes('rate limit') || error.message.includes('too many requests')) {
-        throw new Error('⏰ Too many reset attempts. Please wait a few minutes before trying again.');
-      }
-      // Handle user not found  
-      if (error.message.includes('not found') || error.message.includes('user not found')) {
-        throw new Error('📞 No account found with this email address. Please check your email or sign up.');
-      }
-      // Handle SMTP/email sending errors specifically
-      if (error.message.includes('Error sending recovery email') || error.status === 500) {
-        throw new Error('📧 Email delivery is not configured on the server. This is a server-side issue that needs to be fixed by setting up SMTP email service. Please contact support via WhatsApp or Instagram for manual password reset assistance.');
-      }
-      // Handle any other error
-      throw new Error(`❌ Password reset failed: ${error.message}`);
-    }
+    // Since Gmail SMTP has deliverability issues for transactional emails,
+    // provide a helpful contact-based alternative for users
+    throw new Error('📧 Password reset emails are temporarily unavailable due to email service limitations. Please contact us via WhatsApp or Instagram (links in footer) for immediate password reset assistance. We apologize for the inconvenience!');
   };
 
   const getUserProfile = async (): Promise<StudentProfile | null> => {
