@@ -25,6 +25,32 @@ export const subjectMapping: SubjectMapping = {
       'Basics of Electrical and Electronics Engineering - BEE (BEC 101)',
       'Mobile Application Development - MAD (BCS 104)',
       'Soft Skills and Personality Development - SSPD (HMC 102)'
+    ],
+    '3': [
+      'Discrete Mathematics - DM',
+      'Software Engineering - SE',
+      'Design and Analysis of Algorithm - DAA',
+      'Fundamental of Analog & Digital Electronics - FADE',
+      'Semiconductor Technology - ST',
+      'Operations Management - OM',
+      'Ergonomic Design - ED',
+      'Measurement and Metrology - MM',
+      'Solar Energy Technology - SET',
+      'Industrial Waste Water Treatment - IWWT',
+      'IKS/UHV',
+      'Introduction to Internet of Things - IoT',
+      'Internship'
+    ],
+    '4': [
+      'Database Management Systems - DBMS',
+      'Computer Organization and Architecture - COA',
+      'Operating Systems - OS',
+      'Data Communication and Computer Networks - DCCN',
+      'Information Theory and Coding - ITC',
+      'Statistical Modeling - SM',
+      'Data Mining and Data Warehouse - DMDW',
+      'IKS/UHV',
+      'Advanced IoT and Real World Applications - AIoT'
     ]
   },
   'CSE-AI': {
@@ -45,6 +71,27 @@ export const subjectMapping: SubjectMapping = {
       'Basics of Electrical and Electronics Engineering - BEE (BEC 101)',
       'Introduction to Data Science - IDS (BAI 103)',
       'Soft Skills and Personality Development - SSPD (HMC 102)'
+    ],
+    '3': [
+      'Discrete Mathematics- DM',
+      'Database Management Systems- DBMS',
+      'Artificial Intelligence- AI',
+      'Computer Organization and Architecture- COA',
+      'Operations Management- OM',
+      'Ergonomic Design- ED',
+      'IKS/UHV',
+      'Object Oriented Programming- OOPs'
+    ],
+    '4': [
+      'Design and Analysis of Algorithms- DAA',
+      'Computer Networks- CN',
+      'Operating Systems- OS',
+      'Software Engineering- SE',
+      'Cloud Computing- CC',
+      'Optimization Techniques and Decision Making- OTD',
+      'Statistical Modeling- SM',
+      'IKS/UHV',
+      'Open Source Technologies- OST'
     ]
   },
   'ECE': {
@@ -67,6 +114,31 @@ export const subjectMapping: SubjectMapping = {
       'Introduction to Data Science (BAI 103)',
       'IT Workshop (BAI 102)',
       'Soft Skills and Personality Development (HMC 102)'
+    ],
+    '3': [
+      'Numerical Techniques for Engineers - NTE',
+      'Digital System Design (DSD) - DSD',
+      'Analog Communication Systems - ACS',
+      'Data Structures and Algorithm - DSA',
+      'Object-Oriented Programming - OOP',
+      'Data Base Management Systems - DBMS',
+      'Subject from NPTEL',
+      'IKS/UHV',
+      'Electronics Circuit Simulation Workshop - ECSW',
+      'Advanced Electronic Workshop - AEW',
+      'Internship'
+    ],
+    '4': [
+      'Analog Electronics - AE',
+      'Electromagnetic Field Theory & Antenna - EFTA',
+      'Digital Communication Systems - DCS',
+      'Control Systems (CS) - CS',
+      'Microprocessors & Microcontrollers - MM',
+      'Electrical Measurement & Instrumentation (EMI) - EMI',
+      'Electrical Machines (EM) - EM',
+      'Sensors and Actuators (SA) - SA',
+      'Subject from NPTEL',
+      'IKS/UHV'
     ]
   },
   'ECE-AI': {
@@ -89,6 +161,30 @@ export const subjectMapping: SubjectMapping = {
       'Introduction to Data Science - IDS (BAI 103)',
       'IT Workshop - ITW (BAI 102)',
       'Soft Skills and Personality Development - SSPD (HMC 102)'
+    ],
+    '3': [
+      'Numerical Techniques for Engineers - NTE',
+      'Analog & Digital Electronics (ADE) - ADE',
+      'Data Structures and Algorithm - DSA',
+      'Object-Oriented Programming - OOP',
+      'Semiconductor Technology (ST) - ST',
+      'Subject from NPTEL',
+      'IKS/UHV',
+      'Electronics Circuit Simulation Workshop - ECSW',
+      'Advanced Electronic Workshop - AEW',
+      'Internship'
+    ],
+    '4': [
+      'Analog Communication Systems - ACS',
+      'Computer Organization & Architecture - COA',
+      'Artificial Intelligence (AI) - AI',
+      'Design & Analysis of Algorithms - DAA',
+      'Electromagnetic Field Theory & Antenna - EFTA',
+      'Database Management System (DBMS) - DBMS',
+      'Information Theory and Coding (ITC) - ITC',
+      'Sensors and Actuators (SA) - SA',
+      'Subject from NPTEL',
+      'IKS/UHV'
     ]
   },
   'IT': {
@@ -109,6 +205,32 @@ export const subjectMapping: SubjectMapping = {
       'Basics of Electrical and Electronics Engineering - BEE (BEC 101)',
       'Introduction to Data Science - IDS (BAI 103)',
       'Soft Skills and Personality Development - SSPD (HMC 102)'
+    ],
+    '3': [
+      'Discrete Mathematics - DM',
+      'Data Structures and Algorithm - DSA',
+      'Database Management Systems - DBMS',
+      'Fundamental of Analog & Digital Electronics - FADE',
+      'Semiconductor Technology - ST',
+      'Computer Organization and Architecture - COA',
+      'Operations Management - OM',
+      'Ergonomic Design - ED',
+      'Measurement and Metrology - MM',
+      'Solar Energy Technology - SET',
+      'Industrial Waste Water Treatment - IWWT',
+      'IKS/UHV',
+      'Open Source Technologies - OST',
+      'Internship'
+    ],
+    '4': [
+      'Design and Analysis of Algorithms - DAA',
+      'Operating Systems - OS',
+      'Software Engineering - SE',
+      'Statistical Modeling - SM',
+      'Cloud Computing - CC',
+      'Data Mining and Data Warehouse - DMDW',
+      'IKS/UHV',
+      'Fundamentals of Devops - FD'
     ]
   },
   'AI&ML': {
@@ -129,6 +251,32 @@ export const subjectMapping: SubjectMapping = {
       'Basics of Electrical and Electronics Engineering - BEE (BEC 101)',
       'Introduction to Data Science - IDS (BAI 103)',
       'Soft Skills and Personality Development - SSPD (HMC 102)'
+    ],
+    '3': [
+      'Discrete Mathematics - DM',
+      'Data Structures and Algorithm - DSA',
+      'Database Management Systems - DBMS',
+      'Fundamental of Analog & Digital Electronics - FADE',
+      'Semiconductor Technology - ST',
+      'Computer Organization and Architecture - COA',
+      'Operations Management - OM',
+      'Ergonomic Design - ED',
+      'Measurement and Metrology - MM',
+      'Solar Energy Technology - SET',
+      'Industrial Waste Water Treatment - IWWT',
+      'IKS/UHV',
+      'Open Source Technologies - OST',
+      'Internship'
+    ],
+    '4': [
+      'Design and Analysis of Algorithms - DAA',
+      'Operating Systems - OS',
+      'Artificial Intelligence - AI',
+      'Cloud Computing - CC',
+      'Statistical Modeling - SM',
+      'Data Mining and Data Warehouse - DMDW',
+      'IKS/UHV',
+      'Fundamentals of Devops - FD'
     ]
   },
   'MAE/DMAM': {
@@ -152,6 +300,35 @@ export const subjectMapping: SubjectMapping = {
       'Introduction to Data Science - IDS (BAI 103)',
       'Web Application Development - WAD (BCS 102)',
       'Soft Skills and Personality Development - SSPD (HMC 102)'
+    ],
+    '3': [
+      'Numerical Techniques for Engineers - NTE',
+      'Production Technology - I - PT1',
+      'Engineering Materials - EM',
+      'Thermal Engineering - I - TE1',
+      'Machine Drawing Lab - MDL',
+      'Fundamental of Analog & Digital Electronics - FADE',
+      'Semiconductor Technology - ST',
+      'Data Structures - DS',
+      'Object Oriented Programming - OOP',
+      'Database Management Systems - DBMS',
+      'Computer Organization and Architecture - COA',
+      'IKS/UHV',
+      'Robotics Lab - RL',
+      'Internship'
+    ],
+    '4': [
+      'Thermal Engineering - II - TE2',
+      'Production Technology - II - PT2',
+      'Theory of Machines - TOM',
+      'Fluid Mechanics and Hydraulic Machines - FMHM',
+      'Strength of Materials - SOM',
+      'Logistics & Supply Chain Management - LSCM',
+      'Refrigeration and Air-Conditioning - RAC',
+      'Introduction to Autonomous Mobile Robots - IAMR',
+      'Fire Fighting and Life Saving Appliances - FFLSA',
+      'IKS/UHV',
+      'IoT Lab - IoTL'
     ]
   },
   'MAC': {
