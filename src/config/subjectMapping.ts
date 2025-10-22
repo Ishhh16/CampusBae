@@ -30,16 +30,16 @@ export const subjectMapping: SubjectMapping = {
       'Discrete Mathematics - DM',
       'Software Engineering - SE',
       'Design and Analysis of Algorithm - DAA',
-      'Fundamental of Analog & Digital Electronics - FADE',
-      'Semiconductor Technology - ST',
+      // 'Fundamental of Analog & Digital Electronics - FADE',
+      // 'Semiconductor Technology - ST',
       'Operations Management - OM',
       'Ergonomic Design - ED',
-      'Measurement and Metrology - MM',
-      'Solar Energy Technology - SET',
-      'Industrial Waste Water Treatment - IWWT',
+      // 'Measurement and Metrology - MM',
+      // 'Solar Energy Technology - SET',
+      // 'Industrial Waste Water Treatment - IWWT',
       'IKS/UHV',
       'Introduction to Internet of Things - IoT',
-      'Internship'
+      
     ],
     '4': [
       'Database Management Systems - DBMS',
@@ -119,14 +119,11 @@ export const subjectMapping: SubjectMapping = {
       'Numerical Techniques for Engineers - NTE',
       'Digital System Design (DSD) - DSD',
       'Analog Communication Systems - ACS',
-      'Data Structures and Algorithm - DSA',
-      'Object-Oriented Programming - OOP',
       'Data Base Management Systems - DBMS',
-      'Subject from NPTEL',
       'IKS/UHV',
       'Electronics Circuit Simulation Workshop - ECSW',
       'Advanced Electronic Workshop - AEW',
-      'Internship'
+      
     ],
     '4': [
       'Analog Electronics - AE',
@@ -134,10 +131,9 @@ export const subjectMapping: SubjectMapping = {
       'Digital Communication Systems - DCS',
       'Control Systems (CS) - CS',
       'Microprocessors & Microcontrollers - MM',
-      'Electrical Measurement & Instrumentation (EMI) - EMI',
-      'Electrical Machines (EM) - EM',
-      'Sensors and Actuators (SA) - SA',
-      'Subject from NPTEL',
+      'Electrical Measurement & Instrumentation - EMI',
+      'Electrical Machines - EM',
+      'Sensors and Actuators - SA',
       'IKS/UHV'
     ]
   },
@@ -167,12 +163,10 @@ export const subjectMapping: SubjectMapping = {
       'Analog & Digital Electronics (ADE) - ADE',
       'Data Structures and Algorithm - DSA',
       'Object-Oriented Programming - OOP',
-      'Semiconductor Technology (ST) - ST',
-      'Subject from NPTEL',
       'IKS/UHV',
       'Electronics Circuit Simulation Workshop - ECSW',
-      'Advanced Electronic Workshop - AEW',
-      'Internship'
+      'Advanced Electronic Workshop - AEW'
+      
     ],
     '4': [
       'Analog Communication Systems - ACS',
@@ -181,9 +175,6 @@ export const subjectMapping: SubjectMapping = {
       'Design & Analysis of Algorithms - DAA',
       'Electromagnetic Field Theory & Antenna - EFTA',
       'Database Management System (DBMS) - DBMS',
-      'Information Theory and Coding (ITC) - ITC',
-      'Sensors and Actuators (SA) - SA',
-      'Subject from NPTEL',
       'IKS/UHV'
     ]
   },
@@ -210,17 +201,12 @@ export const subjectMapping: SubjectMapping = {
       'Discrete Mathematics - DM',
       'Data Structures and Algorithm - DSA',
       'Database Management Systems - DBMS',
-      'Fundamental of Analog & Digital Electronics - FADE',
-      'Semiconductor Technology - ST',
       'Computer Organization and Architecture - COA',
       'Operations Management - OM',
       'Ergonomic Design - ED',
-      'Measurement and Metrology - MM',
-      'Solar Energy Technology - SET',
-      'Industrial Waste Water Treatment - IWWT',
       'IKS/UHV',
       'Open Source Technologies - OST',
-      'Internship'
+      
     ],
     '4': [
       'Design and Analysis of Algorithms - DAA',
@@ -256,17 +242,12 @@ export const subjectMapping: SubjectMapping = {
       'Discrete Mathematics - DM',
       'Data Structures and Algorithm - DSA',
       'Database Management Systems - DBMS',
-      'Fundamental of Analog & Digital Electronics - FADE',
-      'Semiconductor Technology - ST',
       'Computer Organization and Architecture - COA',
       'Operations Management - OM',
       'Ergonomic Design - ED',
-      'Measurement and Metrology - MM',
-      'Solar Energy Technology - SET',
-      'Industrial Waste Water Treatment - IWWT',
       'IKS/UHV',
-      'Open Source Technologies - OST',
-      'Internship'
+      'Open Source Technologies - OST'
+      
     ],
     '4': [
       'Design and Analysis of Algorithms - DAA',
@@ -315,7 +296,7 @@ export const subjectMapping: SubjectMapping = {
       'Computer Organization and Architecture - COA',
       'IKS/UHV',
       'Robotics Lab - RL',
-      'Internship'
+      // 'Internship'
     ],
     '4': [
       'Thermal Engineering - II - TE2',
