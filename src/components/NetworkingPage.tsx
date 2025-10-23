@@ -125,7 +125,7 @@ export function NetworkingPage() {
       branch: 'ECEAI',
       year: '4th Year',
       linkedin: 'https://www.linkedin.com/in/sripriya-agarwal-483475261//',
-      image: '/sripriya.jpg'
+      image: '/sripriya.jpeg'
     },
     {
       id: 14,
@@ -133,7 +133,7 @@ export function NetworkingPage() {
       branch: 'CSEAI',
       year: '3rd Year',
       linkedin: 'https://www.linkedin.com/in/joysa-jain-86b589283/',
-      image: '/joysa.jpg'
+      image: '/joysa.jpeg'
     },
     {
       id: 15,
@@ -141,7 +141,7 @@ export function NetworkingPage() {
       branch: 'CSEAI',
       year: '3rd Year',
       linkedin: 'https://www.linkedin.com/in/aarohi-chadha/',
-      image: '/aarohi.jpg'
+      image: '/aarohi.jpeg'
     }
   ];
 
