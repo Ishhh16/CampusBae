@@ -27,22 +27,22 @@ export const subjectMapping: SubjectMapping = {
       'Soft Skills and Personality Development - SSPD (HMC 102)'
     ],
     '3': [
-      'Discrete Mathematics - DM',
-      'Software Engineering - SE',
-      'Design and Analysis of Algorithm - DAA',
-      'Operations Management - OM',
-      'Ergonomic Design - ED',
+      'Discrete Mathematics (DM)',
+      'Software Engineering (SE)',
+      'Design and Analysis of Algorithm (DAA)',
+      'Operations Management (OM)',
+      'Ergonomic Design (ED)',
       'IKS/UHV',
       'Introduction to Internet of Things - IoT'
     ],
     '4': [
-      'Database Management Systems - DBMS',
-      'Computer Organization and Architecture - COA',
-      'Operating Systems - OS',
-      'Data Communication and Computer Networks - DCCN',
-      'Information Theory and Coding - ITC',
-      'Statistical Modeling - SM',
-      'Data Mining and Data Warehouse - DMDW',
+      'Database Management Systems (DBMS)',
+      'Computer Organization and Architecture (COA)',
+      'Operating Systems (OS)',
+      'Data Communication and Computer Networks (DCCN)',
+      'Information Theory and Coding (ITC)',
+      'Statistical Modeling (SM)',
+      'Data Mining and Data Warehouse (DMDW)',
       'IKS/UHV',
       'Advanced IoT and Real World Applications - AIoT'
     ]
@@ -77,15 +77,15 @@ export const subjectMapping: SubjectMapping = {
       'Object Oriented Programming (OOP)'
     ],
     '4': [
-      'Design and Analysis of Algorithms - DAA',
-      'Computer Networks - CN',
-      'Operating Systems - OS',
-      'Software Engineering - SE',
-      'Cloud Computing - CC',
-      'Optimization Techniques and Decision Making - OTD',
-      'Statistical Modeling - SM',
+      'Design and Analysis of Algorithms (DAA)',
+      'Computer Networks (CN)',
+      'Operating Systems (OS)',
+      'Software Engineering (SE)',
+      'Cloud Computing (CC)',
+      'Optimization Techniques and Decision Making (OTD)',
+      'Statistical Modeling (SM)',
       'IKS/UHV',
-      'Open Source Technologies - OST'
+      'Open Source Technologies (OST)'
     ]
   },
   'ECE': {
