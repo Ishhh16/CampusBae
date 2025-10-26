@@ -101,7 +101,38 @@ const storageToSubjectMap: { [key: string]: string } = {
   'MM': 'Measurement and Metrology (MM)',
   'SET': 'Solar Energy Technology (SET)',
   'IWWT': 'Industrial Waste Water Treatment (IWWT)',
-  'FADE': 'Fundamental of Analog & Digital Electronics (FADE)'
+  'FADE': 'Fundamental of Analog & Digital Electronics (FADE)',
+  
+  // ECE subjects
+  'NTE': 'Numerical Techniques for Engineers (NTE)',
+  'DSD': 'Digital System Design (DSD)',
+  'ACS': 'Analog Communication Systems (ACS)',
+  'ECSW': 'Electronics Circuit Simulation Workshop (ECSW)',
+  'AEW': 'Advanced Electronic Workshop (AEW)',
+  'AE': 'Analog Electronics (AE)',
+  'EFTA': 'Electromagnetic Field Theory & Antenna (EFTA)',
+  'DCS': 'Digital Communication Systems (DCS)',
+  'EMI': 'Electrical Measurement & Instrumentation (EMI)',
+  'EM': 'Electrical Machines (EM)',
+  'SA': 'Sensors and Actuators (SA)',
+  'ADE': 'Analog & Digital Electronics (ADE)',
+  
+  // MAE/DMAM subjects
+  'PT1': 'Production Technology - I (PT1)',
+  'TE1': 'Thermal Engineering - I (TE1)',
+  'MDL': 'Machine Drawing Lab (MDL)',
+  'DS': 'Data Structures (DS)',
+  'RL': 'Robotics Lab (RL)',
+  'TE2': 'Thermal Engineering - II (TE2)',
+  'PT2': 'Production Technology - II (PT2)',
+  'TOM': 'Theory of Machines (TOM)',
+  'FMHM': 'Fluid Mechanics and Hydraulic Machines (FMHM)',
+  'SOM': 'Strength of Materials (SOM)',
+  'LSCM': 'Logistics & Supply Chain Management (LSCM)',
+  'RAC': 'Refrigeration and Air-Conditioning (RAC)',
+  'IAMR': 'Introduction to Autonomous Mobile Robots (IAMR)',
+  'FFLSA': 'Fire Fighting and Life Saving Appliances (FFLSA)',
+  'IoTL': 'IoT Lab (IoTL)'
 };
 
 // Reverse mapping for filtering
