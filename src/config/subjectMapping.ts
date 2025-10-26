@@ -30,16 +30,10 @@ export const subjectMapping: SubjectMapping = {
       'Discrete Mathematics - DM',
       'Software Engineering - SE',
       'Design and Analysis of Algorithm - DAA',
-      // 'Fundamental of Analog & Digital Electronics - FADE',
-      // 'Semiconductor Technology - ST',
       'Operations Management - OM',
       'Ergonomic Design - ED',
-      // 'Measurement and Metrology - MM',
-      // 'Solar Energy Technology - SET',
-      // 'Industrial Waste Water Treatment - IWWT',
       'IKS/UHV',
-      'Introduction to Internet of Things - IoT',
-      
+      'Introduction to Internet of Things - IoT'
     ],
     '4': [
       'Database Management Systems - DBMS',
@@ -73,25 +67,25 @@ export const subjectMapping: SubjectMapping = {
       'Soft Skills and Personality Development - SSPD (HMC 102)'
     ],
     '3': [
-      'Discrete Mathematics- DM',
-      'Database Management Systems- DBMS',
-      'Artificial Intelligence- AI',
-      'Computer Organization and Architecture- COA',
-      'Operations Management- OM',
-      'Ergonomic Design- ED',
+      'Discrete Mathematics - DM',
+      'Database Management Systems - DBMS',
+      'Artificial Intelligence - AI',
+      'Computer Organization and Architecture - COA',
+      'Operations Management - OM',
+      'Ergonomic Design - ED',
       'IKS/UHV',
-      'Object Oriented Programming- OOPs'
+      'Object Oriented Programming - OOPs'
     ],
     '4': [
-      'Design and Analysis of Algorithms- DAA',
-      'Computer Networks- CN',
-      'Operating Systems- OS',
-      'Software Engineering- SE',
-      'Cloud Computing- CC',
-      'Optimization Techniques and Decision Making- OTD',
-      'Statistical Modeling- SM',
+      'Design and Analysis of Algorithms - DAA',
+      'Computer Networks - CN',
+      'Operating Systems - OS',
+      'Software Engineering - SE',
+      'Cloud Computing - CC',
+      'Optimization Techniques and Decision Making - OTD',
+      'Statistical Modeling - SM',
       'IKS/UHV',
-      'Open Source Technologies- OST'
+      'Open Source Technologies - OST'
     ]
   },
   'ECE': {
@@ -117,23 +111,27 @@ export const subjectMapping: SubjectMapping = {
     ],
     '3': [
       'Numerical Techniques for Engineers - NTE',
-      'Digital System Design (DSD) - DSD',
+      'Digital System Design - DSD',
       'Analog Communication Systems - ACS',
-      'Data Base Management Systems - DBMS',
+      'Data Structures and Algorithm - DSA',
+      'Object-Oriented Programming - OOP',
+      'Database Management Systems - DBMS',
+      'Subject from NPTEL - NPTEL',
       'IKS/UHV',
       'Electronics Circuit Simulation Workshop - ECSW',
       'Advanced Electronic Workshop - AEW',
-      
+      'Internship'
     ],
     '4': [
       'Analog Electronics - AE',
       'Electromagnetic Field Theory & Antenna - EFTA',
       'Digital Communication Systems - DCS',
-      'Control Systems (CS) - CS',
+      'Control Systems - CS',
       'Microprocessors & Microcontrollers - MM',
       'Electrical Measurement & Instrumentation - EMI',
       'Electrical Machines - EM',
       'Sensors and Actuators - SA',
+      'Subject from NPTEL - NPTEL',
       'IKS/UHV'
     ]
   },
@@ -160,22 +158,28 @@ export const subjectMapping: SubjectMapping = {
     ],
     '3': [
       'Numerical Techniques for Engineers - NTE',
-      'Analog & Digital Electronics (ADE) - ADE',
+      'Analog & Digital Electronics - ADE',
       'Data Structures and Algorithm - DSA',
       'Object-Oriented Programming - OOP',
+      'Semiconductor Technology - ST',
+      'Subject from NPTEL - NPTEL',
       'IKS/UHV',
       'Electronics Circuit Simulation Workshop - ECSW',
-      'Advanced Electronic Workshop - AEW'
-      
+      'Advanced Electronic Workshop - AEW',
+      'Internship'
     ],
     '4': [
       'Analog Communication Systems - ACS',
       'Computer Organization & Architecture - COA',
-      'Artificial Intelligence (AI) - AI',
+      'Artificial Intelligence - AI',
       'Design & Analysis of Algorithms - DAA',
       'Electromagnetic Field Theory & Antenna - EFTA',
-      'Database Management System (DBMS) - DBMS',
-      'IKS/UHV'
+      'Database Management System - DBMS',
+      'Information Theory and Coding - ITC',
+      'Sensors and Actuators - SA',
+      'Subject from NPTEL - NPTEL',
+      'IKS/UHV',
+      'Fundamentals of Devops - FD'
     ]
   },
   'IT': {
@@ -201,12 +205,17 @@ export const subjectMapping: SubjectMapping = {
       'Discrete Mathematics - DM',
       'Data Structures and Algorithm - DSA',
       'Database Management Systems - DBMS',
+      'Fundamental of Analog & Digital Electronics - FADE',
+      'Semiconductor Technology - ST',
       'Computer Organization and Architecture - COA',
       'Operations Management - OM',
       'Ergonomic Design - ED',
+      'Measurement and Metrology - MM',
+      'Solar Energy Technology - SET',
+      'Industrial Waste Water Treatment - IWWT',
       'IKS/UHV',
       'Open Source Technologies - OST',
-      
+      'Internship'
     ],
     '4': [
       'Design and Analysis of Algorithms - DAA',
@@ -242,12 +251,17 @@ export const subjectMapping: SubjectMapping = {
       'Discrete Mathematics - DM',
       'Data Structures and Algorithm - DSA',
       'Database Management Systems - DBMS',
+      'Fundamental of Analog & Digital Electronics - FADE',
+      'Semiconductor Technology - ST',
       'Computer Organization and Architecture - COA',
       'Operations Management - OM',
       'Ergonomic Design - ED',
+      'Measurement and Metrology - MM',
+      'Solar Energy Technology - SET',
+      'Industrial Waste Water Treatment - IWWT',
       'IKS/UHV',
-      'Open Source Technologies - OST'
-      
+      'Open Source Technologies - OST',
+      'Internship'
     ],
     '4': [
       'Design and Analysis of Algorithms - DAA',
@@ -296,7 +310,7 @@ export const subjectMapping: SubjectMapping = {
       'Computer Organization and Architecture - COA',
       'IKS/UHV',
       'Robotics Lab - RL',
-      // 'Internship'
+      'Internship'
     ],
     '4': [
       'Thermal Engineering - II - TE2',
