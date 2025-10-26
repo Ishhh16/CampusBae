@@ -74,7 +74,7 @@ export const subjectMapping: SubjectMapping = {
       'Operations Management - OM',
       'Ergonomic Design - ED',
       'IKS/UHV',
-      'Object Oriented Programming (OOP)'
+      'Object Oriented Programming (OOPS)'
     ],
     '4': [
       'Design and Analysis of Algorithms (DAA)',
@@ -114,7 +114,7 @@ export const subjectMapping: SubjectMapping = {
       'Digital System Design (DSD)',
       'Analog Communication Systems (ACS)',
       'Data Structures and Algorithm (DSA)',
-      'Object-Oriented Programming (OOP)',
+      'Object-Oriented Programming (OOPS)',
       'Database Management Systems (DBMS)',
       'Subject from NPTEL - NPTEL',
       'IKS/UHV',
@@ -160,7 +160,7 @@ export const subjectMapping: SubjectMapping = {
       'Numerical Techniques for Engineers (NTE)',
       'Analog & Digital Electronics (ADE)',
       'Data Structures and Algorithm (DSA)',
-      'Object-Oriented Programming (OOP)',
+      'Object-Oriented Programming (OOPS)',
       'Semiconductor Technology (ST)',
       'Subject from NPTEL - NPTEL',
       'IKS/UHV',
@@ -305,7 +305,7 @@ export const subjectMapping: SubjectMapping = {
       'Fundamental of Analog & Digital Electronics (FADE)',
       'Semiconductor Technology (ST)',
       'Data Structures (DS)',
-      'Object Oriented Programming (OOP)',
+      'Object Oriented Programming (OOPS)',
       'Database Management Systems (DBMS)',
       'Computer Organization and Architecture (COA)',
       'IKS/UHV',
