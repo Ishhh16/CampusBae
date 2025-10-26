@@ -94,7 +94,14 @@ const storageToSubjectMap: { [key: string]: string } = {
   'DCCN': 'Data Communication and Computer Networks (DCCN)',
   'OST': 'Open Source Technologies (OST)',
   'FD': 'Fundamentals of Devops (FD)',
-  'OTD': 'Optimization Techniques and Decision Making (OTD)'
+  'OTD': 'Optimization Techniques and Decision Making (OTD)',
+  
+  // Additional short forms commonly used
+  'ST': 'Semiconductor Technology (ST)',
+  'MM': 'Measurement and Metrology (MM)',
+  'SET': 'Solar Energy Technology (SET)',
+  'IWWT': 'Industrial Waste Water Treatment (IWWT)',
+  'FADE': 'Fundamental of Analog & Digital Electronics (FADE)'
 };
 
 // Reverse mapping for filtering

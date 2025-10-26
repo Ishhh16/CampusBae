@@ -202,30 +202,30 @@ export const subjectMapping: SubjectMapping = {
       'Soft Skills and Personality Development - SSPD (HMC 102)'
     ],
     '3': [
-      'Discrete Mathematics - DM',
-      'Data Structures and Algorithm - DSA',
-      'Database Management Systems - DBMS',
+      'Discrete Mathematics (DM)',
+      'Data Structures and Algorithm (DSA)',
+      'Database Management Systems (DBMS)',
       'Fundamental of Analog & Digital Electronics - FADE',
       'Semiconductor Technology - ST',
-      'Computer Organization and Architecture - COA',
-      'Operations Management - OM',
-      'Ergonomic Design - ED',
+      'Computer Organization and Architecture (COA)',
+      'Operations Management (OM)',
+      'Ergonomic Design (ED)',
       'Measurement and Metrology - MM',
       'Solar Energy Technology - SET',
       'Industrial Waste Water Treatment - IWWT',
       'IKS/UHV',
-      'Open Source Technologies - OST',
+      'Open Source Technologies (OST)',
       'Internship'
     ],
     '4': [
-      'Design and Analysis of Algorithms - DAA',
-      'Operating Systems - OS',
-      'Software Engineering - SE',
-      'Statistical Modeling - SM',
-      'Cloud Computing - CC',
-      'Data Mining and Data Warehouse - DMDW',
+      'Design and Analysis of Algorithms (DAA)',
+      'Operating Systems (OS)',
+      'Software Engineering (SE)',
+      'Statistical Modeling (SM)',
+      'Cloud Computing (CC)',
+      'Data Mining and Data Warehouse (DMDW)',
       'IKS/UHV',
-      'Fundamentals of Devops - FD'
+      'Fundamentals of Devops (FD)'
     ]
   },
   'AI&ML': {
@@ -248,30 +248,30 @@ export const subjectMapping: SubjectMapping = {
       'Soft Skills and Personality Development - SSPD (HMC 102)'
     ],
     '3': [
-      'Discrete Mathematics - DM',
-      'Data Structures and Algorithm - DSA',
-      'Database Management Systems - DBMS',
+      'Discrete Mathematics (DM)',
+      'Data Structures and Algorithm (DSA)',
+      'Database Management Systems (DBMS)',
       'Fundamental of Analog & Digital Electronics - FADE',
       'Semiconductor Technology - ST',
-      'Computer Organization and Architecture - COA',
-      'Operations Management - OM',
-      'Ergonomic Design - ED',
+      'Computer Organization and Architecture (COA)',
+      'Operations Management (OM)',
+      'Ergonomic Design (ED)',
       'Measurement and Metrology - MM',
       'Solar Energy Technology - SET',
       'Industrial Waste Water Treatment - IWWT',
       'IKS/UHV',
-      'Open Source Technologies - OST',
+      'Open Source Technologies (OST)',
       'Internship'
     ],
     '4': [
-      'Design and Analysis of Algorithms - DAA',
-      'Operating Systems - OS',
-      'Artificial Intelligence - AI',
-      'Cloud Computing - CC',
-      'Statistical Modeling - SM',
-      'Data Mining and Data Warehouse - DMDW',
+      'Design and Analysis of Algorithms (DAA)',
+      'Operating Systems (OS)',
+      'Artificial Intelligence (AI)',
+      'Cloud Computing (CC)',
+      'Statistical Modeling (SM)',
+      'Data Mining and Data Warehouse (DMDW)',
       'IKS/UHV',
-      'Fundamentals of Devops - FD'
+      'Fundamentals of Devops (FD)'
     ]
   },
   'MAE/DMAM': {
