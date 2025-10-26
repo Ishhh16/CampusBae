@@ -71,7 +71,30 @@ const storageToSubjectMap: { [key: string]: string } = {
   // Sciences
   'EVS': 'Environmental Sciences - EVS (BAS 104)',
   'PS': 'Probability and Statistics - PS (BAS 103)',
-  'SS': 'Signals and Systems - SS (BEC 102)'
+  'SS': 'Signals and Systems - SS (BEC 102)',
+  
+  // Core CS subjects
+  'DM': 'Discrete Mathematics (DM)',
+  'DBMS': 'Database Management Systems (DBMS)',
+  'AI': 'Artificial Intelligence (AI)',
+  'SE': 'Software Engineering (SE)',
+  'DAA': 'Design and Analysis of Algorithms (DAA)',
+  'COA': 'Computer Organization and Architecture (COA)',
+  'OS': 'Operating Systems (OS)',
+  'CN': 'Computer Networks (CN)',
+  'OOP': 'Object-Oriented Programming (OOP)',
+  
+  // Additional subjects
+  'OM': 'Operations Management (OM)',
+  'ED': 'Ergonomic Design (ED)',
+  'CC': 'Cloud Computing (CC)',
+  'SM': 'Statistical Modeling (SM)',
+  'DMDW': 'Data Mining and Data Warehouse (DMDW)',
+  'ITC': 'Information Theory and Coding (ITC)',
+  'DCCN': 'Data Communication and Computer Networks (DCCN)',
+  'OST': 'Open Source Technologies (OST)',
+  'FD': 'Fundamentals of Devops (FD)',
+  'OTD': 'Optimization Techniques and Decision Making (OTD)'
 };
 
 // Reverse mapping for filtering

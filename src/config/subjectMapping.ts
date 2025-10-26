@@ -67,14 +67,14 @@ export const subjectMapping: SubjectMapping = {
       'Soft Skills and Personality Development - SSPD (HMC 102)'
     ],
     '3': [
-      'Discrete Mathematics - DM',
-      'Database Management Systems - DBMS',
-      'Artificial Intelligence - AI',
-      'Computer Organization and Architecture - COA',
+      'Discrete Mathematics (DM)',
+      'Database Management Systems (DBMS)',
+      'Artificial Intelligence (AI)',
+      'Computer Organization and Architecture (COA)',
       'Operations Management - OM',
       'Ergonomic Design - ED',
       'IKS/UHV',
-      'Object Oriented Programming - OOPs'
+      'Object Oriented Programming (OOP)'
     ],
     '4': [
       'Design and Analysis of Algorithms - DAA',
