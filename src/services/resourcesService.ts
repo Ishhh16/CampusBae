@@ -135,7 +135,7 @@ const storageToSubjectMap: { [key: string]: string } = {
   'IoTL': 'IoT Lab (IoTL)',
   
   // IoT subjects
-  'IoT': 'Introduction to Internet of Things - IoT',
+  'IOT': 'Introduction to Internet of Things (IOT)',
   'AIoT': 'Advanced IoT and Real World Applications - AIoT'
 };
 

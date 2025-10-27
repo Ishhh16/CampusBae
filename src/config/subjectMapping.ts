@@ -33,7 +33,7 @@ export const subjectMapping: SubjectMapping = {
       'Operations Management (OM)',
       'Ergonomic Design (ED)',
       'IKS/UHV',
-      'Introduction to Internet of Things - IoT'
+      'Introduction to Internet of Things (IOT)'
     ],
     '4': [
       'Database Management Systems (DBMS)',
