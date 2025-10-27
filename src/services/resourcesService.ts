@@ -51,7 +51,7 @@ const storageToSubjectMap: { [key: string]: string } = {
   'C': 'Programming with C - C (BCS 101)',
   'PF': 'Programming Fundamentals - PF (BAI 104)',
   'OOPS': 'Object Oriented Programming System - OOPS (BIT 102)',
-  'DSA': 'Data Structures and Algorithms - DSA (BCS 103)',
+  'DSA': 'Data Structures and Algorithm (DSA)',
   
   // Engineering subjects
   'BEE': 'Basics of Electrical and Electronics Engineering - BEE (BEC 101)',
@@ -132,7 +132,11 @@ const storageToSubjectMap: { [key: string]: string } = {
   'RAC': 'Refrigeration and Air-Conditioning (RAC)',
   'IAMR': 'Introduction to Autonomous Mobile Robots (IAMR)',
   'FFLSA': 'Fire Fighting and Life Saving Appliances (FFLSA)',
-  'IoTL': 'IoT Lab (IoTL)'
+  'IoTL': 'IoT Lab (IoTL)',
+  
+  // IoT subjects
+  'IoT': 'Introduction to Internet of Things - IoT',
+  'AIoT': 'Advanced IoT and Real World Applications - AIoT'
 };
 
 // Reverse mapping for filtering

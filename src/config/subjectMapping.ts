@@ -19,7 +19,7 @@ export const subjectMapping: SubjectMapping = {
     '2': [
       'Probability and Statistics - PS (BAS 103)',
       'Environmental Sciences - EVS (BAS 104)',
-      'Data Structures and Algorithms - DSA (BCS 103)',
+      'Data Structures and Algorithm (DSA)',
       'IT Workshop - ITW (BAI 102)',
       'Introduction to Data Science - IDS (BAI 103)',
       'Basics of Electrical and Electronics Engineering - BEE (BEC 101)',
@@ -60,7 +60,7 @@ export const subjectMapping: SubjectMapping = {
     '2': [
       'Applied Mathematics - AM (BAS 101)',
       'Applied Physics - AP (BAS 102)',
-      'Data Structures and Algorithms - DSA (BCS 103)',
+      'Data Structures and Algorithm (DSA)',
       'Web Application Development - WAD (BCS 102)',
       'Basics of Electrical and Electronics Engineering - BEE (BEC 101)',
       'Introduction to Data Science - IDS (BAI 103)',
@@ -71,7 +71,7 @@ export const subjectMapping: SubjectMapping = {
       'Database Management Systems (DBMS)',
       'Artificial Intelligence (AI)',
       'Computer Organization and Architecture (COA)',
-      'Operations Management - OM',
+      'Operations Management (OM)',
       'Ergonomic Design (ED)',
       'IKS/UHV',
       'Object Oriented Programming System - OOPS (BIT 102)'
