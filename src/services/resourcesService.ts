@@ -136,7 +136,11 @@ const storageToSubjectMap: { [key: string]: string } = {
   
   // IoT subjects
   'IOT': 'Introduction to Internet of Things (IOT)',
-  'AIoT': 'Advanced IoT and Real World Applications - AIoT'
+  'AIoT': 'Advanced IoT and Real World Applications - AIoT',
+  
+  // Humanities
+  'IKS': 'IKS/UHV',
+  'UHV': 'IKS/UHV'
 };
 
 // Reverse mapping for filtering
