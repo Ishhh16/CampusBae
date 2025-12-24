@@ -27,7 +27,8 @@ export const subjectToStorageMap: { [key: string]: string } = {
   'Calculus I - CAL1 (BAS 105)': 'calculus_1',
   'Calculus II - CAL2 (BAS 106)': 'calculus_2',
   'Linear Algebra - LA (BAS 107)': 'LA',
-  'Programming Tools for Mathematics - PTM (BAS 108)': 'PTM'
+  'Programming Tools for Mathematics - PTM (BAS 108)': 'PTM',
+  'IKS/UHV': 'IKS'
 };
 
 // Reverse mapping for display names
