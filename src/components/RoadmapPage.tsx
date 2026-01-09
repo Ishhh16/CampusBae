@@ -59,6 +59,14 @@ export function RoadmapPage({ onPdfStateChange }: RoadmapPageProps) {
       pdfPath: '/machine-learning.pdf',
       gradient: 'linear-gradient(135deg, #a8edea, #fed6e3)',
       icon: '🧠'
+    },
+    {
+      id: 7,
+      title: 'Electronics Core',
+      description: 'Master electronics fundamentals, circuit design, and embedded systems for hardware innovation.',
+      pdfPath: '/CORE_ROADMAP.pdf',
+      gradient: 'linear-gradient(135deg, #7F00FF, #E100FF)',
+      icon: '⚡'
     }
   ];
 

@@ -170,7 +170,7 @@ export const subjectMapping: SubjectMapping = {
     ],
     '4': [
       'Analog Communication Systems (ACS)',
-      'Computer Organization & Architecture (COA)',
+      'Computer Organization and Architecture (COA)',
       'Artificial Intelligence (AI)',
       'Design & Analysis of Algorithms (DAA)',
       'Electromagnetic Field Theory & Antenna (EFTA)',

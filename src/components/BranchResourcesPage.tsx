@@ -14,14 +14,51 @@ interface BranchResourcesPageProps {
 }
 
 export function BranchResourcesPage({ initialBranch = '', initialSemester = '', initialSubject = '', initialType = '' }: BranchResourcesPageProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedBranch, setSelectedBranch] = useState(initialBranch);
-  const [selectedSemester, setSelectedSemester] = useState(initialSemester);
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>(initialSubject ? [initialSubject] : []);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>(initialType ? [initialType] : []);
+  // Load saved filters from localStorage or use initial values
+  const [searchQuery, setSearchQuery] = useState(() => {
+    const saved = localStorage.getItem('branchResources_searchQuery');
+    return saved || '';
+  });
+  const [selectedBranch, setSelectedBranch] = useState(() => {
+    const saved = localStorage.getItem('branchResources_branch');
+    return saved || initialBranch;
+  });
+  const [selectedSemester, setSelectedSemester] = useState(() => {
+    const saved = localStorage.getItem('branchResources_semester');
+    return saved || initialSemester;
+  });
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>(() => {
+    const saved = localStorage.getItem('branchResources_subjects');
+    return saved ? JSON.parse(saved) : (initialSubject ? [initialSubject] : []);
+  });
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(() => {
+    const saved = localStorage.getItem('branchResources_types');
+    return saved ? JSON.parse(saved) : (initialType ? [initialType] : []);
+  });
   
   // Available subjects based on branch and semester
   const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);
+
+  // Save filters to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('branchResources_searchQuery', searchQuery);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    localStorage.setItem('branchResources_branch', selectedBranch);
+  }, [selectedBranch]);
+
+  useEffect(() => {
+    localStorage.setItem('branchResources_semester', selectedSemester);
+  }, [selectedSemester]);
+
+  useEffect(() => {
+    localStorage.setItem('branchResources_subjects', JSON.stringify(selectedSubjects));
+  }, [selectedSubjects]);
+
+  useEffect(() => {
+    localStorage.setItem('branchResources_types', JSON.stringify(selectedTypes));
+  }, [selectedTypes]);
 
   // Update available subjects when branch or semester changes
   useEffect(() => {
