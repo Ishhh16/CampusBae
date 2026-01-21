@@ -166,20 +166,20 @@ export const subjectMapping: SubjectMapping = {
       'IKS/UHV',
       'Electronics Circuit Simulation Workshop (ECSW)',
       'Advanced Electronic Workshop (AEW)',
-      'Internship'
+      // 'Internship'
     ],
     '4': [
       'Analog Communication Systems (ACS)',
       'Computer Organization and Architecture (COA)',
       'Artificial Intelligence (AI)',
       'Design & Analysis of Algorithms (DAA)',
-      'Electromagnetic Field Theory & Antenna (EFTA)',
-      'Database Management System (DBMS)',
+      // 'Electromagnetic Field Theory & Antenna (EFTA)',
+      'Database Management Systems (DBMS)',
       // 'Information Theory and Coding (ITC)',
       // 'Sensors and Actuators (SA)',
       // 'Subject from NPTEL - NPTEL',
       'IKS/UHV',
-      'Fundamentals of Devops (FD)'
+      // 'Fundamentals of Devops (FD)'
     ]
   },
   'IT': {
