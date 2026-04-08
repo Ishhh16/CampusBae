@@ -8,6 +8,7 @@ export const subjectToStorageMap: { [key: string]: string } = {
   'Basics of Electrical and Electronics Engineering - BEE (BEC 101)': 'BEE',
   'Web Application Development - WAD (BCS 102)': 'WAD',
   'Communication Skills - CS (HMC 101)': 'CS',
+  'Analog Communication Systems (ACS)': 'ACS',
   'Probability and Statistics - PS (BAS 103)': 'PS',
   'Environmental Sciences - EVS (BAS 104)': 'EVS',
   'Data Structures and Algorithms - DSA (BCS 103)': 'DSA',
