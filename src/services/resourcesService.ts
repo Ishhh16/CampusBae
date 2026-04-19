@@ -94,6 +94,8 @@ const storageToSubjectMap: { [key: string]: string } = {
   'DCCN': 'Data Communication and Computer Networks (DCCN)',
   'OST': 'Open Source Technologies (OST)',
   'FD': 'Fundamentals of Devops (FD)',
+  'Devops': 'Fundamentals of Devops (FD)',
+  'devops': 'Fundamentals of Devops (FD)',
   'OTD': 'Optimization Techniques and Decision Making (OTD)',
   
   // Additional short forms commonly used
@@ -107,6 +109,7 @@ const storageToSubjectMap: { [key: string]: string } = {
   'NTE': 'Numerical Techniques for Engineers (NTE)',
   'DSD': 'Digital System Design (DSD)',
   'ACS': 'Analog Communication Systems (ACS)',
+  'acs': 'Analog Communication Systems (ACS)',
   'ECSW': 'Electronics Circuit Simulation Workshop (ECSW)',
   'AEW': 'Advanced Electronic Workshop (AEW)',
   'AE': 'Analog Electronics (AE)',
