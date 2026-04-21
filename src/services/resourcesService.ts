@@ -143,7 +143,10 @@ const storageToSubjectMap: { [key: string]: string } = {
   
   // Humanities
   'IKS': 'IKS/UHV',
-  'UHV': 'IKS/UHV'
+  'UHV': 'IKS/UHV',
+  'IKS/UHV': 'IKS/UHV',
+  'IKS&UHV': 'IKS/UHV',
+  'iks&uhv': 'IKS/UHV'
 };
 
 // Reverse mapping for filtering
@@ -211,12 +214,25 @@ class ResourcesService {
       return { subject: 'Unknown', type: 'Unknown' };
     }
 
-    const storageSubject = pathParts[0];
-    const type = pathParts[1];
+    let storageSubject = pathParts[0];
+    let type = pathParts[1];
     let unit: string | undefined;
 
+    // Handle nested IKS/UHV folder structure: IKS/UHV/<type>/...
+    if (
+      storageSubject?.toLowerCase() === 'iks' &&
+      type?.toLowerCase() === 'uhv' &&
+      pathParts.length >= 3
+    ) {
+      storageSubject = 'IKS/UHV';
+      type = pathParts[2];
+      if (pathParts.length > 4 && (type === 'notes' || type === 'pyqs')) {
+        unit = pathParts[3];
+      }
+    }
+
     // Check if there's a unit folder (for notes/pyqs)
-    if (pathParts.length > 3 && (type === 'notes' || type === 'pyqs')) {
+    if (!unit && pathParts.length > 3 && (type === 'notes' || type === 'pyqs')) {
       unit = pathParts[2];
     }
 

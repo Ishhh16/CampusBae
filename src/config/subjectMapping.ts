@@ -29,7 +29,7 @@ export const subjectMapping: SubjectMapping = {
     '3': [
       'Discrete Mathematics (DM)',
       'Software Engineering (SE)',
-      'Design and Analysis of Algorithm (DAA)',
+      'Design and Analysis of Algorithms (DAA)',
       'Operations Management (OM)',
       'Ergonomic Design (ED)',
       'IKS/UHV',
@@ -172,7 +172,7 @@ export const subjectMapping: SubjectMapping = {
       'Analog Communication Systems (ACS)',
       'Computer Organization and Architecture (COA)',
       'Artificial Intelligence (AI)',
-      'Design & Analysis of Algorithms (DAA)',
+      'Design and Analysis of Algorithms (DAA)',
       // 'Electromagnetic Field Theory & Antenna (EFTA)',
       'Database Management Systems (DBMS)',
       // 'Information Theory and Coding (ITC)',
