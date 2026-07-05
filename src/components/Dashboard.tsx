@@ -25,12 +25,24 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   });
   const [newTodoText, setNewTodoText] = useState('');
 
-  const branchResources = [
-    { name: 'Applied Mathematics - AM', semester: 'Sem 1', type: 'Notes', icon: <Book size={24} />, branch: 'CSE', subject: 'Applied Mathematics - AM (BAS 101)' },
-    { name: 'Data Structures and Algorithms - DSA', semester: 'Sem 2', type: 'PYQs', icon: <FileText size={24} />, branch: 'CSE', subject: 'Data Structures and Algorithms - DSA (BCS 103)' },
-    { name: 'Programming with Python - PP', semester: 'Sem 1', type: 'Notes', icon: <Book size={24} />, branch: 'CSE-AI', subject: 'Programming with Python - PP (BAI 101)' },
-    { name: 'Web Application Development - WAD', semester: 'Sem 1', type: 'Syllabus', icon: <FileText size={24} />, branch: 'CSE-AI', subject: 'Web Application Development - WAD (BCS 102)' }
-  ];
+  const [branchResources] = useState(() => {
+    const saved = localStorage.getItem('campusbae_recent_subjects');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed && parsed.length > 0) {
+        return parsed.map((item: any) => ({
+          ...item,
+          icon: item.type.toLowerCase() === 'notes' || item.type.toLowerCase() === 'book' ? <Book size={24} /> : <FileText size={24} />
+        }));
+      }
+    }
+    return [
+      { name: 'Applied Mathematics - AM', semester: 'Sem 1', type: 'Notes', icon: <Book size={24} />, branch: 'CSE', subject: 'Applied Mathematics - AM (BAS 101)' },
+      { name: 'Data Structures and Algorithms - DSA', semester: 'Sem 2', type: 'PYQs', icon: <FileText size={24} />, branch: 'CSE', subject: 'Data Structures and Algorithms - DSA (BCS 103)' },
+      { name: 'Programming with Python - PP', semester: 'Sem 1', type: 'Notes', icon: <Book size={24} />, branch: 'CSE-AI', subject: 'Programming with Python - PP (BAI 101)' },
+      { name: 'Web Application Development - WAD', semester: 'Sem 1', type: 'Syllabus', icon: <FileText size={24} />, branch: 'CSE-AI', subject: 'Web Application Development - WAD (BCS 102)' }
+    ];
+  });
 
   const societies = [
     { id: 1, name: 'Google Developer Student Clubs(GDSC)', type: 'Technical', members: '500+', image: '/gdsc .png' },
