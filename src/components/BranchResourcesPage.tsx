@@ -20,24 +20,53 @@ export function BranchResourcesPage({ initialBranch = '', initialSemester = '', 
     return saved || '';
   });
   const [selectedBranch, setSelectedBranch] = useState(() => {
+    if (initialBranch) return initialBranch;
     const saved = localStorage.getItem('branchResources_branch');
-    return saved || initialBranch;
+    return saved || '';
   });
   const [selectedSemester, setSelectedSemester] = useState(() => {
+    if (initialSemester) return initialSemester;
     const saved = localStorage.getItem('branchResources_semester');
-    return saved || initialSemester;
+    return saved || '';
   });
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>(() => {
+    if (initialSubject) return [initialSubject];
     const saved = localStorage.getItem('branchResources_subjects');
-    return saved ? JSON.parse(saved) : (initialSubject ? [initialSubject] : []);
+    return saved ? JSON.parse(saved) : [];
   });
   const [selectedTypes, setSelectedTypes] = useState<string[]>(() => {
+    if (initialType) {
+      let normalizedType = initialType.toLowerCase();
+      if (normalizedType === 'syllabus') normalizedType = 'syllab';
+      return [normalizedType];
+    }
     const saved = localStorage.getItem('branchResources_types');
-    return saved ? JSON.parse(saved) : (initialType ? [initialType] : []);
+    return saved ? JSON.parse(saved) : [];
   });
   
   // Available subjects based on branch and semester
   const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);
+
+  // Sync props when they change (e.g. from Dashboard navigation)
+  useEffect(() => {
+    if (initialBranch) setSelectedBranch(initialBranch);
+  }, [initialBranch]);
+
+  useEffect(() => {
+    if (initialSemester) setSelectedSemester(initialSemester);
+  }, [initialSemester]);
+
+  useEffect(() => {
+    if (initialSubject) setSelectedSubjects([initialSubject]);
+  }, [initialSubject]);
+
+  useEffect(() => {
+    if (initialType) {
+      let normalizedType = initialType.toLowerCase();
+      if (normalizedType === 'syllabus') normalizedType = 'syllab';
+      setSelectedTypes([normalizedType]);
+    }
+  }, [initialType]);
 
   // Save filters to localStorage whenever they change
   useEffect(() => {
@@ -54,7 +83,29 @@ export function BranchResourcesPage({ initialBranch = '', initialSemester = '', 
 
   useEffect(() => {
     localStorage.setItem('branchResources_subjects', JSON.stringify(selectedSubjects));
-  }, [selectedSubjects]);
+    
+    // Save to recently visited subjects list
+    if (selectedSubjects.length > 0 && selectedBranch && selectedSemester) {
+      const subjectName = selectedSubjects[0];
+      const typeName = selectedTypes[0] || 'notes';
+      const displayName = subjectName.split(' (')[0];
+      
+      const newItem = {
+        name: displayName,
+        semester: `Sem ${selectedSemester}`,
+        type: typeName.charAt(0).toUpperCase() + typeName.slice(1).toLowerCase(),
+        branch: selectedBranch,
+        subject: subjectName
+      };
+
+      const saved = localStorage.getItem('campusbae_recent_subjects');
+      let recentList = saved ? JSON.parse(saved) : [];
+      recentList = recentList.filter((item: any) => !(item.subject === subjectName && item.branch === selectedBranch));
+      recentList.unshift(newItem);
+      recentList = recentList.slice(0, 4);
+      localStorage.setItem('campusbae_recent_subjects', JSON.stringify(recentList));
+    }
+  }, [selectedSubjects, selectedBranch, selectedSemester, selectedTypes]);
 
   useEffect(() => {
     localStorage.setItem('branchResources_types', JSON.stringify(selectedTypes));
@@ -65,20 +116,27 @@ export function BranchResourcesPage({ initialBranch = '', initialSemester = '', 
     if (selectedBranch && selectedSemester) {
       const subjects = getSubjectsForBranchSemester(selectedBranch, selectedSemester);
       setAvailableSubjects(subjects);
-      // Reset selected subjects when branch/semester changes
-      setSelectedSubjects([]);
+      
+      // Clear selected subject ONLY if it's not valid for the new branch/semester
+      // But allow keeping initialSubject if it is valid.
+      setSelectedSubjects(prev => {
+        if (initialSubject && subjects.includes(initialSubject)) {
+          return [initialSubject];
+        }
+        return prev.filter(s => subjects.includes(s));
+      });
     } else {
       setAvailableSubjects([]);
       setSelectedSubjects([]);
     }
-  }, [selectedBranch, selectedSemester]);
+  }, [selectedBranch, selectedSemester, initialSubject]);
 
   const handleSubjectToggle = (subject: string) => {
     setSelectedSubjects(prev => {
       if (prev.includes(subject)) {
-        return prev.filter(s => s !== subject);
+        return [];
       } else {
-        return [...prev, subject];
+        return [subject];
       }
     });
   };
@@ -86,15 +144,15 @@ export function BranchResourcesPage({ initialBranch = '', initialSemester = '', 
   const handleTypeToggle = (type: string) => {
     setSelectedTypes(prev => {
       if (prev.includes(type)) {
-        return prev.filter(t => t !== type);
+        return [];
       } else {
-        return [...prev, type];
+        return [type];
       }
     });
   };
 
   const selectAllSubjects = () => {
-    setSelectedSubjects([...availableSubjects]);
+    // Disabled select all since only one subject can be selected at a time
   };
 
   const clearAllSubjects = () => {
@@ -102,7 +160,7 @@ export function BranchResourcesPage({ initialBranch = '', initialSemester = '', 
   };
 
   const selectAllTypes = () => {
-    setSelectedTypes([...types]);
+    // Disabled select all since only one type can be selected at a time
   };
 
   const clearAllTypes = () => {
@@ -185,13 +243,6 @@ export function BranchResourcesPage({ initialBranch = '', initialSemester = '', 
                 <h3 className="text-lg font-semibold" style={{ color: '#EAEAEA' }}>Subjects</h3>
                 <div className="flex gap-2">
                   <button
-                    onClick={selectAllSubjects}
-                    className="text-xs px-3 py-1 rounded-full transition-colors"
-                    style={{ backgroundColor: 'rgba(0, 229, 255, 0.2)', color: '#00E5FF' }}
-                  >
-                    Select All
-                  </button>
-                  <button
                     onClick={clearAllSubjects}
                     className="text-xs px-3 py-1 rounded-full transition-colors"
                     style={{ backgroundColor: 'rgba(255, 107, 107, 0.2)', color: '#FF6B6B' }}
@@ -257,13 +308,6 @@ export function BranchResourcesPage({ initialBranch = '', initialSemester = '', 
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold" style={{ color: '#EAEAEA' }}>Resource Types</h3>
               <div className="flex gap-2">
-                <button
-                  onClick={selectAllTypes}
-                  className="text-xs px-3 py-1 rounded-full transition-colors"
-                  style={{ backgroundColor: 'rgba(0, 229, 255, 0.2)', color: '#00E5FF' }}
-                >
-                  Select All
-                </button>
                 <button
                   onClick={clearAllTypes}
                   className="text-xs px-3 py-1 rounded-full transition-colors"
