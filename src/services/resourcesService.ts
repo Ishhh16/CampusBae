@@ -56,6 +56,10 @@ const storageToSubjectMap: { [key: string]: string } = {
   // Engineering subjects
   'BEE': 'Basics of Electrical and Electronics Engineering - BEE (BEC 101)',
   'EW': 'Electronics Workshop - EW (BEC 103)',
+  'CAE': 'Computer Aided Engineering',
+  'EMat': 'Engineering Materials (EM)',
+  'Robotics': 'Introduction to Robotics and Automation',
+  'CyberSec': 'Cyber Security Awareness',
   
   // Web & IT subjects  
   'WAD': 'Web Application Development - WAD (BCS 102)',
@@ -381,4 +385,3 @@ class ResourcesService {
 
 export const resourcesService = new ResourcesService();
 export default resourcesService;
-
