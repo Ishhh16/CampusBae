@@ -45,6 +45,17 @@ export const subjectMapping: SubjectMapping = {
       'Data Mining and Data Warehouse (DMDW)',
       'IKS/UHV',
       'Advanced IoT and Real World Applications - AIoT'
+    ],
+    '5': [
+      'Object Oriented Programming (BIT 202)',
+      'Artificial Intelligence (BAI 202)',
+      'Theory of Computation (BCS 301)',
+      'Data Analytics Models and Algorithms (BCS 302)',
+      'Human Computer Interaction (BCS 303)',
+      'Cryptography (BIT 319)',
+      'Disaster Management/NCC (AEC 301)',
+      'Cloud Computing Systems and Applications (BCS 304)',
+      'Internship (BCS 350)'
     ]
   },
   'CSE-AI': {
@@ -86,6 +97,18 @@ export const subjectMapping: SubjectMapping = {
       'Statistical Modeling (SM)',
       'IKS/UHV',
       'Open Source Technologies (OST)'
+    ],
+    '5': [
+      'Machine Learning (BAI 301)',
+      'Java Programming (BIT 302)',
+      'Theory of Computation (BCS 301)',
+      'Blockchain Technologies (BIT 303)',
+      'Digital Image Processing (BEC 310)',
+      'Recommender Systems (BAI 302)',
+      'Information Retrieval (BIT 317)',
+      'Disaster Management/NCC (AEC 301)',
+      'Competitive Coding (BIT 307)',
+      'Internship (BAI 350)'
     ]
   },
   'ECE': {
@@ -133,6 +156,18 @@ export const subjectMapping: SubjectMapping = {
       'Sensors and Actuators (SA)',
       'Subject from NPTEL - NPTEL',
       'IKS/UHV'
+    ],
+    '5': [
+      'Digital Signal Processing (BEC 301)',
+      'Hardware Modeling using Verilog (BEC 302)',
+      'Microwave Theory and Techniques (BEC 303)',
+      'IC Fabrication (BEC 304)',
+      'Computer Architecture (BEC 305)',
+      'Data Communication and Computer Networks (BIT 301)',
+      'Machine Learning (BAI 301)',
+      'Disaster Management/NCC (AEC 301)',
+      'Embedded Systems (BEC 306)',
+      'Internship (BEC 350)'
     ]
   },
   'ECE-AI': {
@@ -180,6 +215,18 @@ export const subjectMapping: SubjectMapping = {
       // 'Subject from NPTEL - NPTEL',
       'IKS/UHV',
       // 'Fundamentals of Devops (FD)'
+    ],
+    '5': [
+      'Digital Signal Processing (BEC 301)',
+      'Hardware Modeling using Verilog (BEC 302)',
+      'Machine Learning (BAI 301)',
+      'IC Fabrication (BEC 304)',
+      'Computer Architecture (BEC 305)',
+      'Data Communication and Computer Networks (BIT 301)',
+      'Microwave Theory and Techniques (BEC 303)',
+      'Disaster Management/NCC (AEC 301)',
+      'Embedded Systems (BEC 306)',
+      'Internship (BEC 350)'
     ]
   },
   'IT': {
@@ -226,6 +273,18 @@ export const subjectMapping: SubjectMapping = {
       'Data Mining and Data Warehouse (DMDW)',
       'IKS/UHV',
       'Fundamentals of Devops (FD)'
+    ],
+    '5': [
+      'Data Communication and Computer Networks (BIT 301)',
+      'Java Programming (BIT 302)',
+      'Artificial Intelligence (BAI 202)',
+      'Blockchain Technologies (BIT 303)',
+      'Social Network and Mining (BIT 304)',
+      'Quantum Computing (BIT 305)',
+      'Digital Forensics (BIT 306)',
+      'Disaster Management/NCC (AEC 301)',
+      'Competitive Coding (BIT 307)',
+      'Internship (BIT 350)'
     ]
   },
   'AI&ML': {
@@ -272,6 +331,19 @@ export const subjectMapping: SubjectMapping = {
       'Data Mining and Data Warehouse (DMDW)',
       'IKS/UHV',
       'Fundamentals of Devops (FD)'
+    ],
+    '5': [
+      'Java Programming (BIT 302)',
+      'Machine Learning (BAI 301)',
+      'Software Engineering (BIT 205)',
+      'Theory of Computation (BCS 301)',
+      'Blockchain Technologies (BIT 303)',
+      'Social Network and Mining (BIT 304)',
+      'Quantum Computing (BIT 305)',
+      'Digital Forensics (BIT 306)',
+      'Disaster Management/NCC (AEC 301)',
+      'Competitive Coding (BIT 307)',
+      'Internship (BAM 350)'
     ]
   },
   'MAE/DMAM': {
@@ -324,6 +396,18 @@ export const subjectMapping: SubjectMapping = {
       'Fire Fighting and Life Saving Appliances (FFLSA)',
       'IKS/UHV',
       'IoT Lab (IoTL)'
+    ],
+    '5': [
+      'Machine Design (BMA 301)',
+      'Automobile Engineering (BMA 302)',
+      'Applied Measurement & Industrial Metrology (BMA 303)',
+      'Artificial Intelligence in MAE (BMA 304)',
+      'Mechanical Vibrations (BMA 305)',
+      'Automation in Manufacturing (BMA 306)',
+      'Production Planning, Costing and Control (BMA 307)',
+      'Disaster Management/NCC (AEC 301)',
+      'Elements of CNC and Robotics (BMA 308)',
+      'Internship (BMA 350)'
     ]
   },
   'MAC': {

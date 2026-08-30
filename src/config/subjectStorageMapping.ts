@@ -36,7 +36,56 @@ export const subjectToStorageMap: { [key: string]: string } = {
   'Computer Aided Engineering': 'CAE',
   'Engineering Materials (EM)': 'EMat',
   'Introduction to Robotics and Automation': 'Robotics',
-  'Cyber Security Awareness': 'CyberSec'
+  'Cyber Security Awareness': 'CyberSec',
+
+  // 5th Semester Subjects
+  // MAE/DMAM
+  'Machine Design (BMA 301)': 'MD',
+  'Automobile Engineering (BMA 302)': 'AutoE',
+  'Applied Measurement & Industrial Metrology (BMA 303)': 'AMIM',
+  'Artificial Intelligence in MAE (BMA 304)': 'AIMA',
+  'Mechanical Vibrations (BMA 305)': 'MV',
+  'Automation in Manufacturing (BMA 306)': 'AutoM',
+  'Production Planning, Costing and Control (BMA 307)': 'PPCC',
+  'Disaster Management/NCC (AEC 301)': 'AEC301',
+  'Elements of CNC and Robotics (BMA 308)': 'ECRP',
+  'Internship (BMA 350)': 'BMA350',
+
+  // ECE / ECE-AI
+  'Digital Signal Processing (BEC 301)': 'BEC301',
+  'Hardware Modeling using Verilog (BEC 302)': 'HMV',
+  'Microwave Theory and Techniques (BEC 303)': 'MTT',
+  'Machine Learning (BAI 301)': 'BAI301',
+  'IC Fabrication (BEC 304)': 'ICF',
+  'Computer Architecture (BEC 305)': 'CA',
+  'Data Communication and Computer Networks (BIT 301)': 'DCCN',
+  'Embedded Systems (BEC 306)': 'BEC306',
+  'Internship (BEC 350)': 'BEC350',
+
+  // AI&ML / IT
+  'Java Programming (BIT 302)': 'JP',
+  'Software Engineering (BIT 205)': 'BIT205',
+  'Theory of Computation (BCS 301)': 'TOC',
+  'Blockchain Technologies (BIT 303)': 'BT',
+  'Social Network and Mining (BIT 304)': 'SNM',
+  'Quantum Computing (BIT 305)': 'QC',
+  'Digital Forensics (BIT 306)': 'DF',
+  'Competitive Coding (BIT 307)': 'BIT307',
+  'Internship (BAM 350)': 'BAM350',
+  'Artificial Intelligence (BAI 202)': 'BAI202',
+  'Internship (BIT 350)': 'BIT350',
+
+  // CSE / CSE-AI
+  'Object Oriented Programming (BIT 202)': 'BIT202',
+  'Data Analytics Models and Algorithms (BCS 302)': 'DAMA',
+  'Human Computer Interaction (BCS 303)': 'HCI',
+  'Cryptography (BIT 319)': 'Crypt',
+  'Cloud Computing Systems and Applications (BCS 304)': 'CCSA',
+  'Internship (BCS 350)': 'BCS350',
+  'Digital Image Processing (BEC 310)': 'DIP',
+  'Recommender Systems (BAI 302)': 'RS',
+  'Information Retrieval (BIT 317)': 'IR',
+  'Internship (BAI 350)': 'BAI350'
 };
 
 // Reverse mapping for display names

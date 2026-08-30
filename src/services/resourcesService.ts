@@ -150,7 +150,250 @@ const storageToSubjectMap: { [key: string]: string } = {
   'UHV': 'IKS/UHV',
   'IKS/UHV': 'IKS/UHV',
   'IKS&UHV': 'IKS/UHV',
-  'iks&uhv': 'IKS/UHV'
+  'iks&uhv': 'IKS/UHV',
+
+  // 5th Semester Subjects - MAE/DMAM
+  'bma301': 'Machine Design (BMA 301)',
+  'bma 301': 'Machine Design (BMA 301)',
+  'bma_301': 'Machine Design (BMA 301)',
+  'md': 'Machine Design (BMA 301)',
+  'machine design': 'Machine Design (BMA 301)',
+
+  'bma302': 'Automobile Engineering (BMA 302)',
+  'bma 302': 'Automobile Engineering (BMA 302)',
+  'bma_302': 'Automobile Engineering (BMA 302)',
+  'ae': 'Automobile Engineering (BMA 302)',
+  'autoe': 'Automobile Engineering (BMA 302)',
+  'automobile engineering': 'Automobile Engineering (BMA 302)',
+
+  'bma303': 'Applied Measurement & Industrial Metrology (BMA 303)',
+  'bma 303': 'Applied Measurement & Industrial Metrology (BMA 303)',
+  'bma_303': 'Applied Measurement & Industrial Metrology (BMA 303)',
+  'amim': 'Applied Measurement & Industrial Metrology (BMA 303)',
+  'applied measurement & industrial metrology': 'Applied Measurement & Industrial Metrology (BMA 303)',
+
+  'bma304': 'Artificial Intelligence in MAE (BMA 304)',
+  'bma 304': 'Artificial Intelligence in MAE (BMA 304)',
+  'bma_304': 'Artificial Intelligence in MAE (BMA 304)',
+  'aimae': 'Artificial Intelligence in MAE (BMA 304)',
+  'aima': 'Artificial Intelligence in MAE (BMA 304)',
+  'artificial intelligence in mae': 'Artificial Intelligence in MAE (BMA 304)',
+
+  'bma305': 'Mechanical Vibrations (BMA 305)',
+  'bma 305': 'Mechanical Vibrations (BMA 305)',
+  'bma_305': 'Mechanical Vibrations (BMA 305)',
+  'mv': 'Mechanical Vibrations (BMA 305)',
+  'mechanical vibrations': 'Mechanical Vibrations (BMA 305)',
+
+  'bma306': 'Automation in Manufacturing (BMA 306)',
+  'bma 306': 'Automation in Manufacturing (BMA 306)',
+  'bma_306': 'Automation in Manufacturing (BMA 306)',
+  'aim': 'Automation in Manufacturing (BMA 306)',
+  'autom': 'Automation in Manufacturing (BMA 306)',
+  'automation in manufacturing': 'Automation in Manufacturing (BMA 306)',
+
+  'bma307': 'Production Planning, Costing and Control (BMA 307)',
+  'bma 307': 'Production Planning, Costing and Control (BMA 307)',
+  'bma_307': 'Production Planning, Costing and Control (BMA 307)',
+  'ppcc': 'Production Planning, Costing and Control (BMA 307)',
+  'production planning, costing and control': 'Production Planning, Costing and Control (BMA 307)',
+
+  'aec301': 'Disaster Management/NCC (AEC 301)',
+  'aec 301': 'Disaster Management/NCC (AEC 301)',
+  'aec_301': 'Disaster Management/NCC (AEC 301)',
+  'dm': 'Disaster Management/NCC (AEC 301)',
+  'ncc': 'Disaster Management/NCC (AEC 301)',
+  'disaster management': 'Disaster Management/NCC (AEC 301)',
+  'disaster management/ncc': 'Disaster Management/NCC (AEC 301)',
+
+  'bma308': 'Elements of CNC and Robotics (BMA 308)',
+  'bma 308': 'Elements of CNC and Robotics (BMA 308)',
+  'bma_308': 'Elements of CNC and Robotics (BMA 308)',
+  'cncr': 'Elements of CNC and Robotics (BMA 308)',
+  'ecrp': 'Elements of CNC and Robotics (BMA 308)',
+  'elements of cnc and robotics': 'Elements of CNC and Robotics (BMA 308)',
+
+  'bma350': 'Internship (BMA 350)',
+  'bma 350': 'Internship (BMA 350)',
+  'bma_350': 'Internship (BMA 350)',
+
+  // 5th Semester Subjects - ECE / ECE-AI
+  'bec301': 'Digital Signal Processing (BEC 301)',
+  'bec 301': 'Digital Signal Processing (BEC 301)',
+  'bec_301': 'Digital Signal Processing (BEC 301)',
+  'dsp': 'Digital Signal Processing (BEC 301)',
+  'digital signal processing': 'Digital Signal Processing (BEC 301)',
+
+  'bec302': 'Hardware Modeling using Verilog (BEC 302)',
+  'bec 302': 'Hardware Modeling using Verilog (BEC 302)',
+  'bec_302': 'Hardware Modeling using Verilog (BEC 302)',
+  'hmv': 'Hardware Modeling using Verilog (BEC 302)',
+  'verilog': 'Hardware Modeling using Verilog (BEC 302)',
+  'hardware modeling using verilog': 'Hardware Modeling using Verilog (BEC 302)',
+
+  'bec303': 'Microwave Theory and Techniques (BEC 303)',
+  'bec 303': 'Microwave Theory and Techniques (BEC 303)',
+  'bec_303': 'Microwave Theory and Techniques (BEC 303)',
+  'mtt': 'Microwave Theory and Techniques (BEC 303)',
+  'microwave': 'Microwave Theory and Techniques (BEC 303)',
+  'microwave theory and techniques': 'Microwave Theory and Techniques (BEC 303)',
+
+  'bai301': 'Machine Learning (BAI 301)',
+  'bai 301': 'Machine Learning (BAI 301)',
+  'bai_301': 'Machine Learning (BAI 301)',
+  'ml': 'Machine Learning (BAI 301)',
+  'machine learning': 'Machine Learning (BAI 301)',
+
+  'bec304': 'IC Fabrication (BEC 304)',
+  'bec 304': 'IC Fabrication (BEC 304)',
+  'bec_304': 'IC Fabrication (BEC 304)',
+  'icf': 'IC Fabrication (BEC 304)',
+  'ic fabrication': 'IC Fabrication (BEC 304)',
+
+  'bec305': 'Computer Architecture (BEC 305)',
+  'bec 305': 'Computer Architecture (BEC 305)',
+  'bec_305': 'Computer Architecture (BEC 305)',
+  'ca': 'Computer Architecture (BEC 305)',
+  'computer architecture': 'Computer Architecture (BEC 305)',
+
+  'bit301': 'Data Communication and Computer Networks (BIT 301)',
+  'bit 301': 'Data Communication and Computer Networks (BIT 301)',
+  'bit_301': 'Data Communication and Computer Networks (BIT 301)',
+  'dccn': 'Data Communication and Computer Networks (BIT 301)',
+  'cn': 'Data Communication and Computer Networks (BIT 301)',
+  'data communication and computer networks': 'Data Communication and Computer Networks (BIT 301)',
+
+  'bec306': 'Embedded Systems (BEC 306)',
+  'bec 306': 'Embedded Systems (BEC 306)',
+  'bec_306': 'Embedded Systems (BEC 306)',
+  'es': 'Embedded Systems (BEC 306)',
+  'embedded systems': 'Embedded Systems (BEC 306)',
+
+  'bec350': 'Internship (BEC 350)',
+  'bec 350': 'Internship (BEC 350)',
+  'bec_350': 'Internship (BEC 350)',
+
+  // 5th Semester Subjects - AI&ML / IT
+  'bit302': 'Java Programming (BIT 302)',
+  'bit 302': 'Java Programming (BIT 302)',
+  'bit_302': 'Java Programming (BIT 302)',
+  'java': 'Java Programming (BIT 302)',
+  'jp': 'Java Programming (BIT 302)',
+  'java programming': 'Java Programming (BIT 302)',
+
+  'bit205': 'Software Engineering (BIT 205)',
+  'bit 205': 'Software Engineering (BIT 205)',
+  'bit_205': 'Software Engineering (BIT 205)',
+  'se': 'Software Engineering (BIT 205)',
+  'software engineering': 'Software Engineering (BIT 205)',
+
+  'bcs301': 'Theory of Computation (BCS 301)',
+  'bcs 301': 'Theory of Computation (BCS 301)',
+  'bcs_301': 'Theory of Computation (BCS 301)',
+  'toc': 'Theory of Computation (BCS 301)',
+  'theory of computation': 'Theory of Computation (BCS 301)',
+
+  'bit303': 'Blockchain Technologies (BIT 303)',
+  'bit 303': 'Blockchain Technologies (BIT 303)',
+  'bit_303': 'Blockchain Technologies (BIT 303)',
+  'bt': 'Blockchain Technologies (BIT 303)',
+  'blockchain': 'Blockchain Technologies (BIT 303)',
+  'blockchain technologies': 'Blockchain Technologies (BIT 303)',
+
+  'bit304': 'Social Network and Mining (BIT 304)',
+  'bit 304': 'Social Network and Mining (BIT 304)',
+  'bit_304': 'Social Network and Mining (BIT 304)',
+  'snm': 'Social Network and Mining (BIT 304)',
+  'social network and mining': 'Social Network and Mining (BIT 304)',
+
+  'bit305': 'Quantum Computing (BIT 305)',
+  'bit 305': 'Quantum Computing (BIT 305)',
+  'bit_305': 'Quantum Computing (BIT 305)',
+  'qc': 'Quantum Computing (BIT 305)',
+  'quantum computing': 'Quantum Computing (BIT 305)',
+
+  'bit306': 'Digital Forensics (BIT 306)',
+  'bit 306': 'Digital Forensics (BIT 306)',
+  'bit_306': 'Digital Forensics (BIT 306)',
+  'df': 'Digital Forensics (BIT 306)',
+  'digital forensics': 'Digital Forensics (BIT 306)',
+
+  'bit307': 'Competitive Coding (BIT 307)',
+  'bit 307': 'Competitive Coding (BIT 307)',
+  'bit_307': 'Competitive Coding (BIT 307)',
+  'cc': 'Competitive Coding (BIT 307)',
+  'competitive coding': 'Competitive Coding (BIT 307)',
+
+  'bam350': 'Internship (BAM 350)',
+  'bam 350': 'Internship (BAM 350)',
+  'bam_350': 'Internship (BAM 350)',
+
+  'bai202': 'Artificial Intelligence (BAI 202)',
+  'bai 202': 'Artificial Intelligence (BAI 202)',
+  'bai_202': 'Artificial Intelligence (BAI 202)',
+  'ai': 'Artificial Intelligence (BAI 202)',
+  'artificial intelligence': 'Artificial Intelligence (BAI 202)',
+
+  'bit350': 'Internship (BIT 350)',
+  'bit 350': 'Internship (BIT 350)',
+  'bit_350': 'Internship (BIT 350)',
+
+  // 5th Semester Subjects - CSE / CSE-AI
+  'bit202': 'Object Oriented Programming (BIT 202)',
+  'bit 202': 'Object Oriented Programming (BIT 202)',
+  'bit_202': 'Object Oriented Programming (BIT 202)',
+  'object oriented programming': 'Object Oriented Programming (BIT 202)',
+
+  'bcs302': 'Data Analytics Models and Algorithms (BCS 302)',
+  'bcs 302': 'Data Analytics Models and Algorithms (BCS 302)',
+  'bcs_302': 'Data Analytics Models and Algorithms (BCS 302)',
+  'dama': 'Data Analytics Models and Algorithms (BCS 302)',
+  'data analytics models and algorithms': 'Data Analytics Models and Algorithms (BCS 302)',
+
+  'bcs303': 'Human Computer Interaction (BCS 303)',
+  'bcs 303': 'Human Computer Interaction (BCS 303)',
+  'bcs_303': 'Human Computer Interaction (BCS 303)',
+  'hci': 'Human Computer Interaction (BCS 303)',
+  'human computer interaction': 'Human Computer Interaction (BCS 303)',
+
+  'bit319': 'Cryptography (BIT 319)',
+  'bit 319': 'Cryptography (BIT 319)',
+  'bit_319': 'Cryptography (BIT 319)',
+  'crypto': 'Cryptography (BIT 319)',
+  'crypt': 'Cryptography (BIT 319)',
+  'cryptography': 'Cryptography (BIT 319)',
+
+  'bcs304': 'Cloud Computing Systems and Applications (BCS 304)',
+  'bcs 304': 'Cloud Computing Systems and Applications (BCS 304)',
+  'bcs_304': 'Cloud Computing Systems and Applications (BCS 304)',
+  'ccsa': 'Cloud Computing Systems and Applications (BCS 304)',
+  'cloud computing systems and applications': 'Cloud Computing Systems and Applications (BCS 304)',
+
+  'bcs350': 'Internship (BCS 350)',
+  'bcs 350': 'Internship (BCS 350)',
+  'bcs_350': 'Internship (BCS 350)',
+
+  'bec310': 'Digital Image Processing (BEC 310)',
+  'bec 310': 'Digital Image Processing (BEC 310)',
+  'bec_310': 'Digital Image Processing (BEC 310)',
+  'dip': 'Digital Image Processing (BEC 310)',
+  'digital image processing': 'Digital Image Processing (BEC 310)',
+
+  'bai302': 'Recommender Systems (BAI 302)',
+  'bai 302': 'Recommender Systems (BAI 302)',
+  'bai_302': 'Recommender Systems (BAI 302)',
+  'rs': 'Recommender Systems (BAI 302)',
+  'recommender systems': 'Recommender Systems (BAI 302)',
+
+  'bit317': 'Information Retrieval (BIT 317)',
+  'bit 317': 'Information Retrieval (BIT 317)',
+  'bit_317': 'Information Retrieval (BIT 317)',
+  'ir': 'Information Retrieval (BIT 317)',
+  'information retrieval': 'Information Retrieval (BIT 317)',
+
+  'bai350': 'Internship (BAI 350)',
+  'bai 350': 'Internship (BAI 350)',
+  'bai_350': 'Internship (BAI 350)'
 };
 
 // Reverse mapping for filtering
