@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseClient';
+import { matchesStorageSubject } from '../config/subjectStorageMapping';
 
 export interface ResourceFromDB {
   id: string;
@@ -396,30 +397,31 @@ const storageToSubjectMap: { [key: string]: string } = {
   'bai_350': 'Internship (BAI 350)'
 };
 
-// Reverse mapping for filtering
-const subjectToStorageMap: { [key: string]: string } = {};
-Object.entries(storageToSubjectMap).forEach(([storage, display]) => {
-  subjectToStorageMap[display] = storage;
-});
-
 class ResourcesService {
   /**
    * Get all resources from the database
    */
   async getAllResources(): Promise<ResourceFromDB[]> {
     try {
-      const { data, error } = await supabase
-        .from('resources')
-        .select('*')
-        .order('file_name', { ascending: true });
+      // The Data API caps each response. Fetch every page so subjects aren't
+      // marked unavailable merely because their files fall past the first page.
+      const pageSize = 1000;
+      const allResources: ResourceFromDB[] = [];
+      for (let offset = 0; ; offset += pageSize) {
+        const { data, error } = await supabase
+          .from('resources')
+          .select('*')
+          .order('file_name', { ascending: true })
+          .order('id', { ascending: true })
+          .range(offset, offset + pageSize - 1);
 
-      if (error) {
-        console.error('Error fetching resources:', error);
-        return [];
+        if (error) throw error;
+        allResources.push(...(data || []));
+        if (!data || data.length < pageSize) break;
       }
 
       // Filter out placeholder files and other unwanted files
-      const filteredData = (data || []).filter(resource => {
+      const filteredData = allResources.filter(resource => {
         const fileName = resource.file_name?.toLowerCase() || '';
         
         // Skip placeholder files
@@ -448,14 +450,14 @@ class ResourcesService {
   /**
    * Process file path to extract subject, type, and unit information
    */
-  private processFilePath(filePath: string): {
+  private processFilePath(filePath: string, subjects: string[] = []): {
     subject: string;
     type: string;
     unit?: string;
   } {
     // Remove leading slash if present
     const cleanPath = filePath.replace(/^\/+/, '');
-    const pathParts = cleanPath.split('/');
+    const pathParts = cleanPath.split('/').map(part => part.trim());
 
     if (pathParts.length < 2) {
       return { subject: 'Unknown', type: 'Unknown' };
@@ -463,28 +465,36 @@ class ResourcesService {
 
     let storageSubject = pathParts[0];
     let type = pathParts[1];
+    let typeIndex = 1;
     let unit: string | undefined;
 
     // Handle nested IKS/UHV folder structure: IKS/UHV/<type>/...
     if (
       storageSubject?.toLowerCase() === 'iks' &&
-      type?.toLowerCase() === 'uhv' &&
+      ['uhv', 'uh'].includes(type?.toLowerCase()) &&
       pathParts.length >= 3
     ) {
       storageSubject = 'IKS/UHV';
       type = pathParts[2];
-      if (pathParts.length > 4 && (type === 'notes' || type === 'pyqs')) {
-        unit = pathParts[3];
-      }
+      typeIndex = 2;
     }
 
-    // Check if there's a unit folder (for notes/pyqs)
-    if (!unit && pathParts.length > 3 && (type === 'notes' || type === 'pyqs')) {
-      unit = pathParts[2];
+    const typeAliases: Record<string, string> = {
+      note: 'notes', notes: 'notes', pyq: 'pyqs', pyqs: 'pyqs',
+      syllabus: 'syllab', syllab: 'syllab', book: 'book', books: 'book',
+    };
+    type = typeAliases[type.toLowerCase()] || type.toLowerCase();
+    // Some Drive folders contain loose teaching files without a notes folder.
+    if (pathParts.length === typeIndex + 1 && /\.[a-z0-9]+$/i.test(pathParts[typeIndex])) {
+      type = 'notes';
+    }
+    if (pathParts.length > typeIndex + 2 && (type === 'notes' || type === 'pyqs')) {
+      unit = pathParts[typeIndex + 1];
     }
 
     // Map storage subject name to display name (case-insensitive)
-    const displaySubject = storageToSubjectMap[storageSubject] || 
+    const displaySubject = subjects.find(subject => matchesStorageSubject(subject, storageSubject)) ||
+                          storageToSubjectMap[storageSubject] ||
                           storageToSubjectMap[storageSubject.toLowerCase()] ||
                           storageToSubjectMap[storageSubject.toUpperCase()] ||
                           storageSubject;
@@ -512,9 +522,9 @@ class ResourcesService {
   /**
    * Process raw database resources into frontend-compatible format
    */
-  private processResources(rawResources: ResourceFromDB[]): ProcessedResource[] {
+  private processResources(rawResources: ResourceFromDB[], subjects: string[] = []): ProcessedResource[] {
     return rawResources.map(resource => {
-      const pathInfo = this.processFilePath(resource.file_path);
+      const pathInfo = this.processFilePath(resource.file_path, subjects);
       
       return {
         id: resource.id,
@@ -554,7 +564,7 @@ class ResourcesService {
       console.log(`📚 Found ${rawResources.length} total resources in database`);
       
       // Process them into the format expected by frontend
-      const processedResources = this.processResources(rawResources);
+      const processedResources = this.processResources(rawResources, subjects);
       console.log(`✅ Processed ${processedResources.length} resources`);
 
       // Log first few processed resources to see what subjects we have

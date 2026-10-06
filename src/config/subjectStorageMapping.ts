@@ -23,6 +23,7 @@ export const subjectToStorageMap: { [key: string]: string } = {
   'Object Oriented Programming System - OOPS (BIT 102)': 'OOPS',
   'Elements of Mechanical Engineering - EME (BMA 106)': 'EME',
   'Workshop Practice - WP (BMA 107)': 'WP',
+  'Production Technology - I (PT1)': 'PT-1',
   'Engineering Graphics - EG (BMA 102)': 'EG',
   'Engineering Mechanics - EM (BMA 103)': 'EM',
   'Calculus I - CAL1 (BAS 105)': 'calculus_1',
@@ -34,7 +35,9 @@ export const subjectToStorageMap: { [key: string]: string } = {
   'Operating Systems (OS)': 'OS',
   'Fundamentals of Devops (FD)': 'Devops',
   'Computer Aided Engineering': 'CAE',
-  'Engineering Materials (EM)': 'EMat',
+  'Engineering Materials (EM)': 'EMATERIAL',
+  'Software Engineering (SE)': 'SWE',
+  'Digital System Design (DSD)': 'DSD',
   'Introduction to Robotics and Automation': 'Robotics',
   'Cyber Security Awareness': 'CyberSec',
 
@@ -72,20 +75,46 @@ export const subjectToStorageMap: { [key: string]: string } = {
   'Digital Forensics (BIT 306)': 'DF',
   'Competitive Coding (BIT 307)': 'BIT307',
   'Internship (BAM 350)': 'BAM350',
-  'Artificial Intelligence (BAI 202)': 'BAI202',
+  'Artificial Intelligence (BAI 202)': 'AI',
   'Internship (BIT 350)': 'BIT350',
 
   // CSE / CSE-AI
-  'Object Oriented Programming (BIT 202)': 'BIT202',
+  'Object Oriented Programming (BIT 202)': 'OOPS',
   'Data Analytics Models and Algorithms (BCS 302)': 'DAMA',
   'Human Computer Interaction (BCS 303)': 'HCI',
-  'Cryptography (BIT 319)': 'Crypt',
+  'Cryptography (BIT 319)': 'CRPYT',
   'Cloud Computing Systems and Applications (BCS 304)': 'CCSA',
   'Internship (BCS 350)': 'BCS350',
   'Digital Image Processing (BEC 310)': 'DIP',
   'Recommender Systems (BAI 302)': 'RS',
   'Information Retrieval (BIT 317)': 'IR',
   'Internship (BAI 350)': 'BAI350'
+};
+
+// A Drive folder can serve multiple curriculum display names. Resolve against
+// the selected subjects rather than letting a reverse map pick one semester.
+const subjectStorageAliases: Record<string, string[]> = {
+  'IKS/UHV': ['IKS', 'UHV', 'UH', 'IKS/UHV', 'IKS/UH', 'IKS&UHV', 'IKS&UH'],
+  'Software Engineering (SE)': ['SE', 'SWE'],
+  'Software Engineering (BIT 205)': ['SE', 'SWE', 'BIT205'],
+  'Production Technology - I (PT1)': ['PT', 'PT1', 'PT-1'],
+  'Engineering Materials (EM)': ['EMat', 'EMATERIAL'],
+  'Engineering Mechanics - EM (BMA 103)': ['EMECH', 'EMech', 'EM'],
+  'Object Oriented Programming (BIT 202)': ['OOPS', 'OOP', 'BIT202'],
+  'Artificial Intelligence (BAI 202)': ['AI', 'BAI202'],
+  'Artificial Intelligence (AI)': ['AI', 'BAI202'],
+  'Theory of Computation (BCS 301)': ['TOC', 'BCS301'],
+  'Data Communication and Computer Networks (BIT 301)': ['DCCN', 'BIT301'],
+  'Cryptography (BIT 319)': ['CRPYT', 'CRYPT', 'CRYPTO', 'BIT319'],
+  'Cloud Computing Systems and Applications (BCS 304)': ['CCSA', 'CSSA', 'BCS304'],
+};
+
+export const normalizeStorageSubject = (value: string): string =>
+  value.trim().toLowerCase().replace(/[\s_-]+/g, '');
+
+export const matchesStorageSubject = (subject: string, folder: string): boolean => {
+  const aliases = [subject, subjectToStorageMap[subject], ...(subjectStorageAliases[subject] || [])];
+  return aliases.some(alias => alias && normalizeStorageSubject(alias) === normalizeStorageSubject(folder));
 };
 
 // Reverse mapping for display names
